@@ -1,3 +1,4 @@
+import config from '@config'
 import Image from 'next/image'
 
 const navigation = {
@@ -107,10 +108,7 @@ export default function Footer() {
               height={1000}
               className="h-10 w-auto"
             />
-            <p className="text-sm leading-6 text-gray-300">
-              Making the world a better place through constructing elegant
-              payment solutions.
-            </p>
+            <p className="text-sm leading-6 text-gray-300">{config.tagline}</p>
             <div className="flex space-x-6">
               {navigation.social.map((item) => (
                 <a
@@ -201,8 +199,7 @@ export default function Footer() {
         </div>
         <div className="mt-16 border-t border-white/10 pt-8 sm:mt-20 lg:mt-24">
           <p className="text-xs leading-5 text-gray-400">
-            &copy; {new Date().getFullYear()} Credova Financial, LLC. All rights
-            reserved.
+            &copy; {new Date().getFullYear()} {config.trademark}
           </p>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss'
+const appConfig = require('./config')
 
 const config: Config = {
   content: [
@@ -13,6 +14,7 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      colors: appConfig.theme.colors,
     },
   },
   plugins: [require('@tailwindcss/forms')],

@@ -14,9 +14,9 @@ import FormInput from '@/components/form/FormInput'
 import FormSelect from '@/components/form/FormSelect'
 import CredovaTypes from '@credova/elements-js/types/sdk'
 import { useRouter } from 'next/navigation'
-import _products from '@/data/products.json'
-
-const products = _products.slice(0, 1)
+import config from '@config'
+import Button from '@/components/Button'
+import { useCart } from '@/providers/CartProvider'
 
 const deliveryMethods = [
   {
@@ -47,9 +47,11 @@ function Component() {
   const cardElement = useRef<CredovaTypes.CardElement>(null)
   const [loading, setLoading] = useState(false)
   const { credova } = useCredova()
+  const cart = useCart()
   const total = useMemo(() => {
-    const subtotal = products.reduce(
-      (accum, cur) => accum + parseFloat(cur.price.replace('$', '')),
+    const subtotal = cart.items.reduce(
+      (accum, cur) =>
+        accum + parseFloat(cur.item.price.replace('$', '')) * cur.quantity,
       0
     )
     return {
@@ -58,7 +60,7 @@ function Component() {
       taxes: 0.07 * subtotal,
       total: subtotal + 0.07 * subtotal,
     }
-  }, [products])
+  }, [cart.items])
   const router = useRouter()
 
   const schema = Yup.object().shape({
@@ -95,19 +97,19 @@ function Component() {
 
   const initialValues: Yup.InferType<typeof schema> = {
     customer: {
-      email: 'ryan.frahm@credova.com',
-      first_name: 'Ryan',
-      last_name: 'Frahm',
+      email: '',
+      first_name: '',
+      last_name: '',
       business_name: '',
-      phone: '11234567890',
+      phone: '',
     },
     address: {
-      address_line_1: '232 Main St',
+      address_line_1: '',
       address_line_2: undefined,
-      city: 'Ames',
-      state: 'IA',
-      postal_code: '50010',
-      country: 'US',
+      city: '',
+      state: '',
+      postal_code: '',
+      country: '',
     },
     delivery_method: 1,
     name_on_card: 'Ryan Frahm',
@@ -143,7 +145,6 @@ function Component() {
           card,
         })
         if (response) {
-          // setCardSuccessMessage(response)
           return response
         }
       } catch (error) {
@@ -479,12 +480,15 @@ function Component() {
                   <div className="mt-4 rounded-lg border border-gray-200 bg-white shadow-sm">
                     <h3 className="sr-only">Items in your cart</h3>
                     <ul role="list" className="divide-y divide-gray-200">
-                      {products.map((product) => (
-                        <li key={product.id} className="flex px-4 py-6 sm:px-6">
+                      {cart.items.map((product) => (
+                        <li
+                          key={product.item.id}
+                          className="flex px-4 py-6 sm:px-6"
+                        >
                           <div className="flex-shrink-0">
                             <img
-                              alt={product.imageAlt}
-                              src={product.imageSrc}
+                              alt={product.item.imageAlt}
+                              src={product.item.imageSrc}
                               className="w-20 rounded-md"
                             />
                           </div>
@@ -494,17 +498,17 @@ function Component() {
                               <div className="min-w-0 flex-1">
                                 <h4 className="text-sm">
                                   <a
-                                    href={`/ecommerce/products/${product.slug}`}
+                                    href={`/ecommerce/products/${product.item.slug}`}
                                     className="font-medium text-gray-700 hover:text-gray-800"
                                   >
-                                    {product.name}
+                                    {product.item.name}
                                   </a>
                                 </h4>
                                 <p className="mt-1 text-sm text-gray-500">
-                                  {product.description}
+                                  {product.item.description}
                                 </p>
                                 <p className="mt-1 text-sm text-gray-500">
-                                  {product.options}
+                                  {product.item.options}
                                 </p>
                               </div>
 
@@ -524,7 +528,7 @@ function Component() {
 
                             <div className="flex flex-1 items-end justify-between pt-2">
                               <p className="mt-1 text-sm font-medium text-gray-900">
-                                {product.price}
+                                {product.item.price}
                               </p>
 
                               <div className="ml-4">
@@ -532,6 +536,7 @@ function Component() {
                                   Quantity
                                 </label>
                                 <select
+                                  value={product.quantity}
                                   id="quantity"
                                   name="quantity"
                                   className="rounded-md border border-gray-300 text-left text-base font-medium text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
@@ -579,12 +584,13 @@ function Component() {
                     </dl>
 
                     <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
-                      <button
+                      <Button
                         type="submit"
-                        className="w-full rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                        loading={loading}
+                        disabled={loading}
                       >
                         Confirm order
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </div>

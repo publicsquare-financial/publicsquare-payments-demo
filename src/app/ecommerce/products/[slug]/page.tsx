@@ -4,8 +4,11 @@ import { useState } from 'react'
 import { StarIcon } from '@heroicons/react/20/solid'
 import { Radio, RadioGroup } from '@headlessui/react'
 import cx from 'classnames'
+import { useParams } from 'next/navigation'
+import { useCart } from '@/providers/CartProvider'
+import config from '@config'
 
-const product = {
+const _product = {
   name: 'Basic Tee 6-Pack',
   price: '$192',
   href: '#',
@@ -59,9 +62,22 @@ const product = {
 }
 const reviews = { href: '#', average: 4, totalCount: 117 }
 
-export default function Example() {
+export default function Page() {
+  const params = useParams()
+  const product = {
+    ..._product,
+    ...config.products.find((cur) => cur.slug === params.slug),
+    images: [
+      {
+        src: config.products.find((cur) => cur.slug === params.slug)?.imageSrc,
+        alt: '',
+      },
+      ..._product.images,
+    ],
+  }
   const [selectedColor, setSelectedColor] = useState(product.colors[0])
   const [selectedSize, setSelectedSize] = useState(product.sizes[2])
+  const cart = useCart()
 
   return (
     <div className="bg-white">
@@ -107,22 +123,22 @@ export default function Example() {
 
         {/* Image gallery */}
         <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
-          <div className="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
+          <div className="aspect-h-3 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
             <img
               alt={product.images[0].alt}
               src={product.images[0].src}
               className="h-full w-full object-cover object-center"
             />
           </div>
-          <div className="hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
-            <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
+          <div className="hidden lg:grid lg:grid-cols-1 lg:space-y-8">
+            <div className="overflow-hidden rounded-lg aspect-video">
               <img
                 alt={product.images[1].alt}
                 src={product.images[1].src}
                 className="h-full w-full object-cover object-center"
               />
             </div>
-            <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
+            <div className="overflow-hidden rounded-lg aspect-video">
               <img
                 alt={product.images[2].alt}
                 src={product.images[2].src}
@@ -130,7 +146,7 @@ export default function Example() {
               />
             </div>
           </div>
-          <div className="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg">
+          <div className="aspect-h-3 aspect-w-3 sm:overflow-hidden sm:rounded-lg">
             <img
               alt={product.images[3].alt}
               src={product.images[3].src}
@@ -182,7 +198,26 @@ export default function Example() {
               </div>
             </div>
 
-            <form className="mt-10">
+            <form
+              className="mt-10"
+              onSubmit={(e) => {
+                e.preventDefault()
+                if (cart.items.find((cur) => cur.item.slug === params.slug)) {
+                  cart.setItems(
+                    cart.items.map((cur) =>
+                      cur.item.slug
+                        ? { ...cur, quantity: cur.quantity + 1 }
+                        : cur
+                    )
+                  )
+                } else {
+                  cart.setItems([
+                    ...cart.items,
+                    { item: product as any, quantity: 1 },
+                  ])
+                }
+              }}
+            >
               {/* Colors */}
               <div>
                 <h3 className="text-sm font-medium text-gray-900">Color</h3>

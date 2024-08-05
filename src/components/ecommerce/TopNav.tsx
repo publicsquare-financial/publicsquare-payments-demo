@@ -25,100 +25,23 @@ import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import { useCart } from '@/providers/CartProvider'
+import config from '@config'
+import Button from '../Button'
 
 const currencies = ['USD', 'CAD', 'AUD', 'EUR', 'GBP']
 const navigation = {
-  categories: [
-    {
-      name: 'Women',
-      featured: [
-        { name: 'Sleep', href: '#' },
-        { name: 'Swimwear', href: '#' },
-        { name: 'Underwear', href: '#' },
-      ],
-      collection: [
-        { name: 'Everything', href: '#' },
-        { name: 'Core', href: '#' },
-        { name: 'New Arrivals', href: '#' },
-        { name: 'Sale', href: '#' },
-      ],
-      categories: [
-        { name: 'Basic Tees', href: '#' },
-        { name: 'Artwork Tees', href: '#' },
-        { name: 'Bottoms', href: '#' },
-        { name: 'Underwear', href: '#' },
-        { name: 'Accessories', href: '#' },
-      ],
-      brands: [
-        { name: 'Full Nelson', href: '#' },
-        { name: 'My Way', href: '#' },
-        { name: 'Re-Arranged', href: '#' },
-        { name: 'Counterfeit', href: '#' },
-        { name: 'Significant Other', href: '#' },
-      ],
-    },
-    {
-      name: 'Men',
-      featured: [
-        { name: 'Casual', href: '#' },
-        { name: 'Boxers', href: '#' },
-        { name: 'Outdoor', href: '#' },
-      ],
-      collection: [
-        { name: 'Everything', href: '#' },
-        { name: 'Core', href: '#' },
-        { name: 'New Arrivals', href: '#' },
-        { name: 'Sale', href: '#' },
-      ],
-      categories: [
-        { name: 'Artwork Tees', href: '#' },
-        { name: 'Pants', href: '#' },
-        { name: 'Accessories', href: '#' },
-        { name: 'Boxers', href: '#' },
-        { name: 'Basic Tees', href: '#' },
-      ],
-      brands: [
-        { name: 'Significant Other', href: '#' },
-        { name: 'My Way', href: '#' },
-        { name: 'Counterfeit', href: '#' },
-        { name: 'Re-Arranged', href: '#' },
-        { name: 'Full Nelson', href: '#' },
-      ],
-    },
-  ],
+  categories: config.menus.main,
   pages: [
     { name: 'Company', href: '#' },
     { name: 'Stores', href: '#' },
   ],
 }
 
-const products = [
-  {
-    id: 1,
-    name: 'Throwback Hip Bag',
-    href: '#',
-    color: 'Salmon',
-    imageSrc:
-      'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg',
-    imageAlt:
-      'Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.',
-  },
-  {
-    id: 2,
-    name: 'Medium Stuff Satchel',
-    href: '#',
-    color: 'Blue',
-    imageSrc:
-      'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg',
-    imageAlt:
-      'Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.',
-  },
-  // More products...
-]
-
 export default function TopNav() {
   const [open, setOpen] = useState(false)
   const router = useRouter()
+  const cart = useCart()
 
   return (
     <div className="bg-white">
@@ -388,7 +311,7 @@ export default function TopNav() {
                       <span className="sr-only">Your Company</span>
                       <Image
                         alt=""
-                        src="/logo-dark.svg"
+                        src={config.logo}
                         sizes="100vw"
                         width={1000}
                         height={1000}
@@ -411,7 +334,7 @@ export default function TopNav() {
 
                             <PopoverPanel
                               transition
-                              className="absolute inset-x-0 top-full text-gray-500 transition data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in sm:text-sm"
+                              className="z-10 absolute inset-x-0 top-full text-gray-500 transition data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in sm:text-sm"
                             >
                               {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
                               <div
@@ -629,7 +552,7 @@ export default function TopNav() {
                               className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                             />
                             <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-                              {products.length}
+                              {cart.items.length}
                             </span>
                             <span className="sr-only">
                               items in cart, view bag
@@ -637,7 +560,7 @@ export default function TopNav() {
                           </PopoverButton>
                           <PopoverPanel
                             transition
-                            className="absolute inset-x-0 top-16 mt-px bg-white pb-6 shadow-lg transition data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in sm:px-2 lg:left-auto lg:right-0 lg:top-full lg:-mr-1.5 lg:mt-3 lg:w-80 lg:rounded-lg lg:ring-1 lg:ring-black lg:ring-opacity-5"
+                            className="z-10 absolute inset-x-0 top-16 mt-px bg-white pb-6 shadow-lg transition data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in sm:px-2 lg:left-auto lg:right-0 lg:top-full lg:-mr-1.5 lg:mt-3 lg:w-80 lg:rounded-lg lg:ring-1 lg:ring-black lg:ring-opacity-5"
                           >
                             <h2 className="sr-only">Shopping Cart</h2>
 
@@ -646,39 +569,49 @@ export default function TopNav() {
                                 role="list"
                                 className="divide-y divide-gray-200"
                               >
-                                {products.map((product) => (
-                                  <li
-                                    key={product.id}
-                                    className="flex items-center py-6"
-                                  >
-                                    <img
-                                      alt={product.imageAlt}
-                                      src={product.imageSrc}
-                                      className="h-16 w-16 flex-none rounded-md border border-gray-200"
-                                    />
-                                    <div className="ml-4 flex-auto">
-                                      <h3 className="font-medium text-gray-900">
-                                        <a href={product.href}>
-                                          {product.name}
-                                        </a>
-                                      </h3>
-                                      <p className="text-gray-500">
-                                        {product.color}
-                                      </p>
-                                    </div>
+                                {cart.items.length ? (
+                                  cart.items.map((product) => (
+                                    <li
+                                      key={product.item.id}
+                                      className="flex items-center py-6"
+                                    >
+                                      <img
+                                        alt={product.item.imageAlt}
+                                        src={product.item.imageSrc}
+                                        className="h-16 w-16 flex-none rounded-md border border-gray-200"
+                                      />
+                                      <div className="ml-4 flex-auto">
+                                        <h3 className="font-medium text-gray-900">
+                                          <a
+                                            href={`/ecommerce/products/${product.item.slug}`}
+                                          >
+                                            {product.item.name}
+                                          </a>
+                                        </h3>
+                                        <p className="text-gray-500">
+                                          {product.item.options}
+                                        </p>
+                                      </div>
+                                      <div>{product.quantity}</div>
+                                    </li>
+                                  ))
+                                ) : (
+                                  <li className="py-6">
+                                    <p className="text-gray-500 text-center">
+                                      No products yet...
+                                    </p>
                                   </li>
-                                ))}
+                                )}
                               </ul>
 
-                              <button
-                                type="button"
-                                className="w-full rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                              <Button
                                 onClick={() =>
                                   router.push('/ecommerce/checkout')
                                 }
+                                disabled={!cart.items.length}
                               >
                                 Checkout
-                              </button>
+                              </Button>
 
                               <p className="mt-6 text-center">
                                 <Link
