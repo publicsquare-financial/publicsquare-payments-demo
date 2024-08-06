@@ -90,22 +90,22 @@ function Component() {
 
   const initialValues: Yup.InferType<typeof schema> = {
     customer: {
-      email: 'ryan.frahm@credova.com',
-      first_name: 'Ryan',
-      last_name: 'Frahm',
+      email: '',
+      first_name: '',
+      last_name: '',
       business_name: '',
-      phone: '11234567890',
+      phone: '',
     },
     address: {
-      address_line_1: '232 Main St',
+      address_line_1: '',
       address_line_2: undefined,
-      city: 'Ames',
-      state: 'IA',
-      postal_code: '50010',
-      country: 'US',
+      city: '',
+      state: '',
+      postal_code: '',
+      country: '',
     },
     delivery_method: 1,
-    name_on_card: 'Ryan Frahm',
+    name_on_card: '',
     card: {},
   }
 

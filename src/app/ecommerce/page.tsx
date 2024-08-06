@@ -13,14 +13,14 @@ export default function Page() {
               key={product.id}
               className="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white"
             >
-              <div className="aspect-h-4 aspect-w-3 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-96">
+              <div className="aspect-h-4 aspect-w-3 sm:aspect-none group-hover:opacity-75 sm:h-96">
                 <Image
                   alt={product.imageAlt}
                   src={product.images[0]}
                   sizes="100vw"
                   width={1000}
                   height={1000}
-                  className="h-full w-full object-cover object-center sm:h-full sm:w-full"
+                  className="h-full w-full object-contain object-center sm:h-full sm:w-full"
                 />
               </div>
               <div className="flex flex-1 flex-col space-y-2 p-4">
