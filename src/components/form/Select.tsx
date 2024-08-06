@@ -47,7 +47,7 @@ const Select = ({
           </Label>
         )}
         <ListboxButton
-          className="relative flex w-full items-center justify-between py-1.5 pl-3 border placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:leading-6 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-white"
+          className="relative flex w-full items-center justify-between py-1.5 pl-3 border placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:leading-6 rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm bg-white"
           data-testid={`${name}_dropdown_button`}
         >
           <span className="block truncate">

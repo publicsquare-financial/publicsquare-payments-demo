@@ -7,7 +7,9 @@ export default function Page() {
     <div className="bg-white">
       <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
         <div className="max-w-xl">
-          <h1 className="text-base font-medium text-indigo-600">Thank you!</h1>
+          <h1 className="text-base font-medium text-primary-dark">
+            Thank you!
+          </h1>
           <p className="mt-2 text-4xl font-bold tracking-tight sm:text-5xl">
             It's on the way!
           </p>
@@ -17,7 +19,7 @@ export default function Page() {
 
           <dl className="mt-12 text-sm font-medium">
             <dt className="text-gray-900">Tracking number</dt>
-            <dd className="mt-2 text-indigo-600">51547878755545848512</dd>
+            <dd className="mt-2 text-primary-dark">51547878755545848512</dd>
           </dl>
         </div>
 

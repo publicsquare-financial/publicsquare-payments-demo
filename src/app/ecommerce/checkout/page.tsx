@@ -97,19 +97,19 @@ function Component() {
 
   const initialValues: Yup.InferType<typeof schema> = {
     customer: {
-      email: '',
-      first_name: '',
-      last_name: '',
+      email: 'ryan.frahm@credova.com',
+      first_name: 'Ryan',
+      last_name: 'Frahm',
       business_name: '',
-      phone: '',
+      phone: '11234567890',
     },
     address: {
-      address_line_1: '',
+      address_line_1: '232 Main St',
       address_line_2: undefined,
-      city: '',
-      state: '',
-      postal_code: '',
-      country: '',
+      city: 'Ames',
+      state: 'IA',
+      postal_code: '50010',
+      country: 'US',
     },
     delivery_method: 1,
     name_on_card: 'Ryan Frahm',
@@ -371,7 +371,7 @@ function Component() {
                             value={deliveryMethod}
                             aria-label={deliveryMethod.title}
                             aria-description={`${deliveryMethod.turnaround} for ${deliveryMethod.price}`}
-                            className="group relative flex cursor-pointer rounded-lg border border-gray-300 bg-white p-4 shadow-sm focus:outline-none data-[checked]:border-transparent data-[focus]:ring-2 data-[focus]:ring-indigo-500"
+                            className="group relative flex cursor-pointer rounded-lg border border-gray-300 bg-white p-4 shadow-sm focus:outline-none data-[checked]:border-transparent data-[focus]:ring-2 data-[focus]:ring-primary"
                           >
                             <span className="flex flex-1">
                               <span className="flex flex-col">
@@ -388,11 +388,11 @@ function Component() {
                             </span>
                             <CheckCircleIcon
                               aria-hidden="true"
-                              className="h-5 w-5 text-indigo-600 [.group:not([data-checked])_&]:hidden"
+                              className="h-5 w-5 text-primary-dark [.group:not([data-checked])_&]:hidden"
                             />
                             <span
                               aria-hidden="true"
-                              className="pointer-events-none absolute -inset-px rounded-lg border-2 border-transparent group-data-[focus]:border group-data-[checked]:border-indigo-500"
+                              className="pointer-events-none absolute -inset-px rounded-lg border-2 border-transparent group-data-[focus]:border group-data-[checked]:border-primary"
                             />
                           </Radio>
                         ))}
@@ -421,14 +421,14 @@ function Component() {
                                   id={paymentMethod.id}
                                   name="payment-type"
                                   type="radio"
-                                  className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                  className="h-4 w-4 border-gray-300 text-primary-dark focus:ring-primary"
                                 />
                               ) : (
                                 <input
                                   id={paymentMethod.id}
                                   name="payment-type"
                                   type="radio"
-                                  className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                  className="h-4 w-4 border-gray-300 text-primary-dark focus:ring-primary"
                                 />
                               )}
 
@@ -458,7 +458,7 @@ function Component() {
                       </div>
                       <div className="col-span-4">
                         <div
-                          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-1"
+                          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm py-1"
                           {...{
                             type: 'text',
                           }}
@@ -539,7 +539,7 @@ function Component() {
                                   value={product.quantity}
                                   id="quantity"
                                   name="quantity"
-                                  className="rounded-md border border-gray-300 text-left text-base font-medium text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+                                  className="rounded-md border border-gray-300 text-left text-base font-medium text-gray-700 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary sm:text-sm"
                                 >
                                   <option value={1}>1</option>
                                   <option value={2}>2</option>

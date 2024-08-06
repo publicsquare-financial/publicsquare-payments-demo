@@ -7,6 +7,7 @@ export default {
   theme: {
     colors: {
       primary: '#4f46e5',
+      'primary-dark': '#4338ca',
     },
   },
   menus: {

@@ -7,6 +7,7 @@ import cx from 'classnames'
 import { useParams } from 'next/navigation'
 import { useCart } from '@/providers/CartProvider'
 import config from '@config'
+import Button from '@/components/Button'
 
 const _product = {
   name: 'Basic Tee 6-Pack',
@@ -189,10 +190,7 @@ export default function Page() {
                   ))}
                 </div>
                 <p className="sr-only">{reviews.average} out of 5 stars</p>
-                <a
-                  href={reviews.href}
-                  className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500"
-                >
+                <a href={reviews.href} className="ml-3 text-sm">
                   {reviews.totalCount} reviews
                 </a>
               </div>
@@ -255,10 +253,7 @@ export default function Page() {
               <div className="mt-10">
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-medium text-gray-900">Size</h3>
-                  <a
-                    href="#"
-                    className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
-                  >
+                  <a href="#" className="text-sm font-medium0">
                     Size guide
                   </a>
                 </div>
@@ -278,14 +273,14 @@ export default function Page() {
                           size.inStock
                             ? 'cursor-pointer bg-white text-gray-900 shadow-sm'
                             : 'cursor-not-allowed bg-gray-50 text-gray-200',
-                          'group relative flex items-center justify-center rounded-md border px-4 py-3 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none data-[focus]:ring-2 data-[focus]:ring-indigo-500 sm:flex-1 sm:py-6'
+                          'group relative flex items-center justify-center rounded-md border px-4 py-3 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none data-[focus]:ring-2 data-[focus]:ring-primary sm:flex-1 sm:py-6'
                         )}
                       >
                         <span>{size.name}</span>
                         {size.inStock ? (
                           <span
                             aria-hidden="true"
-                            className="pointer-events-none absolute -inset-px rounded-md border-2 border-transparent group-data-[focus]:border group-data-[checked]:border-indigo-500"
+                            className="pointer-events-none absolute -inset-px rounded-md border-2 border-transparent group-data-[focus]:border group-data-[checked]:border-primary"
                           />
                         ) : (
                           <span
@@ -314,12 +309,9 @@ export default function Page() {
                 </fieldset>
               </div>
 
-              <button
-                type="submit"
-                className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-              >
+              <Button type="submit" className="mt-10">
                 Add to bag
-              </button>
+              </Button>
             </form>
           </div>
 

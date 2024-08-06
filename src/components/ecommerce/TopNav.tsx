@@ -75,7 +75,7 @@ export default function TopNav() {
                   {navigation.categories.map((category) => (
                     <Tab
                       key={category.name}
-                      className="flex-1 whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-base font-medium text-gray-900 data-[selected]:border-indigo-600 data-[selected]:text-indigo-600"
+                      className="flex-1 whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-base font-medium text-gray-900 data-[selected]:border-primary-dark data-[selected]:text-primary-dark"
                     >
                       {category.name}
                     </Tab>
@@ -327,7 +327,7 @@ export default function TopNav() {
                         {navigation.categories.map((category, categoryIdx) => (
                           <Popover key={category.name} className="flex">
                             <div className="relative flex">
-                              <PopoverButton className="relative z-10 -mb-px flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-gray-700 transition-colors duration-200 ease-out hover:text-gray-800 data-[open]:border-indigo-600 data-[open]:text-indigo-600">
+                              <PopoverButton className="relative z-10 -mb-px flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-gray-700 transition-colors duration-200 ease-out hover:text-gray-800 data-[open]:border-primary-dark data-[open]:text-primary-dark">
                                 {category.name}
                               </PopoverButton>
                             </div>
@@ -616,7 +616,7 @@ export default function TopNav() {
                               <p className="mt-6 text-center">
                                 <Link
                                   href="/ecommerce/cart"
-                                  className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                                  className="text-sm font-medium"
                                 >
                                   View Shopping Bag
                                 </Link>

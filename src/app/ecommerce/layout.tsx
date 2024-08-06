@@ -1,4 +1,3 @@
-'use client'
 import Footer from '@/components/ecommerce/Footer'
 import TopNav from '@/components/ecommerce/TopNav'
 import { CartProvider } from '@/providers/CartProvider'
