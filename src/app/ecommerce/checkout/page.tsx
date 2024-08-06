@@ -14,9 +14,9 @@ import FormInput from '@/components/form/FormInput'
 import FormSelect from '@/components/form/FormSelect'
 import CredovaTypes from '@credova/elements-js/types/sdk'
 import { useRouter } from 'next/navigation'
-import config from '@config'
 import Button from '@/components/Button'
 import { useCart } from '@/providers/CartProvider'
+import { currency } from '@/utils'
 
 const deliveryMethods = [
   {
@@ -32,13 +32,6 @@ const paymentMethods = [
   { id: 'paypal', title: 'PayPal' },
   { id: 'etransfer', title: 'eTransfer' },
 ]
-
-export function currency(amount: number) {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  }).format(amount)
-}
 
 function Component() {
   const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(
@@ -488,7 +481,7 @@ function Component() {
                           <div className="flex-shrink-0">
                             <img
                               alt={product.item.imageAlt}
-                              src={product.item.imageSrc}
+                              src={product.item.images[0]}
                               className="w-20 rounded-md"
                             />
                           </div>

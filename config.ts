@@ -135,8 +135,6 @@ export default {
       description:
         'Get the full lineup of our Basic Tees. Have a fresh shirt all week, and an extra for laundry day.',
       options: '8 colors',
-      imageSrc:
-        'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-01.jpg',
       imageAlt:
         'Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.',
       images: [
@@ -153,8 +151,6 @@ export default {
       description:
         'Look like a visionary CEO and wear the same black t-shirt every day.',
       options: 'Black',
-      imageSrc:
-        'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-02.jpg',
       imageAlt: 'Front of plain black t-shirt.',
       images: [
         'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-02.jpg',
@@ -169,8 +165,6 @@ export default {
       price: '$32',
       description: "It's probably, like, 5000 Kelvin instead of 6000 K.",
       options: 'White',
-      imageSrc:
-        'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-03.jpg',
       imageAlt:
         'Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.',
       images: [
@@ -187,8 +181,6 @@ export default {
       description:
         'White tees stain easily, and black tees fade. This is going to be gray for a while.',
       options: 'Charcoal',
-      imageSrc:
-        'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-04.jpg',
       imageAlt: 'Front of plain black t-shirt.',
       images: [
         'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-04.jpg',
@@ -204,8 +196,6 @@ export default {
       description:
         'Who need stark minimalism when you could have earth tones? Embrace the season.',
       options: 'Olive',
-      imageSrc:
-        'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-05.jpg',
       imageAlt:
         'Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.',
       images: [
@@ -222,8 +212,6 @@ export default {
       description:
         'Get all 3 colors of our popular Linework design and some variety to your monotonous life.',
       options: '3 colors',
-      imageSrc:
-        'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg',
       imageAlt: 'Front of plain black t-shirt.',
       images: [
         'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg',

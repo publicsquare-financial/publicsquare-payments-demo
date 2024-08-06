@@ -577,7 +577,7 @@ export default function TopNav() {
                                     >
                                       <img
                                         alt={product.item.imageAlt}
-                                        src={product.item.imageSrc}
+                                        src={product.item.images[0]}
                                         className="h-16 w-16 flex-none rounded-md border border-gray-200"
                                       />
                                       <div className="ml-4 flex-auto">

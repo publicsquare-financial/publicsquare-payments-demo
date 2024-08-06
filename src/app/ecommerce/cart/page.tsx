@@ -2,15 +2,10 @@
 
 import Button from '@/components/Button'
 import { useCart } from '@/providers/CartProvider'
-import {
-  CheckIcon,
-  ClockIcon,
-  QuestionMarkCircleIcon,
-  XMarkIcon,
-} from '@heroicons/react/20/solid'
+import { currency } from '@/utils'
+import { QuestionMarkCircleIcon, XMarkIcon } from '@heroicons/react/20/solid'
 import { useRouter } from 'next/navigation'
 import { useMemo } from 'react'
-import { currency } from '../checkout/page'
 
 export default function Cart() {
   const router = useRouter()
@@ -52,7 +47,7 @@ export default function Cart() {
                     <div className="flex-shrink-0">
                       <img
                         alt={product.item.imageAlt}
-                        src={product.item.imageSrc}
+                        src={product.item.images[0]}
                         className="h-24 w-24 rounded-md object-cover object-center sm:h-48 sm:w-48"
                       />
                     </div>

@@ -11,7 +11,7 @@ export default function Page() {
             Thank you!
           </h1>
           <p className="mt-2 text-4xl font-bold tracking-tight sm:text-5xl">
-            It's on the way!
+            It&apos;s on the way!
           </p>
           <p className="mt-2 text-base text-gray-500">
             Your order #14034056 has shipped and will be with you soon.
@@ -34,7 +34,7 @@ export default function Page() {
             >
               <img
                 alt={product.imageAlt}
-                src={product.imageSrc}
+                src={product.images[0]}
                 className="h-20 w-20 flex-none rounded-lg bg-gray-100 object-cover object-center sm:h-40 sm:w-40"
               />
               <div className="flex flex-auto flex-col">

@@ -16,7 +16,7 @@ export default function Page() {
               <div className="aspect-h-4 aspect-w-3 bg-gray-200 sm:aspect-none group-hover:opacity-75 sm:h-96">
                 <Image
                   alt={product.imageAlt}
-                  src={product.imageSrc}
+                  src={product.images[0]}
                   sizes="100vw"
                   width={1000}
                   height={1000}
