@@ -17,12 +17,14 @@
     "classnames": "^2.5.1",
     "formik": "^2.4.6",
     "next": "14.2.5",
+    "prismjs": "^1.29.0",
     "react": "^18",
     "react-dom": "^18",
     "yup": "^1.4.0"
   },
   "devDependencies": {
     "@types/node": "^20",
+    "@types/prismjs": "^1.26.4",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",

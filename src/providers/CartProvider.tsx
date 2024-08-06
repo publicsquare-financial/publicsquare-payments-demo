@@ -78,7 +78,6 @@ export const CartProvider = ({
     if (typeof window !== 'undefined') {
       if (window.localStorage.getItem('cart')) {
         const data = JSON.parse(window.localStorage.getItem('cart') as any)
-        console.log('> cart', data)
         _setCustomer(data.customer)
         _setItems(data.items ?? [])
         _setBillingDetails(data.billing_details)

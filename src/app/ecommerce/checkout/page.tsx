@@ -17,6 +17,10 @@ import { useRouter } from 'next/navigation'
 import Button from '@/components/Button'
 import { useCart } from '@/providers/CartProvider'
 import { currency } from '@/utils'
+import CodeCallout from '@/components/CodeCallout'
+import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
+import CardElementsCallout from '@/components/ecommerce/CardElementsCallout'
+import ConfirmOrderCallout from '@/components/ecommerce/ConfirmOrderCallout'
 
 const deliveryMethods = [
   {
@@ -55,6 +59,7 @@ function Component() {
     }
   }, [cart.items])
   const router = useRouter()
+  const [elementsCalloutOpen, setElementsCalloutOpen] = useState(false)
 
   const schema = Yup.object().shape({
     customer: Yup.object({
@@ -175,7 +180,6 @@ function Component() {
       validationSchema={schema}
       onSubmit={async (values, { setSubmitting, setFieldError }) => {
         if (!cardElement.current) {
-          console.log(cardElement)
           setFieldError('card', 'Card is required')
         } else {
           setSubmitting(true)
@@ -449,7 +453,7 @@ function Component() {
                           <FormInput name="name_on_card" />
                         </div>
                       </div>
-                      <div className="col-span-4">
+                      <div className="col-span-4 relative">
                         <div
                           className="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm py-1"
                           {...{
@@ -459,6 +463,7 @@ function Component() {
                           <CardElement ref={cardElement} id="card-element" />
                         </div>
                         <ErrorMessage name="card" />
+                        <CardElementsCallout />
                       </div>
                     </div>
                   </div>
@@ -576,7 +581,7 @@ function Component() {
                       </div>
                     </dl>
 
-                    <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
+                    <div className="border-t border-gray-200 px-4 py-6 sm:px-6 relative">
                       <Button
                         type="submit"
                         loading={loading}
@@ -584,6 +589,7 @@ function Component() {
                       >
                         Confirm order
                       </Button>
+                      <ConfirmOrderCallout />
                     </div>
                   </div>
                 </div>
