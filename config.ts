@@ -139,6 +139,11 @@ export default {
         'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-01.jpg',
       imageAlt:
         'Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.',
+      images: [
+        'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-01.jpg',
+        'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-01.jpg',
+        'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-01.jpg',
+      ],
     },
     {
       id: 2,
@@ -151,6 +156,11 @@ export default {
       imageSrc:
         'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-02.jpg',
       imageAlt: 'Front of plain black t-shirt.',
+      images: [
+        'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-02.jpg',
+        'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-02.jpg',
+        'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-02.jpg',
+      ],
     },
     {
       id: 3,
@@ -163,6 +173,11 @@ export default {
         'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-03.jpg',
       imageAlt:
         'Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.',
+      images: [
+        'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-03.jpg',
+        'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-03.jpg',
+        'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-03.jpg',
+      ],
     },
     {
       id: 4,
@@ -175,6 +190,11 @@ export default {
       imageSrc:
         'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-04.jpg',
       imageAlt: 'Front of plain black t-shirt.',
+      images: [
+        'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-04.jpg',
+        'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-04.jpg',
+        'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-04.jpg',
+      ],
     },
     {
       id: 5,
@@ -188,6 +208,11 @@ export default {
         'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-05.jpg',
       imageAlt:
         'Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.',
+      images: [
+        'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-05.jpg',
+        'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-05.jpg',
+        'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-05.jpg',
+      ],
     },
     {
       id: 6,
@@ -200,6 +225,11 @@ export default {
       imageSrc:
         'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg',
       imageAlt: 'Front of plain black t-shirt.',
+      images: [
+        'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg',
+        'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg',
+        'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg',
+      ],
     },
   ],
 }

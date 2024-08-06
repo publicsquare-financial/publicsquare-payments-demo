@@ -10,30 +10,9 @@ import config from '@config'
 import Button from '@/components/Button'
 
 const _product = {
-  name: 'Basic Tee 6-Pack',
-  price: '$192',
-  href: '#',
   breadcrumbs: [
     { id: 1, name: 'Men', href: '#' },
     { id: 2, name: 'Clothing', href: '#' },
-  ],
-  images: [
-    {
-      src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-secondary-product-shot.jpg',
-      alt: 'Two each of gray, white, and black shirts laying flat.',
-    },
-    {
-      src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-01.jpg',
-      alt: 'Model wearing plain black basic tee.',
-    },
-    {
-      src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-02.jpg',
-      alt: 'Model wearing plain gray basic tee.',
-    },
-    {
-      src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-featured-product-shot.jpg',
-      alt: 'Model wearing plain white basic tee.',
-    },
   ],
   colors: [
     { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
@@ -67,14 +46,7 @@ export default function Page() {
   const params = useParams()
   const product = {
     ..._product,
-    ...config.products.find((cur) => cur.slug === params.slug),
-    images: [
-      {
-        src: config.products.find((cur) => cur.slug === params.slug)?.imageSrc,
-        alt: '',
-      },
-      ..._product.images,
-    ],
+    ...config.products.find((cur) => cur.slug === params.slug)!,
   }
   const [selectedColor, setSelectedColor] = useState(product.colors[0])
   const [selectedSize, setSelectedSize] = useState(product.sizes[2])
@@ -112,7 +84,7 @@ export default function Page() {
             ))}
             <li className="text-sm">
               <a
-                href={product.href}
+                href={`/ecommerce/products/${product.slug}`}
                 aria-current="page"
                 className="font-medium text-gray-500 hover:text-gray-600"
               >
@@ -126,31 +98,22 @@ export default function Page() {
         <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
           <div className="aspect-h-3 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
             <img
-              alt={product.images[0].alt}
-              src={product.images[0].src}
+              alt={product.imageAlt}
+              src={product.images[0]}
               className="h-full w-full object-cover object-center"
             />
           </div>
-          <div className="hidden lg:grid lg:grid-cols-1 lg:space-y-8">
-            <div className="overflow-hidden rounded-lg aspect-video">
-              <img
-                alt={product.images[1].alt}
-                src={product.images[1].src}
-                className="h-full w-full object-cover object-center"
-              />
-            </div>
-            <div className="overflow-hidden rounded-lg aspect-video">
-              <img
-                alt={product.images[2].alt}
-                src={product.images[2].src}
-                className="h-full w-full object-cover object-center"
-              />
-            </div>
+          <div className="aspect-h-3 aspect-w-3 sm:overflow-hidden sm:rounded-lg">
+            <img
+              alt={product.imageAlt}
+              src={product.images[1]}
+              className="h-full w-full object-cover object-center"
+            />
           </div>
           <div className="aspect-h-3 aspect-w-3 sm:overflow-hidden sm:rounded-lg">
             <img
-              alt={product.images[3].alt}
-              src={product.images[3].src}
+              alt={product.imageAlt}
+              src={product.images[2]}
               className="h-full w-full object-cover object-center"
             />
           </div>
