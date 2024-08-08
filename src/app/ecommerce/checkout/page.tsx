@@ -8,17 +8,15 @@ import {
   CredovaProvider,
   useCredova,
 } from '@credova/elements-react'
+import type CredovaTypes from '@credova/elements-react/types/sdk'
 import * as Yup from 'yup'
 import { ErrorMessage, Form, Formik } from 'formik'
 import FormInput from '@/components/form/FormInput'
 import FormSelect from '@/components/form/FormSelect'
-import CredovaTypes from '@credova/elements-js/types/sdk'
 import { useRouter } from 'next/navigation'
 import Button from '@/components/Button'
 import { useCart } from '@/providers/CartProvider'
 import { currency } from '@/utils'
-import CodeCallout from '@/components/CodeCallout'
-import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
 import CardElementsCallout from '@/components/ecommerce/CardElementsCallout'
 import ConfirmOrderCallout from '@/components/ecommerce/ConfirmOrderCallout'
 

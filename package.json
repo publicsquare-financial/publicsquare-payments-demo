@@ -9,8 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@credova/elements-js": "^1.1.0",
-    "@credova/elements-react": "^1.1.0",
+    "@credova/elements-react": "^1.1.1",
     "@headlessui/react": "^2.1.2",
     "@heroicons/react": "^2.1.5",
     "@tailwindcss/forms": "^0.5.7",

@@ -20,19 +20,19 @@
     snake-case "^3.0.4"
     snakecase-keys "^3.2.1"
 
-"@credova/elements-js@1.1.0", "@credova/elements-js@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@credova/elements-js/-/elements-js-1.1.0.tgz#5d7fcec5b9c68d82d770931c55ca684a817a659f"
-  integrity sha512-Mgtn/YHNjsvHq7VYiBbAsMJ4BMuX6ewTnDwi38HbYEo/RoERLwA1Fj7VwGXppcwRuIMlyqN1QLV8Y93CiccPWQ==
+"@credova/elements-js@1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@credova/elements-js/-/elements-js-1.1.1.tgz#9d351d34b21397e0b7e5db47c08c4f4987923cd7"
+  integrity sha512-rFJUcICgxII1uls9iJHs/vVhmLbekriaa/+lZikPzi8ntnsTFdN42qGzIhYIDWiIwpRJmp4mOjXiHaUuwiMwJQ==
   dependencies:
     "@basis-theory/basis-theory-js" "^4.6.2"
 
-"@credova/elements-react@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@credova/elements-react/-/elements-react-1.1.0.tgz#d1933973b5be50fe5c987832dccc05a43b250b40"
-  integrity sha512-NFwzUvBOPMBUICPpLMijZPXADCG5s4xtYs9YkEBqI06oIGmwsswxBdcyAkBxBjD/ILjI1JahisFXKcd1RqdGuQ==
+"@credova/elements-react@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@credova/elements-react/-/elements-react-1.1.1.tgz#043191f559aa561968c302c504c5bf0b5fcbc3bf"
+  integrity sha512-u+qEvElVyIqbLhDr4ig+w86E9gi2VlGiL50CHkya7DH47+isa2tn8NgYz0ZqpkTtLijF+yfr/LGlfRO4/Wjyng==
   dependencies:
-    "@credova/elements-js" "1.1.0"
+    "@credova/elements-js" "1.1.1"
 
 "@eslint-community/eslint-utils@^4.2.0":
   version "4.4.0"
