@@ -16,7 +16,9 @@ pnpm i
 bun i
 ```
 
-Second, run the development server:
+Second, rename the `.env.example` file to `.env` and update the api key variables named `NEXT_PUBLIC_CREDOVA_API_KEY` and `CREDOVA_API_SECRET` from your account in the [Credova portal](https://portal.credova.com/developers/api-keys).
+
+Third, run the development server:
 
 ```bash
 npm run dev
