@@ -1,9 +1,10 @@
-'use client'
-import { ErrorMessage } from 'formik'
+'use client';
+
+import { ErrorMessage } from 'formik';
 
 type Props = {
   name: string
-}
+};
 
 const FormError = ({ name }: Props) => {
   return (
@@ -13,6 +14,6 @@ const FormError = ({ name }: Props) => {
       className="pt-2 text-xs text-red-500"
     />
   )
-}
+};
 
-export default FormError
+export default FormError;

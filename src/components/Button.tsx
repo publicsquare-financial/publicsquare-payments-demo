@@ -1,6 +1,6 @@
-import { ComponentProps } from 'react'
-import cx from 'classnames'
-import Loader from './Loader'
+import { ComponentProps } from 'react';
+import cx from 'classnames';
+import Loader from './Loader';
 
 export default function Button({
   children,

@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { StarIcon } from '@heroicons/react/20/solid'
-import { Radio, RadioGroup } from '@headlessui/react'
-import cx from 'classnames'
-import { useParams } from 'next/navigation'
-import { useCart } from '@/providers/CartProvider'
-import config from '@config'
-import Button from '@/components/Button'
+import { useState } from 'react';
+import { StarIcon } from '@heroicons/react/20/solid';
+import { Radio, RadioGroup } from '@headlessui/react';
+import cx from 'classnames';
+import { useParams } from 'next/navigation';
+import { useCart } from '@/providers/CartProvider';
+import config from '@config';
+import Button from '@/components/Button';
 
 const _product = {
   breadcrumbs: [
@@ -39,8 +39,8 @@ const _product = {
   ],
   details:
     'The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming "Charcoal Gray" limited release.',
-}
-const reviews = { href: '#', average: 4, totalCount: 117 }
+};
+const reviews = { href: '#', average: 4, totalCount: 117 };
 
 export default function Page() {
   const params = useParams()

@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
-import Button from '@/components/Button'
-import { useCart } from '@/providers/CartProvider'
-import { currency } from '@/utils'
-import { QuestionMarkCircleIcon, XMarkIcon } from '@heroicons/react/20/solid'
-import { useRouter } from 'next/navigation'
-import { useMemo } from 'react'
+import Button from '@/components/Button';
+import { useCart } from '@/providers/CartProvider';
+import { currency } from '@/utils';
+import { QuestionMarkCircleIcon, XMarkIcon } from '@heroicons/react/20/solid';
+import { useRouter } from 'next/navigation';
+import { useMemo } from 'react';
 
 export default function Cart() {
-  const router = useRouter()
-  const cart = useCart()
+  const router = useRouter();
+  const cart = useCart();
 
   const total = useMemo(() => {
     const subtotal = cart.items.reduce(
@@ -23,7 +23,7 @@ export default function Cart() {
       taxes: 0.07 * subtotal,
       total: subtotal + 0.07 * subtotal,
     }
-  }, [cart.items])
+  }, [cart.items]);
 
   return (
     <div className="bg-white">

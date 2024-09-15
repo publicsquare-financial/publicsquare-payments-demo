@@ -1,6 +1,7 @@
-'use client'
-import { Field } from 'formik'
-import { ComponentProps } from 'react'
+'use client';
+
+import { Field } from 'formik';
+import { ComponentProps } from 'react';
 
 type Props = {
   name: string
@@ -12,7 +13,7 @@ type Props = {
   disabled?: boolean
   step?: string
   autoComplete?: string
-} & ComponentProps<'input'>
+} & ComponentProps<'input'>;
 
 const FormInputField = (props: Props) => {
   return (
@@ -21,6 +22,6 @@ const FormInputField = (props: Props) => {
       {...props}
     />
   )
-}
+};
 
-export default FormInputField
+export default FormInputField;

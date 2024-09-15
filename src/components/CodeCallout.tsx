@@ -4,11 +4,11 @@ import {
   DialogBackdrop,
   DialogPanel,
   DialogTitle,
-} from '@headlessui/react'
-import { ComponentProps } from 'react'
-import Button from './Button'
-import Prism from 'prismjs'
-import 'prismjs/themes/prism.css'
+} from '@headlessui/react';
+import { ComponentProps } from 'react';
+import Button from './Button';
+import Prism from 'prismjs';
+import 'prismjs/themes/prism.css';
 
 export default function CodeCallout({
   title,

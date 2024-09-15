@@ -4,10 +4,10 @@ import {
   ListboxButton,
   ListboxOption,
   ListboxOptions,
-} from '@headlessui/react'
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
-import cx from 'classnames'
-import { FieldInputProps } from 'formik'
+} from '@headlessui/react';
+import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
+import cx from 'classnames';
+import { FieldInputProps } from 'formik';
 
 type Props = {
   options?: {
@@ -18,7 +18,7 @@ type Props = {
   description?: string
   loading?: boolean
   handleChange?: () => void
-}
+};
 
 const Select = ({
   options,
@@ -106,6 +106,6 @@ const Select = ({
       </Listbox>
     </div>
   )
-}
+};
 
-export default Select
+export default Select;

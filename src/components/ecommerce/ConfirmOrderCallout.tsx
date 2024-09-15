@@ -1,6 +1,6 @@
-import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
-import { useState } from 'react'
-import CodeCallout from '../CodeCallout'
+import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
+import { useState } from 'react';
+import CodeCallout from '../CodeCallout';
 
 export default function ConfirmOrderCallout() {
   const [open, setOpen] = useState(false)
@@ -18,14 +18,14 @@ export default function ConfirmOrderCallout() {
         code={`
 // ...
 // Step 1: Create the card
-// See https://developers.credova.com/guides/merchants/collect-cards#storing-cards
-const response = await credova.cards.create({
+// See https://developers.publicsquare.com/guides/merchants/collect-cards#storing-cards
+const response = await publicsquare.cards.create({
   cardholder_name: values.name_on_card,
   // This is the card element ref
   card,
 })
 // Step 2: Capture the payment
-// See https://developers.credova.com/guides/merchants/process-payments#process-the-payment
+// See https://developers.publicsquare.com/guides/merchants/process-payments#process-the-payment
 const payment = await fetch('/api/payments', {
   method: 'POST',
   body: JSON.stringify({

@@ -1,10 +1,10 @@
-import { Field, FieldInputProps } from 'formik'
-import Select from './Select'
+import { Field, FieldInputProps } from 'formik';
+import Select from './Select';
 
 type Props = {
   name: string
   options: { value: string; name: string }[]
-}
+};
 
 const FormSelect = (props: Props) => {
   const { name, options } = props
@@ -16,6 +16,6 @@ const FormSelect = (props: Props) => {
       )}
     </Field>
   )
-}
+};
 
-export default FormSelect
+export default FormSelect;

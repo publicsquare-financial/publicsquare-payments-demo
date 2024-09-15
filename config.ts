@@ -1,8 +1,8 @@
 export default {
-  seoTitle: 'Credova Shop',
+  seoTitle: 'PublicSquare Shop',
   tagline:
     'Making the world a better place through constructing elegant payment solutions.',
-  trademark: 'Credova Financial, LLC. All rights reserved.',
+  trademark: 'PublicSquare Financial, LLC. All rights reserved.',
   logo: '/logo-dark.svg',
   theme: {
     colors: {

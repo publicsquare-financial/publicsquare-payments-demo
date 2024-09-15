@@ -1,7 +1,7 @@
-import React, { ComponentProps, HTMLInputTypeAttribute } from 'react'
-import FormLabel from './FormLabel'
-import FormError from './FormError'
-import FormInputField from './FormInputField'
+import React, { ComponentProps, HTMLInputTypeAttribute } from 'react';
+import FormLabel from './FormLabel';
+import FormError from './FormError';
+import FormInputField from './FormInputField';
 
 type Props = {
   name: string
@@ -13,7 +13,7 @@ type Props = {
   disabled?: boolean
   step?: string
   autoComplete?: string
-} & ComponentProps<'div'>
+} & ComponentProps<'div'>;
 
 const FormInput = ({
   name,
@@ -42,6 +42,6 @@ const FormInput = ({
       </div>
     </div>
   )
-}
+};
 
-export default FormInput
+export default FormInput;

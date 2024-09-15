@@ -1,6 +1,6 @@
-import config from '@config'
+import config from '@config';
 
-const products = config.products.slice(0, 1)
+const products = config.products.slice(0, 1);
 
 export default function Page() {
   return (

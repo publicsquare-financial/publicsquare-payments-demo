@@ -1,5 +1,5 @@
-import config from '@config'
-import Image from 'next/image'
+import config from '@config';
+import Image from 'next/image';
 
 const navigation = {
   solutions: [
@@ -89,7 +89,7 @@ const navigation = {
       ),
     },
   ],
-}
+};
 
 export default function Footer() {
   return (
@@ -101,8 +101,8 @@ export default function Footer() {
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
           <div className="space-y-8">
             <Image
-              alt="Credova Financial"
-              src="/logo-dark.svg"
+              alt="PublicSquare Financial"
+              src="/logo-white.svg"
               sizes="100vw"
               width={1000}
               height={1000}

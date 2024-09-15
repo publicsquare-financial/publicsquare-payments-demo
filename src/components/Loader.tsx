@@ -1,5 +1,5 @@
-import { ComponentProps } from 'react'
-import cx from 'classnames'
+import { ComponentProps } from 'react';
+import cx from 'classnames';
 
 export default function Loader({ className, ...props }: ComponentProps<'div'>) {
   return (

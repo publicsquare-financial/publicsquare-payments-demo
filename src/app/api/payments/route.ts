@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   // Parse json body
@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
     shipping_address,
   } = await req.json()
   try {
-    const result = await fetch(`${process.env.CREDOVA_API_URI}/payments`, {
+    const result = await fetch(`${process.env.PUBLICSQUARE_API_URI}/payments`, {
       method: 'POST',
       body: JSON.stringify({
         amount,
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
         shipping_address,
       }),
       headers: {
-        'x-api-key': process.env.CREDOVA_API_SECRET!,
+        'x-api-key': process.env.PUBLICSQUARE_API_SECRET!,
         'Content-Type': 'application/json',
       },
     })

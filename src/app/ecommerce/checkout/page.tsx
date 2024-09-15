@@ -1,24 +1,24 @@
-'use client'
+'use client';
 
-import { useMemo, useRef, useState } from 'react'
-import { Radio, RadioGroup } from '@headlessui/react'
-import { CheckCircleIcon, TrashIcon } from '@heroicons/react/20/solid'
+import { useMemo, useRef, useState } from 'react';
+import { Radio, RadioGroup } from '@headlessui/react';
+import { CheckCircleIcon, TrashIcon } from '@heroicons/react/20/solid';
 import {
   CardElement,
-  CredovaProvider,
-  useCredova,
-} from '@credova/elements-react'
-import * as Yup from 'yup'
-import { ErrorMessage, Form, Formik } from 'formik'
-import FormInput from '@/components/form/FormInput'
-import FormSelect from '@/components/form/FormSelect'
-import CredovaTypes from '@credova/elements-js/types/sdk'
-import { useRouter } from 'next/navigation'
-import Button from '@/components/Button'
-import { useCart } from '@/providers/CartProvider'
-import { currency } from '@/utils'
-import CardElementsCallout from '@/components/ecommerce/CardElementsCallout'
-import ConfirmOrderCallout from '@/components/ecommerce/ConfirmOrderCallout'
+  PublicSquareProvider,
+  usePublicSquare,
+} from '@publicsquare/elements-react';
+import * as Yup from 'yup';
+import { ErrorMessage, Form, Formik } from 'formik';
+import FormInput from '@/components/form/FormInput';
+import FormSelect from '@/components/form/FormSelect';
+import PublicSquareTypes from '@publicsquare/elements-js/types/sdk';
+import { useRouter } from 'next/navigation';
+import Button from '@/components/Button';
+import { useCart } from '@/providers/CartProvider';
+import { currency } from '@/utils';
+import CardElementsCallout from '@/components/ecommerce/CardElementsCallout';
+import ConfirmOrderCallout from '@/components/ecommerce/ConfirmOrderCallout';
 
 const deliveryMethods = [
   {
@@ -28,20 +28,20 @@ const deliveryMethods = [
     price: '$5.00',
   },
   { id: 2, title: 'Express', turnaround: '2–5 business days', price: '$16.00' },
-]
+];
 const paymentMethods = [
   { id: 'credit-card', title: 'Credit card' },
   { id: 'paypal', title: 'PayPal' },
   { id: 'etransfer', title: 'eTransfer' },
-]
+];
 
 function Component() {
   const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(
     deliveryMethods[0]
   )
-  const cardElement = useRef<CredovaTypes.CardElement>(null)
+  const cardElement = useRef<PublicSquareTypes.CardElement>(null)
   const [loading, setLoading] = useState(false)
-  const { credova } = useCredova()
+  const { publicsquare } = usePublicSquare()
   const cart = useCart()
   const total = useMemo(() => {
     const subtotal = cart.items.reduce(
@@ -131,11 +131,11 @@ function Component() {
 
   async function createCard(
     values: typeof initialValues,
-    card: CredovaTypes.CardsCreateInput['card']
+    card: PublicSquareTypes.CardsCreateInput['card']
   ) {
-    if (values.name_on_card && card && credova) {
+    if (values.name_on_card && card && publicsquare) {
       try {
-        const response = await credova.cards.create({
+        const response = await publicsquare.cards.create({
           cardholder_name: values.name_on_card,
           card,
         })
@@ -150,7 +150,7 @@ function Component() {
 
   async function capturePayment(
     values: typeof initialValues,
-    card: CredovaTypes.CardCreateResponse
+    card: PublicSquareTypes.CardCreateResponse
   ) {
     try {
       const payment = await fetch('/api/payments', {
@@ -601,8 +601,8 @@ function Component() {
 
 export default function Page() {
   return (
-    <CredovaProvider apiKey={process.env.NEXT_PUBLIC_CREDOVA_API_KEY!}>
+    <PublicSquareProvider apiKey={process.env.NEXT_PUBLIC_PUBLICSQUARE_API_KEY!}>
       <Component />
-    </CredovaProvider>
+    </PublicSquareProvider>
   )
 }

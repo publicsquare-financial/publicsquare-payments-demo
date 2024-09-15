@@ -1,7 +1,7 @@
 type Props = {
   children: React.ReactNode
   name?: string
-}
+};
 
 const FormLabel = ({ children, name }: Props) => {
   return (
@@ -12,6 +12,6 @@ const FormLabel = ({ children, name }: Props) => {
       {children}
     </label>
   )
-}
+};
 
-export default FormLabel
+export default FormLabel;

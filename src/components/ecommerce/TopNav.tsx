@@ -13,30 +13,30 @@ import {
   TabList,
   TabPanel,
   TabPanels,
-} from '@headlessui/react'
+} from '@headlessui/react';
 import {
   Bars3Icon,
   MagnifyingGlassIcon,
   ShoppingCartIcon,
   UserIcon,
   XMarkIcon,
-} from '@heroicons/react/24/outline'
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import Image from 'next/image'
-import { useCart } from '@/providers/CartProvider'
-import config from '@config'
-import Button from '../Button'
+} from '@heroicons/react/24/outline';
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import { useCart } from '@/providers/CartProvider';
+import config from '@config';
+import Button from '../Button';
 
-const currencies = ['USD', 'CAD', 'AUD', 'EUR', 'GBP']
+const currencies = ['USD', 'CAD', 'AUD', 'EUR', 'GBP'];
 const navigation = {
   categories: config.menus.main,
   pages: [
     { name: 'Company', href: '#' },
     { name: 'Stores', href: '#' },
   ],
-}
+};
 
 export default function TopNav() {
   const [open, setOpen] = useState(false)
@@ -307,7 +307,7 @@ export default function TopNav() {
                 <div className="flex h-16 items-center justify-between">
                   {/* Logo (lg+) */}
                   <div className="hidden lg:flex lg:items-center">
-                    <Link href="/ecommerce">
+                    <Link href="/ecommerce" className="border-none">
                       <span className="sr-only">Your Company</span>
                       <Image
                         alt=""

@@ -1,12 +1,13 @@
-'use client'
-import config from '@config'
+'use client';
+
+import config from '@config';
 import React, {
   PropsWithChildren,
   createContext,
   useContext,
   useEffect,
   useState,
-} from 'react'
+} from 'react';
 
 type ProviderValue = {
   customer: any
@@ -15,21 +16,21 @@ type ProviderValue = {
     quantity: number
   }[]
   billingDetails: any
-}
+};
 
 type ProviderFunctions = {
   setItems: (data: ProviderValue['items']) => void
   setCustomer: (data: ProviderValue['customer']) => void
   setBillingDetails: (data: ProviderValue['billingDetails']) => void
-}
+};
 
-const Context = createContext<ProviderValue & ProviderFunctions>({} as any)
+const Context = createContext<ProviderValue & ProviderFunctions>({} as any);
 
-type CredovaProviderProps = {}
+type PublicSquareProviderProps = {};
 
 export const CartProvider = ({
   children,
-}: PropsWithChildren<CredovaProviderProps>) => {
+}: PropsWithChildren<PublicSquareProviderProps>) => {
   const [customer, _setCustomer] = useState<ProviderValue['customer']>()
   const [items, _setItems] = useState<ProviderValue['items']>([])
   const [billingDetails, _setBillingDetails] =
@@ -101,4 +102,4 @@ export const CartProvider = ({
   )
 }
 
-export const useCart = () => useContext(Context)
+export const useCart = () => useContext(Context);

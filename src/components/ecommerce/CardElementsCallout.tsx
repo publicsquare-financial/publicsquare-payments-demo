@@ -1,6 +1,6 @@
-import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
-import { useState } from 'react'
-import CodeCallout from '../CodeCallout'
+import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
+import { useState } from 'react';
+import CodeCallout from '../CodeCallout';
 
 export default function CardElementsCallout() {
   const [open, setOpen] = useState(false)
@@ -13,17 +13,17 @@ export default function CardElementsCallout() {
         <QuestionMarkCircleIcon className="w-5 h-5" />
       </button>
       <CodeCallout
-        title="Render Credova credit/debit card form snippet"
+        title="Render PublicSquare credit/debit card form snippet"
         description="The following code will give you the card form you see on the checkout page:"
         code={`import React, { useRef, useState } from 'react';
 import {
-  CredovaProvider,
+  PublicSquareProvider,
   CardElement,
-  useCredova,
-} from '@credova/elements-react';
+  usePublicSquare,
+} from '@publicsquare/elements-react';
 
 function Component() {
-  const { credova } = useCredova();
+  const { publicsquare } = usePublicSquare();
   // Refs to get access to the Elements instance
   const cardholderNameRef = useRef(null);
   const cardElementRef = useRef(null);
@@ -48,9 +48,9 @@ function Component() {
 
 export default function App() {
   return (
-    <CredovaProvider apiKey={apiKey}>
+    <PublicSquareProvider apiKey={apiKey}>
       <Component />
-    </CredovaProvider>
+    </PublicSquareProvider>
   );
 }
 `}
