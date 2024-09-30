@@ -31,9 +31,8 @@ const deliveryMethods = [
 ];
 const paymentMethods = [
   { id: 'credit-card', title: 'Credit card' },
-  { id: 'paypal', title: 'PayPal' },
-  { id: 'etransfer', title: 'eTransfer' },
-];
+  // { id: 'ach', title: 'ACH' },
+]
 
 function Component() {
   const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(
@@ -209,7 +208,11 @@ function Component() {
                         Email address
                       </label>
                       <div className="mt-1">
-                        <FormInput name="customer.email" type="email" />
+                        <FormInput
+                          name="customer.email"
+                          type="email"
+                          onChange={formik.handleChange}
+                        />
                       </div>
                     </div>
                   </div>
@@ -228,7 +231,10 @@ function Component() {
                           First name
                         </label>
                         <div className="mt-1">
-                          <FormInput name="customer.first_name" />
+                          <FormInput
+                            name="customer.first_name"
+                            onChange={formik.handleChange}
+                          />
                         </div>
                       </div>
 
@@ -240,7 +246,10 @@ function Component() {
                           Last name
                         </label>
                         <div className="mt-1">
-                          <FormInput name="customer.last_name" />
+                          <FormInput
+                            name="customer.last_name"
+                            onChange={formik.handleChange}
+                          />
                         </div>
                       </div>
 
@@ -252,7 +261,10 @@ function Component() {
                           Company
                         </label>
                         <div className="mt-1">
-                          <FormInput name="customer.business_name" />
+                          <FormInput
+                            name="customer.business_name"
+                            onChange={formik.handleChange}
+                          />
                         </div>
                       </div>
 
@@ -264,7 +276,10 @@ function Component() {
                           Address
                         </label>
                         <div className="mt-1">
-                          <FormInput name="address.address_line_1" />
+                          <FormInput
+                            name="address.address_line_1"
+                            onChange={formik.handleChange}
+                          />
                         </div>
                       </div>
 
@@ -276,7 +291,10 @@ function Component() {
                           Apartment, suite, etc.
                         </label>
                         <div className="mt-1">
-                          <FormInput name="address.address_line_2" />
+                          <FormInput
+                            name="address.address_line_2"
+                            onChange={formik.handleChange}
+                          />
                         </div>
                       </div>
 
@@ -288,7 +306,10 @@ function Component() {
                           City
                         </label>
                         <div className="mt-1">
-                          <FormInput name="address.city" />
+                          <FormInput
+                            name="address.city"
+                            onChange={formik.handleChange}
+                          />
                         </div>
                       </div>
 
@@ -319,7 +340,10 @@ function Component() {
                           State / Province
                         </label>
                         <div className="mt-1">
-                          <FormInput name="address.state" />
+                          <FormInput
+                            name="address.state"
+                            onChange={formik.handleChange}
+                          />
                         </div>
                       </div>
 
@@ -331,7 +355,10 @@ function Component() {
                           Postal code
                         </label>
                         <div className="mt-1">
-                          <FormInput name="address.postal_code" />
+                          <FormInput
+                            name="address.postal_code"
+                            onChange={formik.handleChange}
+                          />
                         </div>
                       </div>
 
@@ -343,7 +370,11 @@ function Component() {
                           Phone
                         </label>
                         <div className="mt-1">
-                          <FormInput name="customer.phone" type="tel" />
+                          <FormInput
+                            name="customer.phone"
+                            type="tel"
+                            onChange={formik.handleChange}
+                          />
                         </div>
                       </div>
                     </div>
@@ -447,7 +478,10 @@ function Component() {
                           Name on card
                         </label>
                         <div className="mt-1">
-                          <FormInput name="name_on_card" />
+                          <FormInput
+                            name="name_on_card"
+                            onChange={formik.handleChange}
+                          />
                         </div>
                       </div>
                       <div className="col-span-4 relative">
@@ -535,6 +569,7 @@ function Component() {
                                   id="quantity"
                                   name="quantity"
                                   className="rounded-md border border-gray-300 text-left text-base font-medium text-gray-700 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary sm:text-sm"
+                                  onChange={formik.handleChange}
                                 >
                                   <option value={1}>1</option>
                                   <option value={2}>2</option>

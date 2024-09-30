@@ -32,7 +32,7 @@ export default function CodeCallout({
             <DialogTitle className="font-bold">{title}</DialogTitle>
             <Description>{description}</Description>
             <pre
-              className="bg-gray-100 p-2 border inset-4 rounded whitespace-pre max-h-96 overflow-auto line-numbers"
+              className="bg-gray-100 p-2 border inset-4 rounded whitespace-pre overflow-auto line-numbers"
               dangerouslySetInnerHTML={{
                 __html: Prism.highlight(
                   code,
