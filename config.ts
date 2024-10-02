@@ -3,11 +3,12 @@ export default {
   tagline:
     'Making the world a better place through constructing elegant payment solutions.',
   trademark: 'PublicSquare Financial, LLC. All rights reserved.',
-  logo: '/logo-dark.svg',
+  logo: '/logo-white.svg',
   theme: {
     colors: {
       primary: '#4f46e5',
       'primary-dark': '#4338ca',
+      navbar: '#111827',
     },
   },
   menus: {

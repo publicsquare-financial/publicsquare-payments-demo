@@ -102,7 +102,7 @@ export default function Footer() {
           <div className="space-y-8">
             <Image
               alt="PublicSquare Financial"
-              src="/logo-white.svg"
+              src={config.logo}
               sizes="100vw"
               width={1000}
               height={1000}

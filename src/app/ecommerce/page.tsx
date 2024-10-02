@@ -13,7 +13,7 @@ export default function Page() {
               key={product.id}
               className="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white"
             >
-              <div className="aspect-h-4 aspect-w-3 sm:aspect-none group-hover:opacity-75 sm:h-96">
+              <div className="aspect-h-4 aspect-video sm:aspect-none group-hover:opacity-75">
                 <Image
                   alt={product.imageAlt}
                   src={product.images[0]}

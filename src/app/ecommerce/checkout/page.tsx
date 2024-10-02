@@ -91,22 +91,22 @@ function Component() {
 
   const initialValues: Yup.InferType<typeof schema> = {
     customer: {
-      email: '',
-      first_name: '',
-      last_name: '',
+      email: 'example@publicsquare.com',
+      first_name: 'John',
+      last_name: 'Joe',
       business_name: '',
-      phone: '',
+      phone: '11234567890',
     },
     address: {
-      address_line_1: '',
+      address_line_1: '1100 S Ocean Blvd',
       address_line_2: undefined,
-      city: '',
-      state: '',
-      postal_code: '',
-      country: '',
+      city: 'Palm Beach',
+      state: 'FL',
+      postal_code: '33480',
+      country: 'US',
     },
     delivery_method: 1,
-    name_on_card: '',
+    name_on_card: 'John Joe',
     card: {},
   }
 
@@ -636,7 +636,9 @@ function Component() {
 
 export default function Page() {
   return (
-    <PublicSquareProvider apiKey={process.env.NEXT_PUBLIC_PUBLICSQUARE_API_KEY!}>
+    <PublicSquareProvider
+      apiKey={process.env.NEXT_PUBLIC_PUBLICSQUARE_API_KEY!}
+    >
       <Component />
     </PublicSquareProvider>
   )

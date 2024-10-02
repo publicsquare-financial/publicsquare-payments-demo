@@ -21,7 +21,3 @@
     text-wrap: balance;
   }
 }
-
-a {
-  @apply border-b border-dotted;
-}

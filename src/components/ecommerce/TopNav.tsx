@@ -20,24 +20,20 @@ import {
   MagnifyingGlassIcon,
   ShoppingCartIcon,
   UserIcon,
+  WalletIcon,
   XMarkIcon,
-} from '@heroicons/react/24/outline';
-import { ChevronDownIcon } from '@heroicons/react/20/solid';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import { useCart } from '@/providers/CartProvider';
-import config from '@config';
-import Button from '../Button';
+} from '@heroicons/react/24/outline'
+import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import Image from 'next/image'
+import { useCart } from '@/providers/CartProvider'
+import config from '@config'
+import Button from '../Button'
 
-const currencies = ['USD', 'CAD', 'AUD', 'EUR', 'GBP'];
 const navigation = {
   categories: config.menus.main,
-  pages: [
-    { name: 'Company', href: '#' },
-    { name: 'Stores', href: '#' },
-  ],
-};
+}
 
 export default function TopNav() {
   const [open, setOpen] = useState(false)
@@ -76,7 +72,7 @@ export default function TopNav() {
                   {navigation.categories.map((category) => (
                     <Tab
                       key={category.name}
-                      className="flex-1 whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-base font-medium text-gray-900 data-[selected]:border-primary-dark data-[selected]:text-primary-dark"
+                      className="flex-1 whitespace-nowrap border-b-2 border-transparent px-1 py-4 text-base font-medium text-white data-[selected]:border-primary-dark data-[selected]:text-primary-dark"
                     >
                       {category.name}
                     </Tab>
@@ -94,7 +90,7 @@ export default function TopNav() {
                         <div>
                           <p
                             id={`mobile-featured-heading-${categoryIdx}`}
-                            className="font-medium text-gray-900"
+                            className="font-medium"
                           >
                             Featured
                           </p>
@@ -115,7 +111,7 @@ export default function TopNav() {
                         <div>
                           <p
                             id="mobile-categories-heading"
-                            className="font-medium text-gray-900"
+                            className="font-medium"
                           >
                             Categories
                           </p>
@@ -186,19 +182,6 @@ export default function TopNav() {
             </TabGroup>
 
             <div className="space-y-6 border-t border-gray-200 px-4 py-6">
-              {navigation.pages.map((page) => (
-                <div key={page.name} className="flow-root">
-                  <Link
-                    href="/ecommerce"
-                    className="-m-2 block p-2 font-medium text-gray-900"
-                  >
-                    {page.name}
-                  </Link>
-                </div>
-              ))}
-            </div>
-
-            <div className="space-y-6 border-t border-gray-200 px-4 py-6">
               <div className="flow-root">
                 <a
                   href="#"
@@ -216,71 +199,17 @@ export default function TopNav() {
                 </a>
               </div>
             </div>
-
-            <div className="space-y-6 border-t border-gray-200 px-4 py-6">
-              {/* Currency selector */}
-              <form>
-                <div className="inline-block">
-                  <label htmlFor="mobile-currency" className="sr-only">
-                    Currency
-                  </label>
-                  <div className="group relative -ml-2 rounded-md border-transparent focus-within:ring-2 focus-within:ring-white">
-                    <select
-                      id="mobile-currency"
-                      name="currency"
-                      className="flex items-center rounded-md border-transparent bg-none py-0.5 pl-2 pr-5 text-sm font-medium text-gray-700 focus:border-transparent focus:outline-none focus:ring-0 group-hover:text-gray-800"
-                    >
-                      {currencies.map((currency) => (
-                        <option key={currency}>{currency}</option>
-                      ))}
-                    </select>
-                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center">
-                      <ChevronDownIcon
-                        aria-hidden="true"
-                        className="h-5 w-5 text-gray-500"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </div>
           </DialogPanel>
         </div>
       </Dialog>
 
       <header className="relative">
-        <nav aria-label="Top">
+        <nav aria-label="Top" className="bg-navbar">
           {/* Top navigation */}
-          <div className="bg-gray-900">
+          <div>
             <div className="mx-auto flex h-10 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-              {/* Currency selector */}
-              <form className="hidden lg:block lg:flex-1">
-                <div className="flex">
-                  <label htmlFor="desktop-currency" className="sr-only">
-                    Currency
-                  </label>
-                  <div className="group relative -ml-2 rounded-md border-transparent bg-gray-900 focus-within:ring-2 focus-within:ring-white">
-                    <select
-                      id="desktop-currency"
-                      name="currency"
-                      className="flex items-center rounded-md border-transparent bg-gray-900 bg-none py-0.5 pl-2 pr-5 text-sm font-medium text-white focus:border-transparent focus:outline-none focus:ring-0 group-hover:text-gray-100"
-                    >
-                      {currencies.map((currency) => (
-                        <option key={currency}>{currency}</option>
-                      ))}
-                    </select>
-                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center">
-                      <ChevronDownIcon
-                        aria-hidden="true"
-                        className="h-5 w-5 text-gray-300"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </form>
-
               <p className="flex-1 text-center text-sm font-medium text-white lg:flex-none">
-                Get free delivery on orders over $100
+                Get complimentary upgrades on stays over $1,000
               </p>
 
               <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
@@ -302,7 +231,7 @@ export default function TopNav() {
           </div>
 
           {/* Secondary navigation */}
-          <div className="bg-white">
+          <div>
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="border-b border-gray-200">
                 <div className="flex h-16 items-center justify-between">
@@ -316,7 +245,7 @@ export default function TopNav() {
                         sizes="100vw"
                         width={1000}
                         height={1000}
-                        className="h-8 w-auto"
+                        className="h-5 w-auto"
                       />
                     </Link>
                   </div>
@@ -328,7 +257,7 @@ export default function TopNav() {
                         {navigation.categories.map((category, categoryIdx) => (
                           <Popover key={category.name} className="flex">
                             <div className="relative flex">
-                              <PopoverButton className="relative z-10 -mb-px flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-gray-700 transition-colors duration-200 ease-out hover:text-gray-800 data-[open]:border-primary-dark data-[open]:text-primary-dark">
+                              <PopoverButton className="relative z-10 -mb-px flex items-center border-b-2 border-transparent pt-px text-sm font-medium text-white transition-colors duration-200 ease-out hover:text-gray-800 data-[open]:border-primary-dark data-[open]:text-primary-dark">
                                 {category.name}
                               </PopoverButton>
                             </div>
@@ -465,16 +394,6 @@ export default function TopNav() {
                             </PopoverPanel>
                           </Popover>
                         ))}
-
-                        {navigation.pages.map((page) => (
-                          <a
-                            key={page.name}
-                            href={page.href}
-                            className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
-                          >
-                            {page.name}
-                          </a>
-                        ))}
                       </div>
                     </PopoverGroup>
                   </div>
@@ -493,7 +412,7 @@ export default function TopNav() {
                     {/* Search */}
                     <a
                       href="#"
-                      className="ml-2 p-2 text-gray-400 hover:text-gray-500"
+                      className="ml-2 p-2 text-white hover:text-gray-100"
                     >
                       <span className="sr-only">Search</span>
                       <MagnifyingGlassIcon
@@ -515,12 +434,9 @@ export default function TopNav() {
 
                   <div className="flex flex-1 items-center justify-end">
                     <div className="flex items-center lg:ml-8">
-                      <div className="flex space-x-8">
+                      <div className="flex space-x-8 text-white">
                         <div className="hidden lg:flex">
-                          <a
-                            href="#"
-                            className="-m-2 p-2 text-gray-400 hover:text-gray-500"
-                          >
+                          <a href="#" className="-m-2 p-2">
                             <span className="sr-only">Search</span>
                             <MagnifyingGlassIcon
                               aria-hidden="true"
@@ -530,13 +446,13 @@ export default function TopNav() {
                         </div>
 
                         <div className="flex">
-                          <a
-                            href="#"
-                            className="-m-2 p-2 text-gray-400 hover:text-gray-500"
-                          >
+                          <Link href="/ecommerce/wallet" className="-m-2 p-2">
                             <span className="sr-only">Account</span>
-                            <UserIcon aria-hidden="true" className="h-6 w-6" />
-                          </a>
+                            <WalletIcon
+                              aria-hidden="true"
+                              className="h-6 w-6"
+                            />
+                          </Link>
                         </div>
                       </div>
 
@@ -550,9 +466,9 @@ export default function TopNav() {
                           <PopoverButton className="group -m-2 flex items-center p-2">
                             <ShoppingCartIcon
                               aria-hidden="true"
-                              className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                              className="h-6 w-6 flex-shrink-0 text-white"
                             />
-                            <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                            <span className="ml-2 text-sm font-medium text-white">
                               {cart.items.length}
                             </span>
                             <span className="sr-only">
