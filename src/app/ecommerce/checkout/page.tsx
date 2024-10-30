@@ -44,8 +44,7 @@ function Component() {
   const cart = useCart()
   const total = useMemo(() => {
     const subtotal = cart.items.reduce(
-      (accum, cur) =>
-        accum + parseFloat(cur.item.price.replace('$', '')) * cur.quantity,
+      (accum, cur) => accum + cur.item.price * cur.quantity,
       0
     )
     return {
@@ -534,7 +533,7 @@ function Component() {
                                   </a>
                                 </h4>
                                 <p className="mt-1 text-sm text-gray-500">
-                                  {product.item.description}
+                                  {product.item.shortDescription}
                                 </p>
                                 <p className="mt-1 text-sm text-gray-500">
                                   {product.item.options}
@@ -545,6 +544,13 @@ function Component() {
                                 <button
                                   type="button"
                                   className="-m-2.5 flex items-center justify-center bg-white p-2.5 text-gray-400 hover:text-gray-500"
+                                  onClick={() =>
+                                    cart.setItems(
+                                      cart.items.filter(
+                                        (cur) => cur.item.id !== product.item.id
+                                      )
+                                    )
+                                  }
                                 >
                                   <span className="sr-only">Remove</span>
                                   <TrashIcon
@@ -557,7 +563,7 @@ function Component() {
 
                             <div className="flex flex-1 items-end justify-between pt-2">
                               <p className="mt-1 text-sm font-medium text-gray-900">
-                                {product.item.price}
+                                {currency(product.item.price)}
                               </p>
 
                               <div className="ml-4">

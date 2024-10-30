@@ -8,6 +8,7 @@ import { useParams } from 'next/navigation';
 import { useCart } from '@/providers/CartProvider';
 import config from '@config';
 import Button from '@/components/Button';
+import { currency } from '@/utils'
 
 const _product = {
   breadcrumbs: [
@@ -29,18 +30,8 @@ const _product = {
     { name: '2XL', inStock: true },
     { name: '3XL', inStock: true },
   ],
-  description:
-    'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
-  highlights: [
-    'Hand cut and sewn locally',
-    'Dyed with our proprietary colors',
-    'Pre-washed & pre-shrunk',
-    'Ultra-soft 100% cotton',
-  ],
-  details:
-    'The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming "Charcoal Gray" limited release.',
-};
-const reviews = { href: '#', average: 4, totalCount: 117 };
+}
+const reviews = { href: '#', average: 4, totalCount: 117 }
 
 export default function Page() {
   const params = useParams()
@@ -131,7 +122,7 @@ export default function Page() {
           <div className="mt-4 lg:row-span-3 lg:mt-0">
             <h2 className="sr-only">Product information</h2>
             <p className="text-3xl tracking-tight text-gray-900">
-              {product.price}
+              {currency(product.price)}
             </p>
 
             {/* Reviews */}
@@ -284,29 +275,9 @@ export default function Page() {
               <h3 className="sr-only">Description</h3>
 
               <div className="space-y-6">
-                <p className="text-base text-gray-900">{product.description}</p>
-              </div>
-            </div>
-
-            <div className="mt-10">
-              <h3 className="text-sm font-medium text-gray-900">Highlights</h3>
-
-              <div className="mt-4">
-                <ul role="list" className="list-disc space-y-2 pl-4 text-sm">
-                  {product.highlights.map((highlight) => (
-                    <li key={highlight} className="text-gray-400">
-                      <span className="text-gray-600">{highlight}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            <div className="mt-10">
-              <h2 className="text-sm font-medium text-gray-900">Details</h2>
-
-              <div className="mt-4 space-y-6">
-                <p className="text-sm text-gray-600">{product.details}</p>
+                <p className="text-base text-gray-700 whitespace-pre-wrap">
+                  {product.description}
+                </p>
               </div>
             </div>
           </div>

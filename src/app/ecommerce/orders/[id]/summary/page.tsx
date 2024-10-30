@@ -1,6 +1,7 @@
-import config from '@config';
+import { currency } from '@/utils'
+import config from '@config'
 
-const products = config.products.slice(0, 1);
+const products = config.products.slice(0, 1)
 
 export default function Page() {
   return (
@@ -45,7 +46,7 @@ export default function Page() {
                     </a>
                   </h4>
                   <p className="mt-2 text-sm text-gray-600">
-                    {product.description}
+                    {product.shortDescription}
                   </p>
                 </div>
                 <div className="mt-6 flex flex-1 items-end">
@@ -56,7 +57,9 @@ export default function Page() {
                     </div>
                     <div className="flex pl-4 sm:pl-6">
                       <dt className="font-medium text-gray-900">Price</dt>
-                      <dd className="ml-2 text-gray-700">{product.price}</dd>
+                      <dd className="ml-2 text-gray-700">
+                        {currency(product.price)}
+                      </dd>
                     </div>
                   </dl>
                 </div>

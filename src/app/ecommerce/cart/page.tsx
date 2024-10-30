@@ -13,8 +13,7 @@ export default function Cart() {
 
   const total = useMemo(() => {
     const subtotal = cart.items.reduce(
-      (accum, cur) =>
-        accum + parseFloat(cur.item.price.replace('$', '')) * cur.quantity,
+      (accum, cur) => accum + cur.item.price * cur.quantity,
       0
     )
     return {
@@ -23,7 +22,7 @@ export default function Cart() {
       taxes: 0.07 * subtotal,
       total: subtotal + 0.07 * subtotal,
     }
-  }, [cart.items]);
+  }, [cart.items])
 
   return (
     <div className="bg-white">
@@ -66,7 +65,7 @@ export default function Cart() {
                             </h3>
                           </div>
                           <p className="mt-1 text-sm font-medium text-gray-900">
-                            {product.item.price}
+                            {currency(product.item.price)}
                           </p>
                         </div>
 
@@ -97,6 +96,13 @@ export default function Cart() {
                             <button
                               type="button"
                               className="-m-2 inline-flex p-2 text-gray-400 hover:text-gray-500"
+                              onClick={() =>
+                                cart.setItems(
+                                  cart.items.filter(
+                                    (cur) => cur.item.id !== product.item.id
+                                  )
+                                )
+                              }
                             >
                               <span className="sr-only">Remove</span>
                               <XMarkIcon
