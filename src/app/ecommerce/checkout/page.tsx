@@ -19,6 +19,8 @@ import { useCart } from '@/providers/CartProvider';
 import { currency } from '@/utils';
 import CardElementsCallout from '@/components/ecommerce/CardElementsCallout';
 import ConfirmOrderCallout from '@/components/ecommerce/ConfirmOrderCallout';
+import CardElementForm from '@/components/form/CardElementForm'
+import BankAccountElementForm from '@/components/form/BankAccountElementForm'
 
 const deliveryMethods = [
   {
@@ -28,10 +30,10 @@ const deliveryMethods = [
     price: '$5.00',
   },
   { id: 2, title: 'Express', turnaround: '2–5 business days', price: '$16.00' },
-];
+]
 const paymentMethods = [
   { id: 'credit-card', title: 'Credit card' },
-  // { id: 'ach', title: 'ACH' },
+  { id: 'ach', title: 'Bank Account (ACH)' },
 ]
 
 function Component() {
@@ -39,6 +41,7 @@ function Component() {
     deliveryMethods[0]
   )
   const cardElement = useRef<PublicSquareTypes.CardElement>(null)
+  const bankAccountElement = useRef<PublicSquareTypes.BankAccountElement>(null)
   const [loading, setLoading] = useState(false)
   const { publicsquare } = usePublicSquare()
   const cart = useCart()
@@ -55,6 +58,7 @@ function Component() {
     }
   }, [cart.items])
   const router = useRouter()
+  const [paymentMethod, setPaymentMethod] = useState(paymentMethods[0])
 
   const schema = Yup.object().shape({
     customer: Yup.object({
@@ -446,6 +450,9 @@ function Component() {
                                   name="payment-type"
                                   type="radio"
                                   className="h-4 w-4 border-gray-300 text-primary-dark focus:ring-primary"
+                                  onChange={() =>
+                                    setPaymentMethod(paymentMethod)
+                                  }
                                 />
                               ) : (
                                 <input
@@ -453,6 +460,9 @@ function Component() {
                                   name="payment-type"
                                   type="radio"
                                   className="h-4 w-4 border-gray-300 text-primary-dark focus:ring-primary"
+                                  onChange={() =>
+                                    setPaymentMethod(paymentMethod)
+                                  }
                                 />
                               )}
 
@@ -468,34 +478,15 @@ function Component() {
                       </div>
                     </fieldset>
 
-                    <div className="mt-6 grid grid-cols-4 gap-x-4 gap-y-6">
-                      <div className="col-span-4">
-                        <label
-                          htmlFor="name_on_card"
-                          className="block text-sm font-medium text-gray-700"
-                        >
-                          Name on card
-                        </label>
-                        <div className="mt-1">
-                          <FormInput
-                            name="name_on_card"
-                            onChange={formik.handleChange}
-                          />
-                        </div>
-                      </div>
-                      <div className="col-span-4 relative">
-                        <div
-                          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm py-1"
-                          {...{
-                            type: 'text',
-                          }}
-                        >
-                          <CardElement ref={cardElement} id="card-element" />
-                        </div>
-                        <ErrorMessage name="card" />
-                        <CardElementsCallout />
-                      </div>
-                    </div>
+                    {paymentMethod.id === 'credit-card' && (
+                      <CardElementForm formik={formik} ref={cardElement} />
+                    )}
+                    {paymentMethod.id === 'ach' && (
+                      <BankAccountElementForm
+                        formik={formik}
+                        ref={bankAccountElement}
+                      />
+                    )}
                   </div>
                 </div>
 
