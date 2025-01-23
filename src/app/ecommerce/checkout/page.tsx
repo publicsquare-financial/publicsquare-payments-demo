@@ -4,23 +4,20 @@ import { useMemo, useRef, useState } from 'react';
 import { Radio, RadioGroup } from '@headlessui/react';
 import { CheckCircleIcon, TrashIcon } from '@heroicons/react/20/solid';
 import {
-  CardElement,
   PublicSquareProvider,
   usePublicSquare,
-} from '@publicsquare/elements-react';
-import * as Yup from 'yup';
-import { ErrorMessage, Form, Formik } from 'formik';
-import FormInput from '@/components/form/FormInput';
-import FormSelect from '@/components/form/FormSelect';
-import PublicSquareTypes from '@publicsquare/elements-js/types/sdk';
-import { useRouter } from 'next/navigation';
-import Button from '@/components/Button';
-import { useCart } from '@/providers/CartProvider';
-import { currency } from '@/utils';
-import CardElementsCallout from '@/components/ecommerce/CardElementsCallout';
-import ConfirmOrderCallout from '@/components/ecommerce/ConfirmOrderCallout';
-import CardElementForm from '@/components/form/CardElementForm'
-import BankAccountElementForm from '@/components/form/BankAccountElementForm'
+} from '@publicsquare/elements-react'
+import * as Yup from 'yup'
+import { Form, Formik } from 'formik'
+import FormInput from '@/components/form/FormInput'
+import FormSelect from '@/components/form/FormSelect'
+import PublicSquareTypes from '@publicsquare/elements-react/types'
+import { useRouter } from 'next/navigation'
+import Button from '@/components/Button'
+import { useCart } from '@/providers/CartProvider'
+import { currency, PaymentMethodEnum } from '@/utils'
+import ConfirmOrderCallout from '@/components/ecommerce/ConfirmOrderCallout'
+import PaymentMethodTabs from '@/components/PaymentMethodTabs'
 
 const deliveryMethods = [
   {
@@ -30,10 +27,6 @@ const deliveryMethods = [
     price: '$5.00',
   },
   { id: 2, title: 'Express', turnaround: '2–5 business days', price: '$16.00' },
-]
-const paymentMethods = [
-  { id: 'credit-card', title: 'Credit card' },
-  { id: 'ach', title: 'Bank Account (ACH)' },
 ]
 
 function Component() {
@@ -58,7 +51,6 @@ function Component() {
     }
   }, [cart.items])
   const router = useRouter()
-  const [paymentMethod, setPaymentMethod] = useState(paymentMethods[0])
 
   const schema = Yup.object().shape({
     customer: Yup.object({
@@ -89,7 +81,14 @@ function Component() {
     }).required('Address is required'),
     delivery_method: Yup.number().required('Delivery method is required'),
     name_on_card: Yup.string().required('Name on card is required'),
-    card: Yup.object().required('Card is required'),
+    card: Yup.object().when('payment_method', {
+      is: 'credit-card',
+      then: (schema) => schema.required('Card is required'),
+      otherwise: (schema) => schema.optional(),
+    }),
+    payment_method: Yup.string()
+      .required('Payment method is required')
+      .oneOf([PaymentMethodEnum.CREDIT_CARD, PaymentMethodEnum.BANK_ACCOUNT]),
   })
 
   const initialValues: Yup.InferType<typeof schema> = {
@@ -110,6 +109,7 @@ function Component() {
     },
     delivery_method: 1,
     name_on_card: 'John Joe',
+    payment_method: PaymentMethodEnum.CREDIT_CARD,
     card: {},
   }
 
@@ -119,7 +119,7 @@ function Component() {
         setLoading(true)
         const card = await createCard(values, cardElement.current)
         if (card) {
-          const payment = await capturePayment(values, card)
+          const payment = await capturePayment(values, { card })
           if (payment.id) {
             router.push(`/ecommerce/orders/${payment.id}/summary`)
           }
@@ -152,7 +152,13 @@ function Component() {
 
   async function capturePayment(
     values: typeof initialValues,
-    card: PublicSquareTypes.CardCreateResponse
+    {
+      card,
+      bankAccount,
+    }: {
+      card?: PublicSquareTypes.CardCreateResponse
+      bankAccount?: PublicSquareTypes.BankAccountCreateResponse
+    }
   ) {
     try {
       const payment = await fetch('/api/payments', {
@@ -163,7 +169,8 @@ function Component() {
           // optional, USD is assumed
           currency: 'USD',
           payment_method: {
-            card: card.id,
+            ...(card && { card: card.id }),
+            ...(bankAccount && { bank_account: bankAccount.id }),
           },
           customer: values.customer,
           billing_details: values.address,
@@ -173,17 +180,68 @@ function Component() {
     } catch (error) {}
   }
 
+  async function onSubmitBankAccountElement(values: typeof initialValues) {
+    try {
+      if (!loading) {
+        setLoading(true)
+        const bankAccount = await createBankAccount(values)
+        if (bankAccount) {
+          const payment = await capturePayment(values, { bankAccount })
+          if (payment.id) {
+            router.push(`/ecommerce/orders/${payment.id}/summary`)
+          }
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+    setLoading(false)
+  }
+
+  async function createBankAccount(values: typeof initialValues) {
+    if (
+      values.name_on_card &&
+      bankAccountElement.current?.routingNumber.el.value &&
+      bankAccountElement.current?.accountNumber.el.value &&
+      publicsquare
+    ) {
+      try {
+        const response = await publicsquare.bankAccounts.create({
+          account_holder_name: values.name_on_card,
+          routing_number: bankAccountElement.current?.routingNumber.el.value,
+          account_number: bankAccountElement.current?.accountNumber.el.value,
+        })
+        if (response) {
+          return response
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  }
+
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={schema}
       onSubmit={async (values, { setSubmitting, setFieldError }) => {
-        if (!cardElement.current) {
-          setFieldError('card', 'Card is required')
-        } else {
-          setSubmitting(true)
-          onSubmitCardElement(values)
-          setSubmitting(false)
+        console.log(values)
+        if (values.payment_method === PaymentMethodEnum.CREDIT_CARD) {
+          if (!cardElement.current) {
+            setFieldError('card', 'Card is required')
+          } else {
+            setSubmitting(true)
+            onSubmitCardElement(values)
+            setSubmitting(false)
+          }
+        } else if (values.payment_method === PaymentMethodEnum.BANK_ACCOUNT) {
+          if (!bankAccountElement.current) {
+            setFieldError('bank_account', 'Bank account is required')
+          } else {
+            setSubmitting(true)
+            onSubmitBankAccountElement(values)
+            setSubmitting(false)
+          }
         }
       }}
     >
@@ -433,63 +491,13 @@ function Component() {
                     <h2 className="text-lg font-medium text-gray-900">
                       Payment
                     </h2>
-
-                    <fieldset className="mt-4">
-                      <legend className="sr-only">Payment type</legend>
-                      <div className="space-y-4 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
-                        {paymentMethods.map(
-                          (paymentMethod, paymentMethodIdx) => (
-                            <div
-                              key={paymentMethod.id}
-                              className="flex items-center"
-                            >
-                              {paymentMethodIdx === 0 ? (
-                                <input
-                                  defaultChecked
-                                  id={paymentMethod.id}
-                                  name="payment-type"
-                                  type="radio"
-                                  className="h-4 w-4 border-gray-300 text-primary-dark focus:ring-primary"
-                                  onChange={() =>
-                                    setPaymentMethod(paymentMethod)
-                                  }
-                                />
-                              ) : (
-                                <input
-                                  id={paymentMethod.id}
-                                  name="payment-type"
-                                  type="radio"
-                                  className="h-4 w-4 border-gray-300 text-primary-dark focus:ring-primary"
-                                  onChange={() =>
-                                    setPaymentMethod(paymentMethod)
-                                  }
-                                />
-                              )}
-
-                              <label
-                                htmlFor={paymentMethod.id}
-                                className="ml-3 block text-sm font-medium text-gray-700"
-                              >
-                                {paymentMethod.title}
-                              </label>
-                            </div>
-                          )
-                        )}
-                      </div>
-                    </fieldset>
-
-                    {paymentMethod.id === 'credit-card' && (
-                      <CardElementForm formik={formik} ref={cardElement} />
-                    )}
-                    {paymentMethod.id === 'ach' && (
-                      <BankAccountElementForm
-                        formik={formik}
-                        ref={bankAccountElement}
-                      />
-                    )}
+                    <PaymentMethodTabs
+                      formik={formik}
+                      cardElement={cardElement}
+                      bankAccountElement={bankAccountElement}
+                    />
                   </div>
                 </div>
-
                 {/* Order summary */}
                 <div className="mt-10 lg:mt-0">
                   <h2 className="text-lg font-medium text-gray-900">

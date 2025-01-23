@@ -3,7 +3,7 @@ import FormInput from './FormInput'
 import CardElementsCallout from '../ecommerce/CardElementsCallout'
 import { ErrorMessage } from 'formik'
 import { RefObject } from 'react'
-import PublicSquareTypes from '@publicsquare/elements-js/types/sdk'
+import PublicSquareTypes from '@publicsquare/elements-react/types'
 
 export default function CardElementForm({
   formik,
