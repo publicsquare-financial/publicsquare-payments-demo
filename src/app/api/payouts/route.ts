@@ -33,9 +33,8 @@ export async function POST(req: NextRequest) {
 
   if (
     !amount ||
-    !payment_method?.card ||
-    !payment_method?.bank_account ||
-    !customer?.id ||
+    (!payment_method?.card && !payment_method?.bank_account) ||
+    (customer && !customer?.id) ||
     !billing_details?.address_line_1 ||
     !billing_details?.city ||
     !billing_details?.state ||

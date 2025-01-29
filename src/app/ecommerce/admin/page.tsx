@@ -2,7 +2,7 @@
 
 import { useRef } from 'react'
 import PublicSquareTypes from '@publicsquare/elements-react/types'
-import { Form, Formik } from 'formik'
+import { ErrorMessage, Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import { PublicSquareProvider } from '@publicsquare/elements-react'
 import CustomerSelect from '@/components/form/CustomerSelect'
@@ -11,6 +11,7 @@ import Button from '@/components/Button'
 import PaymentMethodTabs from '@/components/PaymentMethodTabs'
 import { PaymentMethodEnum } from '@/utils'
 import FormInput from '@/components/form/FormInput'
+import { useCheckoutSubmit } from '@/hooks/useCheckoutSubmit'
 
 export default function Page() {
   return (
@@ -19,7 +20,7 @@ export default function Page() {
     >
       <div className="mx-auto max-w-7xl py-12 space-y-8 px-4 sm:px-6 lg:px-8">
         <h1 className="text-2xl font-bold">Admin</h1>
-        {PayoutCard()}
+        <PayoutCard />
       </div>
     </PublicSquareProvider>
   )
@@ -28,6 +29,8 @@ export default function Page() {
 function PayoutCard() {
   const cardElement = useRef<PublicSquareTypes.CardElement>(null)
   const bankAccountElement = useRef<PublicSquareTypes.BankAccountElement>(null)
+  const { onSubmitCardElement, onSubmitBankAccountElement, submitting } =
+    useCheckoutSubmit()
 
   const schema = Yup.object().shape({
     amount: Yup.number().required('Amount is required'),
@@ -94,25 +97,38 @@ function PayoutCard() {
       <Formik
         initialValues={initialValues}
         validationSchema={schema}
-        onSubmit={async (values, { setSubmitting, setFieldError }) => {
-          console.log(values)
-          // if (values.payment_method === 'credit-card') {
-          //   if (!cardElement.current) {
-          //     setFieldError('card', 'Card is required')
-          //   } else {
-          //     setSubmitting(true)
-          //     onSubmitCardElement(values)
-          //     setSubmitting(false)
-          //   }
-          // } else if (values.payment_method === 'ach') {
-          //   if (!bankAccountElement.current) {
-          //     setFieldError('bank_account', 'Bank account is required')
-          //   } else {
-          //     setSubmitting(true)
-          //     onSubmitBankAccountElement(values)
-          //     setSubmitting(false)
-          //   }
-          // }
+        onSubmit={(values, { setFieldError }) => {
+          if (values.payment_method === PaymentMethodEnum.CREDIT_CARD) {
+            if (!cardElement.current) {
+              setFieldError('card', 'Card is required')
+            } else {
+              onSubmitCardElement(
+                values.amount * 100,
+                values,
+                cardElement,
+                'payout'
+              ).then((payment) => {
+                if (payment.id) {
+                  alert(`Payout successfully sent ${payment.id}`)
+                }
+              })
+            }
+          } else if (values.payment_method === PaymentMethodEnum.BANK_ACCOUNT) {
+            if (!bankAccountElement.current) {
+              setFieldError('bank_account', 'Bank account is required')
+            } else {
+              onSubmitBankAccountElement(
+                values.amount * 100,
+                values,
+                bankAccountElement,
+                'payout'
+              ).then((payment) => {
+                if (payment.id) {
+                  alert(`Payout successfully sent ${payment.id}`)
+                }
+              })
+            }
+          }
         }}
       >
         {(formik) => (
@@ -125,6 +141,7 @@ function PayoutCard() {
                 1. Select recipient
               </h2>
               <CustomerSelect formik={formik} />
+              <ErrorMessage name="customer" />
               <hr />
               <h3 className="text-md font-medium text-gray-900">
                 2. Select your payment method
@@ -134,11 +151,13 @@ function PayoutCard() {
                 cardElement={cardElement}
                 bankAccountElement={bankAccountElement}
               />
+              <ErrorMessage name="payment_method" />
               <hr />
               <h3 className="text-md font-medium text-gray-900">
                 3. Select your billing address
               </h3>
               <AddressSelect formik={formik} />
+              <ErrorMessage name="address" />
               <hr />
               <h3 className="text-md font-medium text-gray-900">
                 4. Select your payout amount
@@ -156,7 +175,8 @@ function PayoutCard() {
                 <Button
                   type="submit"
                   className="max-w-sm"
-                  loading={formik.isSubmitting}
+                  loading={submitting}
+                  disabled={submitting}
                 >
                   Send payout
                 </Button>

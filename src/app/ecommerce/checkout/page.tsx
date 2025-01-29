@@ -3,10 +3,7 @@
 import { useMemo, useRef, useState } from 'react';
 import { Radio, RadioGroup } from '@headlessui/react';
 import { CheckCircleIcon, TrashIcon } from '@heroicons/react/20/solid';
-import {
-  PublicSquareProvider,
-  usePublicSquare,
-} from '@publicsquare/elements-react'
+import { PublicSquareProvider } from '@publicsquare/elements-react'
 import * as Yup from 'yup'
 import { Form, Formik } from 'formik'
 import FormInput from '@/components/form/FormInput'
@@ -18,6 +15,7 @@ import { useCart } from '@/providers/CartProvider'
 import { currency, PaymentMethodEnum } from '@/utils'
 import ConfirmOrderCallout from '@/components/ecommerce/ConfirmOrderCallout'
 import PaymentMethodTabs from '@/components/PaymentMethodTabs'
+import { useCheckoutSubmit } from '@/hooks/useCheckoutSubmit'
 
 const deliveryMethods = [
   {
@@ -35,8 +33,8 @@ function Component() {
   )
   const cardElement = useRef<PublicSquareTypes.CardElement>(null)
   const bankAccountElement = useRef<PublicSquareTypes.BankAccountElement>(null)
-  const [loading, setLoading] = useState(false)
-  const { publicsquare } = usePublicSquare()
+  const { onSubmitCardElement, onSubmitBankAccountElement, submitting } =
+    useCheckoutSubmit()
   const cart = useCart()
   const total = useMemo(() => {
     const subtotal = cart.items.reduce(
@@ -113,134 +111,36 @@ function Component() {
     card: {},
   }
 
-  async function onSubmitCardElement(values: typeof initialValues) {
-    try {
-      if (cardElement.current && !loading) {
-        setLoading(true)
-        const card = await createCard(values, cardElement.current)
-        if (card) {
-          const payment = await capturePayment(values, { card })
-          if (payment.id) {
-            router.push(`/ecommerce/orders/${payment.id}/summary`)
-          }
-        }
-      }
-    } catch (error) {
-      console.log(error)
-    }
-    setLoading(false)
-  }
-
-  async function createCard(
-    values: typeof initialValues,
-    card: PublicSquareTypes.CardsCreateInput['card']
-  ) {
-    if (values.name_on_card && card && publicsquare) {
-      try {
-        const response = await publicsquare.cards.create({
-          cardholder_name: values.name_on_card,
-          card,
-        })
-        if (response) {
-          return response
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    }
-  }
-
-  async function capturePayment(
-    values: typeof initialValues,
-    {
-      card,
-      bankAccount,
-    }: {
-      card?: PublicSquareTypes.CardCreateResponse
-      bankAccount?: PublicSquareTypes.BankAccountCreateResponse
-    }
-  ) {
-    try {
-      const payment = await fetch('/api/payments', {
-        method: 'POST',
-        body: JSON.stringify({
-          // amount should be in cents rather than dollars
-          amount: total.total * 100,
-          // optional, USD is assumed
-          currency: 'USD',
-          payment_method: {
-            ...(card && { card: card.id }),
-            ...(bankAccount && { bank_account: bankAccount.id }),
-          },
-          customer: values.customer,
-          billing_details: values.address,
-        }),
-      }).then((res) => res.json())
-      return payment
-    } catch (error) {}
-  }
-
-  async function onSubmitBankAccountElement(values: typeof initialValues) {
-    try {
-      if (!loading) {
-        setLoading(true)
-        const bankAccount = await createBankAccount(values)
-        if (bankAccount) {
-          const payment = await capturePayment(values, { bankAccount })
-          if (payment.id) {
-            router.push(`/ecommerce/orders/${payment.id}/summary`)
-          }
-        }
-      }
-    } catch (error) {
-      console.log(error)
-    }
-    setLoading(false)
-  }
-
-  async function createBankAccount(values: typeof initialValues) {
-    if (
-      values.name_on_card &&
-      bankAccountElement.current?.routingNumber.el.value &&
-      bankAccountElement.current?.accountNumber.el.value &&
-      publicsquare
-    ) {
-      try {
-        const response = await publicsquare.bankAccounts.create({
-          account_holder_name: values.name_on_card,
-          routing_number: bankAccountElement.current?.routingNumber.el.value,
-          account_number: bankAccountElement.current?.accountNumber.el.value,
-        })
-        if (response) {
-          return response
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    }
-  }
-
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={schema}
-      onSubmit={async (values, { setSubmitting, setFieldError }) => {
-        console.log(values)
+      onSubmit={async (values, { setFieldError }) => {
         if (values.payment_method === PaymentMethodEnum.CREDIT_CARD) {
           if (!cardElement.current) {
             setFieldError('card', 'Card is required')
           } else {
-            setSubmitting(true)
-            onSubmitCardElement(values)
-            setSubmitting(false)
+            const payment = await onSubmitCardElement(
+              total.total * 100,
+              values as any,
+              cardElement
+            )
+            if (payment.id) {
+              router.push(`/ecommerce/orders/${payment.id}/summary`)
+            }
           }
         } else if (values.payment_method === PaymentMethodEnum.BANK_ACCOUNT) {
           if (!bankAccountElement.current) {
             setFieldError('bank_account', 'Bank account is required')
           } else {
-            setSubmitting(true)
-            onSubmitBankAccountElement(values)
-            setSubmitting(false)
+            const payment = await onSubmitBankAccountElement(
+              total.total * 100,
+              values as any,
+              bankAccountElement
+            )
+            if (payment.id) {
+              router.push(`/ecommerce/orders/${payment.id}/summary`)
+            }
           }
         }
       }}
@@ -621,8 +521,8 @@ function Component() {
                     <div className="border-t border-gray-200 px-4 py-6 sm:px-6 relative">
                       <Button
                         type="submit"
-                        loading={loading}
-                        disabled={loading}
+                        loading={submitting}
+                        disabled={submitting}
                       >
                         Confirm order
                       </Button>

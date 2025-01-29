@@ -25,6 +25,7 @@ export default function BankAccountElementForm({
           <FormInput
             name="account_holder_name"
             onChange={formik.handleChange}
+            placeholder="Account holder name"
           />
         </div>
       </div>

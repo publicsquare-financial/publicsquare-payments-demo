@@ -1,3 +1,5 @@
+import PublicSquareTypes from '@publicsquare/elements-react/types'
+
 export function currency(amount: number) {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',

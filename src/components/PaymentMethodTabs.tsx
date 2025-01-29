@@ -1,4 +1,4 @@
-import { availablePaymentMethods } from '@/utils'
+import { availablePaymentMethods, PaymentMethodEnum } from '@/utils'
 import { FormikProps } from 'formik'
 import CardElementForm from './form/CardElementForm'
 import BankAccountElementForm from './form/BankAccountElementForm'
@@ -54,10 +54,10 @@ export default function PaymentMethodTabs({
         </div>
       </fieldset>
 
-      {formik.values.payment_method === 'credit-card' && (
+      {formik.values.payment_method === PaymentMethodEnum.CREDIT_CARD && (
         <CardElementForm formik={formik} ref={cardElement} />
       )}
-      {formik.values.payment_method === 'ach' && (
+      {formik.values.payment_method === PaymentMethodEnum.BANK_ACCOUNT && (
         <BankAccountElementForm formik={formik} ref={bankAccountElement} />
       )}
     </div>

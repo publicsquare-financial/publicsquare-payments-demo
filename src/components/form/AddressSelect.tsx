@@ -11,11 +11,12 @@ export default function AddressSelect({
   const [addresses, setAddresses] = useState([
     {
       id: '1',
-      address_1: '123 Main St',
-      address_2: undefined,
+      address_line_1: '123 Main St',
+      address_line_2: undefined,
       city: 'New York',
       state: 'NY',
-      zip: '10001',
+      postal_code: '10001',
+      country: 'US',
     },
   ])
 
@@ -42,11 +43,11 @@ export default function AddressSelect({
         <option value="">Select an address</option>
         {addresses.map((address) => (
           <option key={address.id} value={address.id}>
-            {address.address_1}
-            {address.address_2 ? `, ${address.address_2}` : ''}
+            {address.address_line_1}
+            {address.address_line_2 ? `, ${address.address_line_2}` : ''}
             {address.city ? `, ${address.city}` : ''}
             {address.state ? `, ${address.state}` : ''}
-            {address.zip ? `, ${address.zip}` : ''}
+            {address.postal_code ? `, ${address.postal_code}` : ''}
           </option>
         ))}
       </select>
