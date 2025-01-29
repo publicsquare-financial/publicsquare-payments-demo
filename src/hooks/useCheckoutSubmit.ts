@@ -1,12 +1,10 @@
 import { usePublicSquare } from '@publicsquare/elements-react'
 import PublicSquareTypes from '@publicsquare/elements-react/types'
-import { useRouter } from 'next/navigation'
 import { RefObject, useState } from 'react'
 
 export function useCheckoutSubmit() {
   const { publicsquare } = usePublicSquare()
   const [submitting, setSubmitting] = useState(false)
-  const router = useRouter()
 
   async function onSubmitCardElement(
     amount: number,
