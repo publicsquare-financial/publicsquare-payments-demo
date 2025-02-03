@@ -9,7 +9,7 @@ type Props = {
   placeholder?: string
   className?: string
   onClick?: () => void
-  type?: HTMLInputTypeAttribute & 'currency'
+  type?: HTMLInputTypeAttribute | 'currency'
   disabled?: boolean
   step?: string
   autoComplete?: string

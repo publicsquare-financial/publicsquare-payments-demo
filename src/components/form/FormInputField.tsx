@@ -14,7 +14,7 @@ type Props = {
   step?: string
   autoComplete?: string
   iconBefore?: React.ReactNode
-  type?: HTMLInputTypeAttribute & 'currency'
+  type?: HTMLInputTypeAttribute | 'currency'
 } & Omit<ComponentProps<'input'>, 'type'>
 
 const FormInputField = ({ iconBefore, type, ...props }: Props) => {
