@@ -33,7 +33,7 @@ function PayoutCard() {
     useCheckoutSubmit()
 
   const schema = Yup.object().shape({
-    amount: Yup.number().required('Amount is required'),
+    amount: Yup.string().required('Amount is required'),
     customer: Yup.object({
       email: Yup.string().email().required('Email is required'),
       first_name: Yup.string().required('First name is required'),
@@ -61,7 +61,16 @@ function PayoutCard() {
         .required('Country is required'),
     }).required('Address is required'),
     delivery_method: Yup.number().required('Delivery method is required'),
-    name_on_card: Yup.string().required('Name on card is required'),
+    name_on_card: Yup.string().when('payment_method', {
+      is: PaymentMethodEnum.CREDIT_CARD,
+      then: (schema) => schema.required('Name on card is required'),
+      otherwise: (schema) => schema.optional(),
+    }),
+    account_holder_name: Yup.string().when('payment_method', {
+      is: PaymentMethodEnum.BANK_ACCOUNT,
+      then: (schema) => schema.required('Account holder name is required'),
+      otherwise: (schema) => schema.optional(),
+    }),
     payment_method: Yup.string()
       .required('Payment method is required')
       .oneOf([PaymentMethodEnum.CREDIT_CARD, PaymentMethodEnum.BANK_ACCOUNT]),
@@ -84,7 +93,8 @@ function PayoutCard() {
       country: 'US',
     },
     delivery_method: 1,
-    name_on_card: 'John Joe',
+    name_on_card: '',
+    account_holder_name: '',
     amount: '' as any,
     payment_method: PaymentMethodEnum.CREDIT_CARD,
   }
@@ -98,13 +108,18 @@ function PayoutCard() {
         initialValues={initialValues}
         validationSchema={schema}
         onSubmit={(values, { setFieldError }) => {
+          const amount = parseFloat(values.amount.replace(',', '')) * 100
           if (values.payment_method === PaymentMethodEnum.CREDIT_CARD) {
-            if (!cardElement.current) {
+            if (!cardElement.current || !values.name_on_card) {
               setFieldError('card', 'Card is required')
             } else {
               onSubmitCardElement(
-                values.amount * 100,
-                values,
+                amount,
+                {
+                  ...values,
+                  name_on_card: values.name_on_card,
+                  amount,
+                },
                 cardElement,
                 'payout'
               ).then((payment) => {
@@ -118,8 +133,11 @@ function PayoutCard() {
               setFieldError('bank_account', 'Bank account is required')
             } else {
               onSubmitBankAccountElement(
-                values.amount * 100,
-                values,
+                amount,
+                {
+                  ...values,
+                  amount,
+                },
                 bankAccountElement,
                 'payout'
               ).then((payment) => {
@@ -166,8 +184,9 @@ function PayoutCard() {
                 <FormInput
                   name="amount"
                   onChange={formik.handleChange}
-                  type="number"
+                  type="currency"
                   placeholder="Amount in dollars"
+                  iconBefore={<span className="h-5 w-5 text-gray-400">$</span>}
                 />
               </div>
               <hr />

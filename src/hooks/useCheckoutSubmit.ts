@@ -23,6 +23,7 @@ export function useCheckoutSubmit() {
         const card = await createCard(values, cardElement.current)
         if (card) {
           const payment = await capturePayment(amount, values, { card }, type)
+          setSubmitting(false)
           return payment
         }
       }
@@ -100,6 +101,7 @@ export function useCheckoutSubmit() {
             { bankAccount },
             type
           )
+          setSubmitting(false)
           return payment
         }
       }
@@ -111,14 +113,14 @@ export function useCheckoutSubmit() {
 
   async function createBankAccount(values: any, bankAccountElement: any) {
     if (
-      values.name_on_card &&
+      values.account_holder_name &&
       bankAccountElement.current?.routingNumber.el.value &&
       bankAccountElement.current?.accountNumber.el.value &&
       publicsquare
     ) {
       try {
         const response = await publicsquare.bankAccounts.create({
-          account_holder_name: values.name_on_card,
+          account_holder_name: values.account_holder_name,
           routing_number: bankAccountElement.current?.routingNumber.el.value,
           account_number: bankAccountElement.current?.accountNumber.el.value,
         })
