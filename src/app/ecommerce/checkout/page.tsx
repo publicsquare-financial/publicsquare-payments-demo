@@ -3,22 +3,19 @@
 import { useMemo, useRef, useState } from 'react';
 import { Radio, RadioGroup } from '@headlessui/react';
 import { CheckCircleIcon, TrashIcon } from '@heroicons/react/20/solid';
-import {
-  CardElement,
-  PublicSquareProvider,
-  usePublicSquare,
-} from '@publicsquare/elements-react';
-import * as Yup from 'yup';
-import { ErrorMessage, Form, Formik } from 'formik';
-import FormInput from '@/components/form/FormInput';
-import FormSelect from '@/components/form/FormSelect';
-import PublicSquareTypes from '@publicsquare/elements-js/types/sdk';
-import { useRouter } from 'next/navigation';
-import Button from '@/components/Button';
-import { useCart } from '@/providers/CartProvider';
-import { currency } from '@/utils';
-import CardElementsCallout from '@/components/ecommerce/CardElementsCallout';
-import ConfirmOrderCallout from '@/components/ecommerce/ConfirmOrderCallout';
+import { PublicSquareProvider } from '@publicsquare/elements-react'
+import * as Yup from 'yup'
+import { Form, Formik } from 'formik'
+import FormInput from '@/components/form/FormInput'
+import FormSelect from '@/components/form/FormSelect'
+import PublicSquareTypes from '@publicsquare/elements-react/types'
+import { useRouter } from 'next/navigation'
+import Button from '@/components/Button'
+import { useCart } from '@/providers/CartProvider'
+import { currency, PaymentMethodEnum } from '@/utils'
+import ConfirmOrderCallout from '@/components/ecommerce/ConfirmOrderCallout'
+import PaymentMethodTabs from '@/components/PaymentMethodTabs'
+import { useCheckoutSubmit } from '@/hooks/useCheckoutSubmit'
 
 const deliveryMethods = [
   {
@@ -28,10 +25,6 @@ const deliveryMethods = [
     price: '$5.00',
   },
   { id: 2, title: 'Express', turnaround: '2–5 business days', price: '$16.00' },
-];
-const paymentMethods = [
-  { id: 'credit-card', title: 'Credit card' },
-  // { id: 'ach', title: 'ACH' },
 ]
 
 function Component() {
@@ -39,8 +32,9 @@ function Component() {
     deliveryMethods[0]
   )
   const cardElement = useRef<PublicSquareTypes.CardElement>(null)
-  const [loading, setLoading] = useState(false)
-  const { publicsquare } = usePublicSquare()
+  const bankAccountElement = useRef<PublicSquareTypes.BankAccountElement>(null)
+  const { onSubmitCardElement, onSubmitBankAccountElement, submitting } =
+    useCheckoutSubmit()
   const cart = useCart()
   const total = useMemo(() => {
     const subtotal = cart.items.reduce(
@@ -85,7 +79,14 @@ function Component() {
     }).required('Address is required'),
     delivery_method: Yup.number().required('Delivery method is required'),
     name_on_card: Yup.string().required('Name on card is required'),
-    card: Yup.object().required('Card is required'),
+    card: Yup.object().when('payment_method', {
+      is: 'credit-card',
+      then: (schema) => schema.required('Card is required'),
+      otherwise: (schema) => schema.optional(),
+    }),
+    payment_method: Yup.string()
+      .required('Payment method is required')
+      .oneOf([PaymentMethodEnum.CREDIT_CARD, PaymentMethodEnum.BANK_ACCOUNT]),
   })
 
   const initialValues: Yup.InferType<typeof schema> = {
@@ -106,80 +107,41 @@ function Component() {
     },
     delivery_method: 1,
     name_on_card: 'John Joe',
+    payment_method: PaymentMethodEnum.CREDIT_CARD,
     card: {},
-  }
-
-  async function onSubmitCardElement(values: typeof initialValues) {
-    try {
-      if (cardElement.current && !loading) {
-        setLoading(true)
-        const card = await createCard(values, cardElement.current)
-        if (card) {
-          const payment = await capturePayment(values, card)
-          if (payment.id) {
-            router.push(`/ecommerce/orders/${payment.id}/summary`)
-          }
-        }
-      }
-    } catch (error) {
-      console.log(error)
-    }
-    setLoading(false)
-  }
-
-  async function createCard(
-    values: typeof initialValues,
-    card: PublicSquareTypes.CardsCreateInput['card']
-  ) {
-    if (values.name_on_card && card && publicsquare) {
-      try {
-        const response = await publicsquare.cards.create({
-          cardholder_name: values.name_on_card,
-          card,
-        })
-        if (response) {
-          return response
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    }
-  }
-
-  async function capturePayment(
-    values: typeof initialValues,
-    card: PublicSquareTypes.CardCreateResponse
-  ) {
-    try {
-      const payment = await fetch('/api/payments', {
-        method: 'POST',
-        body: JSON.stringify({
-          // amount should be in cents rather than dollars
-          amount: total.total * 100,
-          // optional, USD is assumed
-          currency: 'USD',
-          payment_method: {
-            card: card.id,
-          },
-          customer: values.customer,
-          billing_details: values.address,
-        }),
-      }).then((res) => res.json())
-      return payment
-    } catch (error) {}
   }
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={schema}
-      onSubmit={async (values, { setSubmitting, setFieldError }) => {
-        if (!cardElement.current) {
-          setFieldError('card', 'Card is required')
-        } else {
-          setSubmitting(true)
-          onSubmitCardElement(values)
-          setSubmitting(false)
+      onSubmit={async (values, { setFieldError }) => {
+        if (values.payment_method === PaymentMethodEnum.CREDIT_CARD) {
+          if (!cardElement.current) {
+            setFieldError('card', 'Card is required')
+          } else {
+            const payment = await onSubmitCardElement(
+              total.total * 100,
+              values as any,
+              cardElement
+            )
+            if (payment.id) {
+              router.push(`/ecommerce/orders/${payment.id}/summary`)
+            }
+          }
+        } else if (values.payment_method === PaymentMethodEnum.BANK_ACCOUNT) {
+          if (!bankAccountElement.current) {
+            setFieldError('bank_account', 'Bank account is required')
+          } else {
+            const payment = await onSubmitBankAccountElement(
+              total.total * 100,
+              values as any,
+              bankAccountElement
+            )
+            if (payment.id) {
+              router.push(`/ecommerce/orders/${payment.id}/summary`)
+            }
+          }
         }
       }}
     >
@@ -429,76 +391,13 @@ function Component() {
                     <h2 className="text-lg font-medium text-gray-900">
                       Payment
                     </h2>
-
-                    <fieldset className="mt-4">
-                      <legend className="sr-only">Payment type</legend>
-                      <div className="space-y-4 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
-                        {paymentMethods.map(
-                          (paymentMethod, paymentMethodIdx) => (
-                            <div
-                              key={paymentMethod.id}
-                              className="flex items-center"
-                            >
-                              {paymentMethodIdx === 0 ? (
-                                <input
-                                  defaultChecked
-                                  id={paymentMethod.id}
-                                  name="payment-type"
-                                  type="radio"
-                                  className="h-4 w-4 border-gray-300 text-primary-dark focus:ring-primary"
-                                />
-                              ) : (
-                                <input
-                                  id={paymentMethod.id}
-                                  name="payment-type"
-                                  type="radio"
-                                  className="h-4 w-4 border-gray-300 text-primary-dark focus:ring-primary"
-                                />
-                              )}
-
-                              <label
-                                htmlFor={paymentMethod.id}
-                                className="ml-3 block text-sm font-medium text-gray-700"
-                              >
-                                {paymentMethod.title}
-                              </label>
-                            </div>
-                          )
-                        )}
-                      </div>
-                    </fieldset>
-
-                    <div className="mt-6 grid grid-cols-4 gap-x-4 gap-y-6">
-                      <div className="col-span-4">
-                        <label
-                          htmlFor="name_on_card"
-                          className="block text-sm font-medium text-gray-700"
-                        >
-                          Name on card
-                        </label>
-                        <div className="mt-1">
-                          <FormInput
-                            name="name_on_card"
-                            onChange={formik.handleChange}
-                          />
-                        </div>
-                      </div>
-                      <div className="col-span-4 relative">
-                        <div
-                          className="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm py-1"
-                          {...{
-                            type: 'text',
-                          }}
-                        >
-                          <CardElement ref={cardElement} id="card-element" />
-                        </div>
-                        <ErrorMessage name="card" />
-                        <CardElementsCallout />
-                      </div>
-                    </div>
+                    <PaymentMethodTabs
+                      formik={formik}
+                      cardElement={cardElement}
+                      bankAccountElement={bankAccountElement}
+                    />
                   </div>
                 </div>
-
                 {/* Order summary */}
                 <div className="mt-10 lg:mt-0">
                   <h2 className="text-lg font-medium text-gray-900">
@@ -622,8 +521,8 @@ function Component() {
                     <div className="border-t border-gray-200 px-4 py-6 sm:px-6 relative">
                       <Button
                         type="submit"
-                        loading={loading}
-                        disabled={loading}
+                        loading={submitting}
+                        disabled={submitting}
                       >
                         Confirm order
                       </Button>

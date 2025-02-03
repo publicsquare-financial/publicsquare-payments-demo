@@ -1,7 +1,7 @@
 'use client';
 
 import { Field } from 'formik';
-import { ComponentProps } from 'react';
+import { ComponentProps, HTMLInputTypeAttribute } from 'react'
 
 type Props = {
   name: string
@@ -13,15 +13,34 @@ type Props = {
   disabled?: boolean
   step?: string
   autoComplete?: string
-} & ComponentProps<'input'>;
+  iconBefore?: React.ReactNode
+  type?: HTMLInputTypeAttribute | 'currency'
+} & Omit<ComponentProps<'input'>, 'type'>
 
-const FormInputField = (props: Props) => {
+const FormInputField = ({ iconBefore, type, ...props }: Props) => {
   return (
-    <Field
-      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
-      {...props}
-    />
+    <Field {...props}>
+      {({ field }: any) => (
+        <div className="flex flex-row items-center w-full rounded-md border border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm">
+          {iconBefore && <div className="ml-4">{iconBefore}</div>}
+          <input
+            {...field}
+            className="w-full border-none focus:ring-0 focus:outline-none bg-transparent py-1.5"
+            type={type === 'currency' ? 'text' : type}
+            onBlur={(e) => {
+              if (type === 'currency') {
+                const target = e.target as HTMLInputElement
+                if (!target.value || target.value.endsWith('.')) return
+                target.value = parseFloat(target.value.replace(',', ''))
+                  .toFixed(2)
+                  .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+              }
+            }}
+          />
+        </div>
+      )}
+    </Field>
   )
-};
+}
 
 export default FormInputField;

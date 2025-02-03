@@ -213,6 +213,13 @@ export default function TopNav() {
               </p>
 
               <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
+                <Link
+                  href="/ecommerce/admin"
+                  className="text-sm font-medium text-white hover:text-gray-100"
+                >
+                  Admin
+                </Link>
+                <span aria-hidden="true" className="h-6 w-px bg-gray-600" />
                 <a
                   href="#"
                   className="text-sm font-medium text-white hover:text-gray-100"
