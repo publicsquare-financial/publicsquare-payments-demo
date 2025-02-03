@@ -9,11 +9,13 @@ type Props = {
   placeholder?: string
   className?: string
   onClick?: () => void
-  type?: HTMLInputTypeAttribute
+  type?: HTMLInputTypeAttribute | 'currency'
   disabled?: boolean
   step?: string
   autoComplete?: string
-} & ComponentProps<'div'>;
+  iconBefore?: React.ReactNode
+  value?: string
+} & ComponentProps<'div'>
 
 const FormInput = ({
   name,
@@ -24,6 +26,8 @@ const FormInput = ({
   disabled,
   step,
   autoComplete,
+  iconBefore,
+  value,
   ...props
 }: Props) => {
   return (
@@ -37,11 +41,13 @@ const FormInput = ({
           type={type}
           autoComplete={autoComplete}
           disabled={disabled}
+          iconBefore={iconBefore}
+          value={value}
         />
         <FormError name={name} />
       </div>
     </div>
   )
-};
+}
 
 export default FormInput;
