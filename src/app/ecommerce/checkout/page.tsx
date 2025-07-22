@@ -1,115 +1,125 @@
-'use client';
+"use client";
 
-import { useMemo, useRef, useState } from 'react';
-import { Radio, RadioGroup } from '@headlessui/react';
-import { CheckCircleIcon, TrashIcon } from '@heroicons/react/20/solid';
-import { PublicSquareProvider } from '@publicsquare/elements-react'
-import * as Yup from 'yup'
-import { Form, Formik } from 'formik'
-import FormInput from '@/components/form/FormInput'
-import FormSelect from '@/components/form/FormSelect'
-import PublicSquareTypes from '@publicsquare/elements-react/types'
-import { useRouter } from 'next/navigation'
-import Button from '@/components/Button'
-import { useCart } from '@/providers/CartProvider'
-import { currency, PaymentMethodEnum } from '@/utils'
-import ConfirmOrderCallout from '@/components/ecommerce/ConfirmOrderCallout'
-import PaymentMethodTabs from '@/components/PaymentMethodTabs'
-import { useCheckoutSubmit } from '@/hooks/useCheckoutSubmit'
+import { useMemo, useRef, useState } from "react";
+import { Radio, RadioGroup } from "@headlessui/react";
+import { CheckCircleIcon, TrashIcon } from "@heroicons/react/20/solid";
+import { PublicSquareProvider } from "@publicsquare/elements-react";
+import * as Yup from "yup";
+import { Form, Formik } from "formik";
+import FormInput from "@/components/form/FormInput";
+import FormSelect from "@/components/form/FormSelect";
+import PublicSquareTypes from "@publicsquare/elements-react/types";
+import { useRouter } from "next/navigation";
+import Button from "@/components/Button";
+import { useCart } from "@/providers/CartProvider";
+import { currency, PaymentMethodEnum } from "@/utils";
+import ConfirmOrderCallout from "@/components/ecommerce/ConfirmOrderCallout";
+import PaymentMethodTabs from "@/components/PaymentMethodTabs";
+import { useCheckoutSubmit } from "@/hooks/useCheckoutSubmit";
 
 const deliveryMethods = [
   {
     id: 1,
-    title: 'Standard',
-    turnaround: '4–10 business days',
-    price: '$5.00',
+    title: "Standard",
+    turnaround: "4–10 business days",
+    price: "$5.00",
   },
-  { id: 2, title: 'Express', turnaround: '2–5 business days', price: '$16.00' },
-]
+  { id: 2, title: "Express", turnaround: "2–5 business days", price: "$16.00" },
+];
 
 function Component() {
   const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(
     deliveryMethods[0]
-  )
-  const cardElement = useRef<PublicSquareTypes.CardElement>(null)
-  const bankAccountElement = useRef<PublicSquareTypes.BankAccountElement>(null)
+  );
+  const cardElement = useRef<PublicSquareTypes.CardElement>(null);
+  const bankAccountElement = useRef<PublicSquareTypes.BankAccountElement>(null);
   const { onSubmitCardElement, onSubmitBankAccountElement, submitting } =
-    useCheckoutSubmit()
-  const cart = useCart()
+    useCheckoutSubmit();
+  const cart = useCart();
   const total = useMemo(() => {
     const subtotal = cart.items.reduce(
       (accum, cur) => accum + cur.item.price * cur.quantity,
       0
-    )
+    );
     return {
       subtotal,
       shipping: 5,
       taxes: 0.07 * subtotal,
       total: subtotal + 0.07 * subtotal,
-    }
-  }, [cart.items])
-  const router = useRouter()
+    };
+  }, [cart.items]);
+  const router = useRouter();
 
   const schema = Yup.object().shape({
     customer: Yup.object({
-      email: Yup.string().email().required('Email is required'),
-      first_name: Yup.string().required('First name is required'),
-      last_name: Yup.string().required('Last name is required'),
+      email: Yup.string().email().required("Email is required"),
+      first_name: Yup.string().required("First name is required"),
+      last_name: Yup.string().required("Last name is required"),
       business_name: Yup.string(),
       phone: Yup.string()
-        .max(12, 'Phone can only be 12 characters max, including country code.')
-        .min(11, 'Phone can only be 11 characters min, including country code.')
-        .required('Phone is required'),
+        .max(12, "Phone can only be 12 characters max, including country code.")
+        .min(11, "Phone can only be 11 characters min, including country code.")
+        .required("Phone is required"),
     }),
     address: Yup.object({
-      address_line_1: Yup.string().required('Address line 1 is required'),
+      address_line_1: Yup.string().required("Address line 1 is required"),
       address_line_2: Yup.string(),
-      city: Yup.string().required('City is required'),
+      city: Yup.string().required("City is required"),
       state: Yup.string()
-        .max(3, 'State can only be 3 characters')
-        .min(2, 'State is the 2 or 3 character state code')
-        .required('State is required'),
-      postal_code: Yup.string().required('Postal code is required'),
+        .max(3, "State can only be 3 characters")
+        .min(2, "State is the 2 or 3 character state code")
+        .required("State is required"),
+      postal_code: Yup.string().required("Postal code is required"),
       country: Yup.string()
         .length(
           2,
           'Country is the 2 character ISO country code (e.g. United States => "US")'
         )
-        .required('Country is required'),
-    }).required('Address is required'),
-    delivery_method: Yup.number().required('Delivery method is required'),
-    name_on_card: Yup.string().required('Name on card is required'),
-    card: Yup.object().when('payment_method', {
-      is: 'credit-card',
-      then: (schema) => schema.required('Card is required'),
+        .required("Country is required"),
+    }).required("Address is required"),
+    delivery_method: Yup.number().required("Delivery method is required"),
+    name_on_card: Yup.string().required("Name on card is required"),
+    card: Yup.object().when("payment_method", {
+      is: PaymentMethodEnum.CREDIT_CARD,
+      then: (schema) => schema.required("Card is required"),
+      otherwise: (schema) => schema.optional(),
+    }),
+    apple_pay: Yup.object().when("payment_method", {
+      is: PaymentMethodEnum.APPLE_PAY,
+      then: (schema) => schema.required("Apple Pay token is required"),
       otherwise: (schema) => schema.optional(),
     }),
     payment_method: Yup.string()
-      .required('Payment method is required')
-      .oneOf([PaymentMethodEnum.CREDIT_CARD, PaymentMethodEnum.BANK_ACCOUNT]),
-  })
+      .required("Payment method is required")
+      .oneOf([
+        PaymentMethodEnum.CREDIT_CARD,
+        PaymentMethodEnum.BANK_ACCOUNT,
+        PaymentMethodEnum.APPLE_PAY,
+      ]),
+  });
 
   const initialValues: Yup.InferType<typeof schema> = {
     customer: {
-      email: 'example@publicsquare.com',
-      first_name: 'John',
-      last_name: 'Joe',
-      business_name: '',
-      phone: '11234567890',
+      email: "example@publicsquare.com",
+      first_name: "John",
+      last_name: "Joe",
+      business_name: "",
+      phone: "11234567890",
     },
     address: {
-      address_line_1: '1100 S Ocean Blvd',
+      address_line_1: "1100 S Ocean Blvd",
       address_line_2: undefined,
-      city: 'Palm Beach',
-      state: 'FL',
-      postal_code: '33480',
-      country: 'US',
+      city: "Palm Beach",
+      state: "FL",
+      postal_code: "33480",
+      country: "US",
     },
     delivery_method: 1,
-    name_on_card: 'John Joe',
+    name_on_card: "John Joe",
     payment_method: PaymentMethodEnum.CREDIT_CARD,
     card: {},
-  }
+    apple_pay: {},
+  };
 
   return (
     <Formik
@@ -118,28 +128,28 @@ function Component() {
       onSubmit={async (values, { setFieldError }) => {
         if (values.payment_method === PaymentMethodEnum.CREDIT_CARD) {
           if (!cardElement.current) {
-            setFieldError('card', 'Card is required')
+            setFieldError("card", "Card is required");
           } else {
             const payment = await onSubmitCardElement(
               total.total * 100,
               values as any,
               cardElement
-            )
+            );
             if (payment.id) {
-              router.push(`/ecommerce/orders/${payment.id}/summary`)
+              router.push(`/ecommerce/orders/${payment.id}/summary`);
             }
           }
         } else if (values.payment_method === PaymentMethodEnum.BANK_ACCOUNT) {
           if (!bankAccountElement.current) {
-            setFieldError('bank_account', 'Bank account is required')
+            setFieldError("bank_account", "Bank account is required");
           } else {
             const payment = await onSubmitBankAccountElement(
               total.total * 100,
               values as any,
               bankAccountElement
-            )
+            );
             if (payment.id) {
-              router.push(`/ecommerce/orders/${payment.id}/summary`)
+              router.push(`/ecommerce/orders/${payment.id}/summary`);
             }
           }
         }
@@ -285,9 +295,9 @@ function Component() {
                           <FormSelect
                             name="address.country"
                             options={[
-                              { value: 'US', name: 'United States' },
-                              { value: 'MX', name: 'Mexico ' },
-                              { value: 'CN', name: 'Canada' },
+                              { value: "US", name: "United States" },
+                              { value: "MX", name: "Mexico " },
+                              { value: "CN", name: "Canada" },
                             ]}
                           />
                         </div>
@@ -395,6 +405,7 @@ function Component() {
                       formik={formik}
                       cardElement={cardElement}
                       bankAccountElement={bankAccountElement}
+                      total={total.total}
                     />
                   </div>
                 </div>
@@ -536,7 +547,7 @@ function Component() {
         </Form>
       )}
     </Formik>
-  )
+  );
 }
 
 export default function Page() {
@@ -546,5 +557,5 @@ export default function Page() {
     >
       <Component />
     </PublicSquareProvider>
-  )
+  );
 }

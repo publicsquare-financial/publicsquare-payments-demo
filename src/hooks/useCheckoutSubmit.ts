@@ -35,7 +35,7 @@ export function useCheckoutSubmit() {
 
   async function createCard(
     values: { name_on_card: string },
-    card: PublicSquareTypes.CardsCreateInput['card']
+    card: PublicSquareTypes.CardCreateInput['card']
   ) {
     if (values.name_on_card && card && publicsquare) {
       try {

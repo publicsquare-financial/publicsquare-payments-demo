@@ -1,17 +1,20 @@
-import { availablePaymentMethods, PaymentMethodEnum } from '@/utils'
-import { FormikProps } from 'formik'
-import CardElementForm from './form/CardElementForm'
-import BankAccountElementForm from './form/BankAccountElementForm'
-import PublicSquareTypes from '@publicsquare/elements-react/types'
+import { availablePaymentMethods, PaymentMethodEnum } from "@/utils";
+import { FormikProps } from "formik";
+import CardElementForm from "./form/CardElementForm";
+import BankAccountElementForm from "./form/BankAccountElementForm";
+import ApplePayElementForm from "./form/ApplePayElementForm";
+import PublicSquareTypes from "@publicsquare/elements-react/types";
 
 export default function PaymentMethodTabs({
   formik,
   cardElement,
   bankAccountElement,
+  total,
 }: {
-  formik: FormikProps<any>
-  cardElement: React.RefObject<PublicSquareTypes.CardElement | null>
-  bankAccountElement: React.RefObject<PublicSquareTypes.BankAccountElement | null>
+  formik: FormikProps<any>;
+  cardElement: React.RefObject<PublicSquareTypes.CardElement | null>;
+  bankAccountElement: React.RefObject<PublicSquareTypes.BankAccountElement | null>;
+  total: number;
 }) {
   return (
     <div>
@@ -28,7 +31,7 @@ export default function PaymentMethodTabs({
                   type="radio"
                   className="h-4 w-4 border-gray-300 text-primary-dark focus:ring-primary"
                   onChange={() =>
-                    formik.setFieldValue('payment_method', paymentMethod.id)
+                    formik.setFieldValue("payment_method", paymentMethod.id)
                   }
                 />
               ) : (
@@ -38,7 +41,7 @@ export default function PaymentMethodTabs({
                   type="radio"
                   className="h-4 w-4 border-gray-300 text-primary-dark focus:ring-primary"
                   onChange={() =>
-                    formik.setFieldValue('payment_method', paymentMethod.id)
+                    formik.setFieldValue("payment_method", paymentMethod.id)
                   }
                 />
               )}
@@ -60,6 +63,9 @@ export default function PaymentMethodTabs({
       {formik.values.payment_method === PaymentMethodEnum.BANK_ACCOUNT && (
         <BankAccountElementForm formik={formik} ref={bankAccountElement} />
       )}
+      {formik.values.payment_method === PaymentMethodEnum.APPLE_PAY && (
+        <ApplePayElementForm total={total} />
+      )}
     </div>
-  )
+  );
 }
