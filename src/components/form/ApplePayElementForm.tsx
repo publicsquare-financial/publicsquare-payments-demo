@@ -1,6 +1,8 @@
+import { RefObject } from "react";
 import { ErrorMessage } from "formik";
 import ApplePayButtonElement from "@publicsquare/elements-react/elements/ApplePayButtonElement";
 import { usePublicSquare } from "@publicsquare/elements-react";
+import PublicSquareTypes from "@publicsquare/elements-react/types";
 
 declare global {
   interface Window {
@@ -8,7 +10,13 @@ declare global {
   }
 }
 
-export default function ApplePayElementForm({ total }: { total: number }) {
+export default function ApplePayElementForm({
+  total,
+  ref,
+}: {
+  total: number;
+  ref: RefObject<any | null>;
+}) {
   const { publicsquare } = usePublicSquare();
 
   function createApplePaySession() {
@@ -63,8 +71,11 @@ export default function ApplePayElementForm({ total }: { total: number }) {
       session.completeMerchantValidation(merchantSession);
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    session.onpaymentauthorized = async (event: any) => {
+    session.onpaymentauthorized = async (
+      event: PublicSquareTypes.ApplePaymentData
+    ) => {
+      ref.current = event;
+
       try {
         // decrypt and tokenize Apple Pay
         await createPaymentMethod(event);
@@ -86,7 +97,7 @@ export default function ApplePayElementForm({ total }: { total: number }) {
           id="apple-pay-element"
           onClick={onApplePayButtonClicked}
         />
-        <ErrorMessage name="apple-pay" />
+        <ErrorMessage name="apple_pay" />
         {/* <ApplePayElementsCallout /> */}
       </div>
     </div>

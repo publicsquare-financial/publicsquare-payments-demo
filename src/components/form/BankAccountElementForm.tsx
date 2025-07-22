@@ -1,8 +1,8 @@
+import { RefObject } from 'react'
+import { ErrorMessage } from 'formik'
 import { BankAccountElement } from '@publicsquare/elements-react'
 import FormInput from './FormInput'
 import CardElementsCallout from '../ecommerce/CardElementsCallout'
-import { ErrorMessage } from 'formik'
-import { RefObject } from 'react'
 import PublicSquareTypes from '@publicsquare/elements-react/types'
 
 export default function BankAccountElementForm({

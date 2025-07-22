@@ -1,21 +1,21 @@
 "use client";
-
 import { useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import * as Yup from "yup";
+import { ErrorMessage, Form, Formik } from "formik";
 import { Radio, RadioGroup } from "@headlessui/react";
 import { CheckCircleIcon, TrashIcon } from "@heroicons/react/20/solid";
 import { PublicSquareProvider } from "@publicsquare/elements-react";
-import * as Yup from "yup";
-import { Form, Formik } from "formik";
 import FormInput from "@/components/form/FormInput";
 import FormSelect from "@/components/form/FormSelect";
 import PublicSquareTypes from "@publicsquare/elements-react/types";
-import { useRouter } from "next/navigation";
 import Button from "@/components/Button";
 import { useCart } from "@/providers/CartProvider";
 import { currency, PaymentMethodEnum } from "@/utils";
 import ConfirmOrderCallout from "@/components/ecommerce/ConfirmOrderCallout";
 import PaymentMethodTabs from "@/components/PaymentMethodTabs";
 import { useCheckoutSubmit } from "@/hooks/useCheckoutSubmit";
+import ApplePayButtonElement from "@publicsquare/elements-react/elements/ApplePayButtonElement";
 
 const deliveryMethods = [
   {
@@ -33,8 +33,12 @@ function Component() {
   );
   const cardElement = useRef<PublicSquareTypes.CardElement>(null);
   const bankAccountElement = useRef<PublicSquareTypes.BankAccountElement>(null);
-  const { onSubmitCardElement, onSubmitBankAccountElement, submitting } =
-    useCheckoutSubmit();
+  const {
+    onSubmitCardElement,
+    onSubmitBankAccountElement,
+    onSubmitApplePay,
+    submitting,
+  } = useCheckoutSubmit();
   const cart = useCart();
   const total = useMemo(() => {
     const subtotal = cart.items.reduce(
@@ -152,6 +156,8 @@ function Component() {
               router.push(`/ecommerce/orders/${payment.id}/summary`);
             }
           }
+        } else if (values.payment_method === PaymentMethodEnum.APPLE_PAY) {
+          await onSubmitApplePay(total.total * 100, values as any);
         }
       }}
     >
@@ -405,7 +411,6 @@ function Component() {
                       formik={formik}
                       cardElement={cardElement}
                       bankAccountElement={bankAccountElement}
-                      total={total.total}
                     />
                   </div>
                 </div>
@@ -538,6 +543,21 @@ function Component() {
                         Confirm order
                       </Button>
                       <ConfirmOrderCallout />
+                    </div>
+
+                    <div className="border-t border-gray-200 px-4 py-6 sm:px-6 relative">
+                      <ApplePayButtonElement
+                        id="apple-pay-element"
+                        disabled={submitting}
+                        onClick={() => {
+                          formik.setFieldValue(
+                            "payment_method",
+                            PaymentMethodEnum.APPLE_PAY
+                          );
+                          formik.submitForm();
+                        }}
+                      />
+                      <ErrorMessage name="apple_pay" />
                     </div>
                   </div>
                 </div>

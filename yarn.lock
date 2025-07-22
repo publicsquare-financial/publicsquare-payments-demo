@@ -454,19 +454,19 @@
   resolved "https://registry.yarnpkg.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
 
-"@publicsquare/elements-js@1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@publicsquare/elements-js/-/elements-js-1.7.0.tgz#8eb637b1a37364a4a25e3c02904cb250cfe7be81"
-  integrity sha512-luOHcXbTgxzKEVPS1vVDdTuDb9s3WtYRlqGTo40qUqBTJ8SKHZwpWlU1y6XVtSHJyP8tal3xbqWRfzI0ANcgBw==
+"@publicsquare/elements-js@1.7.1":
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/@publicsquare/elements-js/-/elements-js-1.7.1.tgz#2357a14ca1633e45bd23c1841e8d29421107cce5"
+  integrity sha512-sg//JLwiPzieZc/hhu+fswwWUI0calR+niQ1fPMvdBOvlfxYMnRe3hMB1IRv+vhnVmfvGQYsB0meBcRR3sML9A==
   dependencies:
     "@basis-theory/basis-theory-js" "^4.22.1"
 
-"@publicsquare/elements-react@1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@publicsquare/elements-react/-/elements-react-1.7.0.tgz#c79bd49c3f4275015f79568d9b3272d96313c16f"
-  integrity sha512-InZxzZkQJc9wXvK6IXplKdRPc0vw1azR0Gxt0u4jWhAEynJb0AKWAqrF3oX5SoHKENvGhS57NwYgKq6GYXoLcg==
+"@publicsquare/elements-react@1.7.1":
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/@publicsquare/elements-react/-/elements-react-1.7.1.tgz#74f9dd63e7e4787a5183e85d6003a7033dd2f58d"
+  integrity sha512-HOMyCfNmj7luxcO6Xd5GRa6/DVT7YKsyAI8rS0WdMd4nN6x27oqT3LIMJjclC4dS/zy21cqekclDUyxLJ9H28w==
   dependencies:
-    "@publicsquare/elements-js" "1.7.0"
+    "@publicsquare/elements-js" "1.7.1"
 
 "@react-aria/focus@^3.20.2":
   version "3.20.5"
