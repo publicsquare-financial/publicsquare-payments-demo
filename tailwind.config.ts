@@ -1,5 +1,6 @@
-import type { Config } from 'tailwindcss'
-const appConfig = require('./config')
+import type { Config } from 'tailwindcss';
+import tailwindForms from '@tailwindcss/forms';
+import appConfig from './config';
 
 const config: Config = {
   content: [
@@ -11,12 +12,12 @@ const config: Config = {
     extend: {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       colors: appConfig.theme.colors,
     },
   },
-  plugins: [require('@tailwindcss/forms')],
-}
-export default config
+  plugins: [tailwindForms],
+};
+
+export default config;

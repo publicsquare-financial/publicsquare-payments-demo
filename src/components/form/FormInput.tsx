@@ -4,18 +4,18 @@ import FormError from './FormError';
 import FormInputField from './FormInputField';
 
 type Props = {
-  name: string
-  label?: string
-  placeholder?: string
-  className?: string
-  onClick?: () => void
-  type?: HTMLInputTypeAttribute | 'currency'
-  disabled?: boolean
-  step?: string
-  autoComplete?: string
-  iconBefore?: React.ReactNode
-  value?: string
-} & ComponentProps<'div'>
+  name: string;
+  label?: string;
+  placeholder?: string;
+  className?: string;
+  onClick?: () => void;
+  type?: HTMLInputTypeAttribute | 'currency';
+  disabled?: boolean;
+  step?: string;
+  autoComplete?: string;
+  iconBefore?: React.ReactNode;
+  value?: string;
+} & ComponentProps<'div'>;
 
 const FormInput = ({
   name,
@@ -47,7 +47,7 @@ const FormInput = ({
         <FormError name={name} />
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default FormInput;

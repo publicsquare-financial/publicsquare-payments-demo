@@ -3,14 +3,14 @@ import { useState } from 'react';
 import CodeCallout from '../CodeCallout';
 
 export default function ConfirmOrderCallout() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
   return (
     <>
       <button
         onClick={() => setOpen(true)}
-        className="absolute right-4 top-4 shadow-md shadow-slate-500 rounded-full text-white bg-slate-900"
+        className="absolute right-4 top-4 rounded-full bg-slate-900 text-white shadow-md shadow-slate-500"
       >
-        <QuestionMarkCircleIcon className="w-5 h-5" />
+        <QuestionMarkCircleIcon className="h-5 w-5" />
       </button>
       <CodeCallout
         title="Capture order payment snippets"
@@ -47,5 +47,5 @@ const payment = await fetch('/api/payments', {
         onClose={() => setOpen(false)}
       />
     </>
-  )
+  );
 }

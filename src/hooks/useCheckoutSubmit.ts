@@ -1,7 +1,7 @@
-import { RefObject, useState } from "react";
-import { useRouter } from "next/navigation";
-import { usePublicSquare } from "@publicsquare/elements-react";
-import PublicSquareTypes from "@publicsquare/elements-react/types";
+import { RefObject, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { usePublicSquare } from '@publicsquare/elements-react';
+import PublicSquareTypes from '@publicsquare/elements-react/types';
 
 declare global {
   interface Window {
@@ -23,7 +23,7 @@ export function useCheckoutSubmit() {
       address: any;
     },
     cardElement: RefObject<PublicSquareTypes.CardElement | null>,
-    type: "payment" | "payout" = "payment"
+    type: 'payment' | 'payout' = 'payment',
   ) {
     try {
       if (cardElement.current && !submitting) {
@@ -43,7 +43,7 @@ export function useCheckoutSubmit() {
 
   async function createCard(
     values: { name_on_card: string },
-    card: PublicSquareTypes.CardCreateInput["card"]
+    card: PublicSquareTypes.CardCreateInput['card'],
   ) {
     if (values.name_on_card && card && publicsquare) {
       try {
@@ -72,16 +72,16 @@ export function useCheckoutSubmit() {
       bankAccount?: PublicSquareTypes.BankAccountCreateResponse;
       applePay?: PublicSquareTypes.ApplePayCreateResponse;
     },
-    type: "payment" | "payout" = "payment"
+    type: 'payment' | 'payout' = 'payment',
   ) {
     try {
       const payment = await fetch(`/api/${type}s`, {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify({
           // amount should be in cents rather than dollars
           amount,
           // optional, USD is assumed
-          currency: "USD",
+          currency: 'USD',
           payment_method: {
             ...(card && { card: card.id }),
             ...(bankAccount && { bank_account: bankAccount.id }),
@@ -92,26 +92,21 @@ export function useCheckoutSubmit() {
         }),
       }).then((res) => res.json());
       return payment;
-    } catch (error) {}
+    } catch (_error) {}
   }
 
   async function onSubmitBankAccountElement(
     amount: number,
     values: any,
     bankAccountElement: RefObject<PublicSquareTypes.BankAccountElement | null>,
-    type: "payment" | "payout" = "payment"
+    type: 'payment' | 'payout' = 'payment',
   ) {
     try {
       if (bankAccountElement.current && !submitting) {
         setSubmitting(true);
         const bankAccount = await createBankAccount(values, bankAccountElement);
         if (bankAccount) {
-          const payment = await capturePayment(
-            amount,
-            values,
-            { bankAccount },
-            type
-          );
+          const payment = await capturePayment(amount, values, { bankAccount }, type);
           setSubmitting(false);
           return payment;
         }
@@ -150,7 +145,7 @@ export function useCheckoutSubmit() {
       amount: number;
       customer: any;
       address: any;
-    }
+    },
   ) {
     if (!window.ApplePaySession) {
       return;
@@ -167,12 +162,7 @@ export function useCheckoutSubmit() {
       try {
         const applePay = await createApplePay(event.payment.token);
         if (applePay) {
-          const payment = await capturePayment(
-            amount,
-            values,
-            { applePay },
-            "payment"
-          );
+          const payment = await capturePayment(amount, values, { applePay }, 'payment');
           setSubmitting(false);
 
           // present green check to the user before the timeout (30 seconds)
@@ -194,12 +184,10 @@ export function useCheckoutSubmit() {
     session.begin();
   }
 
-  async function createApplePay(
-    applePaymentData: PublicSquareTypes.ApplePaymentData
-  ) {
+  async function createApplePay(applePaymentData: PublicSquareTypes.ApplePaymentData) {
     if (publicsquare) {
       try {
-        console.log("Apple Pay token", applePaymentData);
+        console.log('Apple Pay token', applePaymentData);
 
         const response = await publicsquare.applePay.create({
           apple_payment_data: applePaymentData,
@@ -215,13 +203,13 @@ export function useCheckoutSubmit() {
 
   function createApplePaySession(total: number) {
     return new window.ApplePaySession(3, {
-      countryCode: "US",
-      currencyCode: "USD",
-      merchantCapabilities: ["supports3DS"],
-      supportedNetworks: ["visa", "masterCard", "amex", "discover"],
+      countryCode: 'US',
+      currencyCode: 'USD',
+      merchantCapabilities: ['supports3DS'],
+      supportedNetworks: ['visa', 'masterCard', 'amex', 'discover'],
       total: {
-        label: "PublicSquare Payments Demo",
-        type: "final",
+        label: 'PublicSquare Payments Demo',
+        type: 'final',
         amount: (total / 100).toFixed(2),
       },
     });
@@ -230,14 +218,14 @@ export function useCheckoutSubmit() {
   async function validateMerchant() {
     try {
       const session = await publicsquare?.applePay.createSession({
-        display_name: "PublicSquare Payments Demo",
+        display_name: 'PublicSquare Payments Demo',
         domain: window.location.host,
       });
 
       console.log(session);
       return session;
     } catch (error) {
-      console.error("Error validating merchant:", error);
+      console.error('Error validating merchant:', error);
       throw error;
     }
   }

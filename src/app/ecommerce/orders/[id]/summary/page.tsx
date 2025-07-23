@@ -1,16 +1,14 @@
-import { currency } from '@/utils'
-import config from '@config'
+import { currency } from '@/utils';
+import config from '@config';
 
-const products = config.products.slice(0, 1)
+const products = config.products.slice(0, 1);
 
 export default function Page() {
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
         <div className="max-w-xl">
-          <h1 className="text-base font-medium text-primary-dark">
-            Thank you!
-          </h1>
+          <h1 className="text-base font-medium text-primary-dark">Thank you!</h1>
           <p className="mt-2 text-4xl font-bold tracking-tight sm:text-5xl">
             It&apos;s on the way!
           </p>
@@ -29,10 +27,7 @@ export default function Page() {
 
           <h3 className="sr-only">Items</h3>
           {products.map((product) => (
-            <div
-              key={product.id}
-              className="flex space-x-6 border-b border-gray-200 py-10"
-            >
+            <div key={product.id} className="flex space-x-6 border-b border-gray-200 py-10">
               <img
                 alt={product.imageAlt}
                 src={product.images[0]}
@@ -41,13 +36,9 @@ export default function Page() {
               <div className="flex flex-auto flex-col">
                 <div>
                   <h4 className="font-medium text-gray-900">
-                    <a href={`/ecommerce/products/${product.slug}`}>
-                      {product.name}
-                    </a>
+                    <a href={`/ecommerce/products/${product.slug}`}>{product.name}</a>
                   </h4>
-                  <p className="mt-2 text-sm text-gray-600">
-                    {product.shortDescription}
-                  </p>
+                  <p className="mt-2 text-sm text-gray-600">{product.shortDescription}</p>
                 </div>
                 <div className="mt-6 flex flex-1 items-end">
                   <dl className="flex space-x-4 divide-x divide-gray-200 text-sm sm:space-x-6">
@@ -57,9 +48,7 @@ export default function Page() {
                     </div>
                     <div className="flex pl-4 sm:pl-6">
                       <dt className="font-medium text-gray-900">Price</dt>
-                      <dd className="ml-2 text-gray-700">
-                        {currency(product.price)}
-                      </dd>
+                      <dd className="ml-2 text-gray-700">{currency(product.price)}</dd>
                     </div>
                   </dl>
                 </div>
@@ -145,5 +134,5 @@ export default function Page() {
         </div>
       </div>
     </div>
-  )
+  );
 }

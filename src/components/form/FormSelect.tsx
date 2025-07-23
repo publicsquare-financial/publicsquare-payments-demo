@@ -2,12 +2,12 @@ import { Field, FieldInputProps } from 'formik';
 import Select from './Select';
 
 type Props = {
-  name: string
-  options: { value: string; name: string }[]
+  name: string;
+  options: { value: string; name: string }[];
 };
 
 const FormSelect = (props: Props) => {
-  const { name, options } = props
+  const { name, options } = props;
 
   return (
     <Field name={name}>
@@ -15,7 +15,7 @@ const FormSelect = (props: Props) => {
         <Select options={options} field={field} />
       )}
     </Field>
-  )
+  );
 };
 
 export default FormSelect;

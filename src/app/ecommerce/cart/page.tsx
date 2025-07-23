@@ -1,5 +1,4 @@
 'use client';
-
 import Button from '@/components/Button';
 import { useCart } from '@/providers/CartProvider';
 import { currency } from '@/utils';
@@ -12,17 +11,14 @@ export default function Cart() {
   const cart = useCart();
 
   const total = useMemo(() => {
-    const subtotal = cart.items.reduce(
-      (accum, cur) => accum + cur.item.price * cur.quantity,
-      0
-    )
+    const subtotal = cart.items.reduce((accum, cur) => accum + cur.item.price * cur.quantity, 0);
     return {
       subtotal,
       shipping: 5,
       taxes: 0.07 * subtotal,
       total: subtotal + 0.07 * subtotal,
-    }
-  }, [cart.items])
+    };
+  }, [cart.items]);
 
   return (
     <div className="bg-white">
@@ -36,10 +32,7 @@ export default function Cart() {
               Items in your shopping cart
             </h2>
 
-            <ul
-              role="list"
-              className="divide-y divide-gray-200 border-b border-t border-gray-200"
-            >
+            <ul role="list" className="divide-y divide-gray-200 border-b border-t border-gray-200">
               {cart.items.length ? (
                 cart.items.map((product, productIdx) => (
                   <li key={product.item.id} className="flex py-6 sm:py-10">
@@ -70,10 +63,7 @@ export default function Cart() {
                         </div>
 
                         <div className="mt-4 sm:mt-0 sm:pr-9">
-                          <label
-                            htmlFor={`quantity-${productIdx}`}
-                            className="sr-only"
-                          >
+                          <label htmlFor={`quantity-${productIdx}`} className="sr-only">
                             Quantity, {product.item.name}
                           </label>
                           <select
@@ -98,17 +88,12 @@ export default function Cart() {
                               className="-m-2 inline-flex p-2 text-gray-400 hover:text-gray-500"
                               onClick={() =>
                                 cart.setItems(
-                                  cart.items.filter(
-                                    (cur) => cur.item.id !== product.item.id
-                                  )
+                                  cart.items.filter((cur) => cur.item.id !== product.item.id),
                                 )
                               }
                             >
                               <span className="sr-only">Remove</span>
-                              <XMarkIcon
-                                aria-hidden="true"
-                                className="h-5 w-5"
-                              />
+                              <XMarkIcon aria-hidden="true" className="h-5 w-5" />
                             </button>
                           </div>
                         </div>
@@ -117,7 +102,7 @@ export default function Cart() {
                   </li>
                 ))
               ) : (
-                <li className="flex py-6 sm:py-10 justify-center text-gray-500">
+                <li className="flex justify-center py-6 text-gray-500 sm:py-10">
                   <p>No products yet...</p>
                 </li>
               )}
@@ -129,67 +114,38 @@ export default function Cart() {
             aria-labelledby="summary-heading"
             className="mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8"
           >
-            <h2
-              id="summary-heading"
-              className="text-lg font-medium text-gray-900"
-            >
+            <h2 id="summary-heading" className="text-lg font-medium text-gray-900">
               Order summary
             </h2>
 
             <dl className="mt-6 space-y-4">
               <div className="flex items-center justify-between">
                 <dt className="text-sm text-gray-600">Subtotal</dt>
-                <dd className="text-sm font-medium text-gray-900">
-                  {currency(total.subtotal)}
-                </dd>
+                <dd className="text-sm font-medium text-gray-900">{currency(total.subtotal)}</dd>
               </div>
               <div className="flex items-center justify-between border-t border-gray-200 pt-4">
                 <dt className="flex items-center text-sm text-gray-600">
                   <span>Shipping estimate</span>
-                  <a
-                    href="#"
-                    className="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500"
-                  >
-                    <span className="sr-only">
-                      Learn more about how shipping is calculated
-                    </span>
-                    <QuestionMarkCircleIcon
-                      aria-hidden="true"
-                      className="h-5 w-5"
-                    />
+                  <a href="#" className="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500">
+                    <span className="sr-only">Learn more about how shipping is calculated</span>
+                    <QuestionMarkCircleIcon aria-hidden="true" className="h-5 w-5" />
                   </a>
                 </dt>
-                <dd className="text-sm font-medium text-gray-900">
-                  {currency(total.shipping)}
-                </dd>
+                <dd className="text-sm font-medium text-gray-900">{currency(total.shipping)}</dd>
               </div>
               <div className="flex items-center justify-between border-t border-gray-200 pt-4">
                 <dt className="flex text-sm text-gray-600">
                   <span>Tax estimate</span>
-                  <a
-                    href="#"
-                    className="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500"
-                  >
-                    <span className="sr-only">
-                      Learn more about how tax is calculated
-                    </span>
-                    <QuestionMarkCircleIcon
-                      aria-hidden="true"
-                      className="h-5 w-5"
-                    />
+                  <a href="#" className="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500">
+                    <span className="sr-only">Learn more about how tax is calculated</span>
+                    <QuestionMarkCircleIcon aria-hidden="true" className="h-5 w-5" />
                   </a>
                 </dt>
-                <dd className="text-sm font-medium text-gray-900">
-                  {currency(total.taxes)}
-                </dd>
+                <dd className="text-sm font-medium text-gray-900">{currency(total.taxes)}</dd>
               </div>
               <div className="flex items-center justify-between border-t border-gray-200 pt-4">
-                <dt className="text-base font-medium text-gray-900">
-                  Order total
-                </dt>
-                <dd className="text-base font-medium text-gray-900">
-                  {currency(total.total)}
-                </dd>
+                <dt className="text-base font-medium text-gray-900">Order total</dt>
+                <dd className="text-base font-medium text-gray-900">{currency(total.total)}</dd>
               </div>
             </dl>
 
@@ -205,5 +161,5 @@ export default function Cart() {
         </form>
       </div>
     </div>
-  )
+  );
 }

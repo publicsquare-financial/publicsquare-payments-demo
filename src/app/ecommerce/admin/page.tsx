@@ -1,36 +1,33 @@
-'use client'
+'use client';
 
-import { useRef } from 'react'
-import PublicSquareTypes from '@publicsquare/elements-react/types'
-import { ErrorMessage, Form, Formik } from 'formik'
-import * as Yup from 'yup'
-import { PublicSquareProvider } from '@publicsquare/elements-react'
-import CustomerSelect from '@/components/form/CustomerSelect'
-import AddressSelect from '@/components/form/AddressSelect'
-import Button from '@/components/Button'
-import PaymentMethodTabs from '@/components/PaymentMethodTabs'
-import { PaymentMethodEnum } from '@/utils'
-import FormInput from '@/components/form/FormInput'
-import { useCheckoutSubmit } from '@/hooks/useCheckoutSubmit'
+import { useRef } from 'react';
+import PublicSquareTypes from '@publicsquare/elements-react/types';
+import { ErrorMessage, Form, Formik } from 'formik';
+import * as Yup from 'yup';
+import { PublicSquareProvider } from '@publicsquare/elements-react';
+import CustomerSelect from '@/components/form/CustomerSelect';
+import AddressSelect from '@/components/form/AddressSelect';
+import Button from '@/components/Button';
+import PaymentMethodTabs from '@/components/PaymentMethodTabs';
+import { PaymentMethodEnum } from '@/utils';
+import FormInput from '@/components/form/FormInput';
+import { useCheckoutSubmit } from '@/hooks/useCheckoutSubmit';
 
 export default function Page() {
   return (
-    <PublicSquareProvider
-      apiKey={process.env.NEXT_PUBLIC_PUBLICSQUARE_API_KEY!}
-    >
-      <div className="mx-auto max-w-7xl py-12 space-y-8 px-4 sm:px-6 lg:px-8">
+    <PublicSquareProvider apiKey={process.env.NEXT_PUBLIC_PUBLICSQUARE_API_KEY!}>
+      <div className="mx-auto max-w-7xl space-y-8 px-4 py-12 sm:px-6 lg:px-8">
         <h1 className="text-2xl font-bold">Admin</h1>
         <PayoutCard />
       </div>
     </PublicSquareProvider>
-  )
+  );
 }
 
 function PayoutCard() {
-  const cardElement = useRef<PublicSquareTypes.CardElement>(null)
-  const bankAccountElement = useRef<PublicSquareTypes.BankAccountElement>(null)
-  const { onSubmitCardElement, onSubmitBankAccountElement, submitting } =
-    useCheckoutSubmit()
+  const cardElement = useRef<PublicSquareTypes.CardElement>(null);
+  const bankAccountElement = useRef<PublicSquareTypes.BankAccountElement>(null);
+  const { onSubmitCardElement, onSubmitBankAccountElement, submitting } = useCheckoutSubmit();
 
   const schema = Yup.object().shape({
     amount: Yup.string().required('Amount is required'),
@@ -54,10 +51,7 @@ function PayoutCard() {
         .required('State is required'),
       postal_code: Yup.string().required('Postal code is required'),
       country: Yup.string()
-        .length(
-          2,
-          'Country is the 2 character ISO country code (e.g. United States => "US")'
-        )
+        .length(2, 'Country is the 2 character ISO country code (e.g. United States => "US")')
         .required('Country is required'),
     }).required('Address is required'),
     delivery_method: Yup.number().required('Delivery method is required'),
@@ -74,7 +68,7 @@ function PayoutCard() {
     payment_method: Yup.string()
       .required('Payment method is required')
       .oneOf([PaymentMethodEnum.CREDIT_CARD, PaymentMethodEnum.BANK_ACCOUNT]),
-  })
+  });
 
   const initialValues: Yup.InferType<typeof schema> = {
     customer: {
@@ -97,21 +91,19 @@ function PayoutCard() {
     account_holder_name: '',
     amount: '' as any,
     payment_method: PaymentMethodEnum.CREDIT_CARD,
-  }
+  };
 
   return (
     <div>
-      <h2 className="text-lg font-medium text-gray-900">
-        Send payouts to customers
-      </h2>
+      <h2 className="text-lg font-medium text-gray-900">Send payouts to customers</h2>
       <Formik
         initialValues={initialValues}
         validationSchema={schema}
         onSubmit={(values, { setFieldError }) => {
-          const amount = parseFloat(values.amount.replace(',', '')) * 100
+          const amount = parseFloat(values.amount.replace(',', '')) * 100;
           if (values.payment_method === PaymentMethodEnum.CREDIT_CARD) {
             if (!cardElement.current || !values.name_on_card) {
-              setFieldError('card', 'Card is required')
+              setFieldError('card', 'Card is required');
             } else {
               onSubmitCardElement(
                 amount,
@@ -121,16 +113,16 @@ function PayoutCard() {
                   amount,
                 },
                 cardElement,
-                'payout'
+                'payout',
               ).then((payment) => {
                 if (payment.id) {
-                  alert(`Payout successfully sent ${payment.id}`)
+                  alert(`Payout successfully sent ${payment.id}`);
                 }
-              })
+              });
             }
           } else if (values.payment_method === PaymentMethodEnum.BANK_ACCOUNT) {
             if (!bankAccountElement.current) {
-              setFieldError('bank_account', 'Bank account is required')
+              setFieldError('bank_account', 'Bank account is required');
             } else {
               onSubmitBankAccountElement(
                 amount,
@@ -139,12 +131,12 @@ function PayoutCard() {
                   amount,
                 },
                 bankAccountElement,
-                'payout'
+                'payout',
               ).then((payment) => {
                 if (payment.id) {
-                  alert(`Payout successfully sent ${payment.id}`)
+                  alert(`Payout successfully sent ${payment.id}`);
                 }
-              })
+              });
             }
           }
         }}
@@ -154,16 +146,12 @@ function PayoutCard() {
             className="mt-4 rounded-lg border border-gray-200 bg-white shadow-sm"
             data-testid="checkout-form"
           >
-            <div className="bg-white p-4 rounded-lg shadow-md space-y-4">
-              <h2 className="text-lg font-medium text-gray-900">
-                1. Select recipient
-              </h2>
+            <div className="space-y-4 rounded-lg bg-white p-4 shadow-md">
+              <h2 className="text-lg font-medium text-gray-900">1. Select recipient</h2>
               <CustomerSelect formik={formik} />
               <ErrorMessage name="customer" />
               <hr />
-              <h3 className="text-md font-medium text-gray-900">
-                2. Select your payment method
-              </h3>
+              <h3 className="text-md font-medium text-gray-900">2. Select your payment method</h3>
               <PaymentMethodTabs
                 formik={formik}
                 cardElement={cardElement}
@@ -171,15 +159,11 @@ function PayoutCard() {
               />
               <ErrorMessage name="payment_method" />
               <hr />
-              <h3 className="text-md font-medium text-gray-900">
-                3. Select your billing address
-              </h3>
+              <h3 className="text-md font-medium text-gray-900">3. Select your billing address</h3>
               <AddressSelect formik={formik} />
               <ErrorMessage name="address" />
               <hr />
-              <h3 className="text-md font-medium text-gray-900">
-                4. Select your payout amount
-              </h3>
+              <h3 className="text-md font-medium text-gray-900">4. Select your payout amount</h3>
               <div className="mt-1">
                 <FormInput
                   name="amount"
@@ -205,5 +189,5 @@ function PayoutCard() {
         )}
       </Formik>
     </div>
-  )
+  );
 }

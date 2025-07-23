@@ -1,8 +1,8 @@
-import { availablePaymentMethods, PaymentMethodEnum } from "@/utils";
-import { FormikProps } from "formik";
-import CardElementForm from "./form/CardElementForm";
-import BankAccountElementForm from "./form/BankAccountElementForm";
-import PublicSquareTypes from "@publicsquare/elements-react/types";
+import { availablePaymentMethods, PaymentMethodEnum } from '@/utils';
+import { FormikProps } from 'formik';
+import CardElementForm from './form/CardElementForm';
+import BankAccountElementForm from './form/BankAccountElementForm';
+import PublicSquareTypes from '@publicsquare/elements-react/types';
 
 export default function PaymentMethodTabs({
   formik,
@@ -27,9 +27,7 @@ export default function PaymentMethodTabs({
                   name="payment-type"
                   type="radio"
                   className="h-4 w-4 border-gray-300 text-primary-dark focus:ring-primary"
-                  onChange={() =>
-                    formik.setFieldValue("payment_method", paymentMethod.id)
-                  }
+                  onChange={() => formik.setFieldValue('payment_method', paymentMethod.id)}
                 />
               ) : (
                 <input
@@ -37,9 +35,7 @@ export default function PaymentMethodTabs({
                   name="payment-type"
                   type="radio"
                   className="h-4 w-4 border-gray-300 text-primary-dark focus:ring-primary"
-                  onChange={() =>
-                    formik.setFieldValue("payment_method", paymentMethod.id)
-                  }
+                  onChange={() => formik.setFieldValue('payment_method', paymentMethod.id)}
                 />
               )}
 
