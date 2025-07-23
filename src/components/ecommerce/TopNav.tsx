@@ -1,5 +1,5 @@
-'use client'
-import { Fragment, useState } from 'react'
+'use client';
+import { Fragment, useState } from 'react';
 import {
   CloseButton,
   Dialog,
@@ -14,31 +14,28 @@ import {
   TabList,
   TabPanel,
   TabPanels,
-} from '@headlessui/react'
+} from '@headlessui/react';
 import {
   Bars3Icon,
   MagnifyingGlassIcon,
   ShoppingCartIcon,
-  UserIcon,
   WalletIcon,
   XMarkIcon,
-} from '@heroicons/react/24/outline'
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import Image from 'next/image'
-import { useCart } from '@/providers/CartProvider'
-import config from '@config'
-import Button from '../Button'
+} from '@heroicons/react/24/outline';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useCart } from '@/providers/CartProvider';
+import config from '@config';
+import Button from '../Button';
 
 const navigation = {
   categories: config.menus.main,
-}
+};
 
 export default function TopNav() {
-  const [open, setOpen] = useState(false)
-  const router = useRouter()
-  const cart = useCart()
+  const [open, setOpen] = useState(false);
+  const router = useRouter();
+  const cart = useCart();
 
   return (
     <div className="bg-white">
@@ -81,17 +78,11 @@ export default function TopNav() {
               </div>
               <TabPanels as={Fragment}>
                 {navigation.categories.map((category, categoryIdx) => (
-                  <TabPanel
-                    key={category.name}
-                    className="space-y-12 px-4 pb-6 pt-10"
-                  >
+                  <TabPanel key={category.name} className="space-y-12 px-4 pb-6 pt-10">
                     <div className="grid grid-cols-1 items-start gap-x-6 gap-y-10">
                       <div className="grid grid-cols-1 gap-x-6 gap-y-10">
                         <div>
-                          <p
-                            id={`mobile-featured-heading-${categoryIdx}`}
-                            className="font-medium"
-                          >
+                          <p id={`mobile-featured-heading-${categoryIdx}`} className="font-medium">
                             Featured
                           </p>
                           <ul
@@ -109,10 +100,7 @@ export default function TopNav() {
                           </ul>
                         </div>
                         <div>
-                          <p
-                            id="mobile-categories-heading"
-                            className="font-medium"
-                          >
+                          <p id="mobile-categories-heading" className="font-medium">
                             Categories
                           </p>
                           <ul
@@ -132,10 +120,7 @@ export default function TopNav() {
                       </div>
                       <div className="grid grid-cols-1 gap-x-6 gap-y-10">
                         <div>
-                          <p
-                            id="mobile-collection-heading"
-                            className="font-medium text-gray-900"
-                          >
+                          <p id="mobile-collection-heading" className="font-medium text-gray-900">
                             Collection
                           </p>
                           <ul
@@ -154,10 +139,7 @@ export default function TopNav() {
                         </div>
 
                         <div>
-                          <p
-                            id="mobile-brand-heading"
-                            className="font-medium text-gray-900"
-                          >
+                          <p id="mobile-brand-heading" className="font-medium text-gray-900">
                             Brands
                           </p>
                           <ul
@@ -183,18 +165,12 @@ export default function TopNav() {
 
             <div className="space-y-6 border-t border-gray-200 px-4 py-6">
               <div className="flow-root">
-                <a
-                  href="#"
-                  className="-m-2 block p-2 font-medium text-gray-900"
-                >
+                <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
                   Create an account
                 </a>
               </div>
               <div className="flow-root">
-                <a
-                  href="#"
-                  className="-m-2 block p-2 font-medium text-gray-900"
-                >
+                <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
                   Sign in
                 </a>
               </div>
@@ -220,17 +196,11 @@ export default function TopNav() {
                   Admin
                 </Link>
                 <span aria-hidden="true" className="h-6 w-px bg-gray-600" />
-                <a
-                  href="#"
-                  className="text-sm font-medium text-white hover:text-gray-100"
-                >
+                <a href="#" className="text-sm font-medium text-white hover:text-gray-100">
                   Create an account
                 </a>
                 <span aria-hidden="true" className="h-6 w-px bg-gray-600" />
-                <a
-                  href="#"
-                  className="text-sm font-medium text-white hover:text-gray-100"
-                >
+                <a href="#" className="text-sm font-medium text-white hover:text-gray-100">
                   Sign in
                 </a>
               </div>
@@ -246,7 +216,7 @@ export default function TopNav() {
                   <div className="hidden lg:flex lg:items-center">
                     <Link href="/ecommerce" className="border-none">
                       <span className="sr-only">Your Company</span>
-                      <Image
+                      <img
                         alt=""
                         src={config.logo}
                         sizes="100vw"
@@ -271,7 +241,7 @@ export default function TopNav() {
 
                             <PopoverPanel
                               transition
-                              className="z-10 absolute inset-x-0 top-full text-gray-500 transition data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in sm:text-sm"
+                              className="absolute inset-x-0 top-full z-10 text-gray-500 transition data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in sm:text-sm"
                             >
                               {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
                               <div
@@ -296,14 +266,8 @@ export default function TopNav() {
                                           className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
                                         >
                                           {category.featured.map((item) => (
-                                            <li
-                                              key={item.name}
-                                              className="flex"
-                                            >
-                                              <a
-                                                href={item.href}
-                                                className="hover:text-gray-800"
-                                              >
+                                            <li key={item.name} className="flex">
+                                              <a href={item.href} className="hover:text-gray-800">
                                                 {item.name}
                                               </a>
                                             </li>
@@ -323,14 +287,8 @@ export default function TopNav() {
                                           className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
                                         >
                                           {category.categories.map((item) => (
-                                            <li
-                                              key={item.name}
-                                              className="flex"
-                                            >
-                                              <a
-                                                href={item.href}
-                                                className="hover:text-gray-800"
-                                              >
+                                            <li key={item.name} className="flex">
+                                              <a href={item.href} className="hover:text-gray-800">
                                                 {item.name}
                                               </a>
                                             </li>
@@ -352,14 +310,8 @@ export default function TopNav() {
                                           className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
                                         >
                                           {category.collection.map((item) => (
-                                            <li
-                                              key={item.name}
-                                              className="flex"
-                                            >
-                                              <a
-                                                href={item.href}
-                                                className="hover:text-gray-800"
-                                              >
+                                            <li key={item.name} className="flex">
+                                              <a href={item.href} className="hover:text-gray-800">
                                                 {item.name}
                                               </a>
                                             </li>
@@ -380,14 +332,8 @@ export default function TopNav() {
                                           className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
                                         >
                                           {category.brands.map((item) => (
-                                            <li
-                                              key={item.name}
-                                              className="flex"
-                                            >
-                                              <a
-                                                href={item.href}
-                                                className="hover:text-gray-800"
-                                              >
+                                            <li key={item.name} className="flex">
+                                              <a href={item.href} className="hover:text-gray-800">
                                                 {item.name}
                                               </a>
                                             </li>
@@ -417,15 +363,9 @@ export default function TopNav() {
                     </button>
 
                     {/* Search */}
-                    <a
-                      href="#"
-                      className="ml-2 p-2 text-white hover:text-gray-100"
-                    >
+                    <a href="#" className="ml-2 p-2 text-white hover:text-gray-100">
                       <span className="sr-only">Search</span>
-                      <MagnifyingGlassIcon
-                        aria-hidden="true"
-                        className="h-6 w-6"
-                      />
+                      <MagnifyingGlassIcon aria-hidden="true" className="h-6 w-6" />
                     </a>
                   </div>
 
@@ -445,28 +385,19 @@ export default function TopNav() {
                         <div className="hidden lg:flex">
                           <a href="#" className="-m-2 p-2">
                             <span className="sr-only">Search</span>
-                            <MagnifyingGlassIcon
-                              aria-hidden="true"
-                              className="h-6 w-6"
-                            />
+                            <MagnifyingGlassIcon aria-hidden="true" className="h-6 w-6" />
                           </a>
                         </div>
 
                         <div className="flex">
                           <Link href="/ecommerce/wallet" className="-m-2 p-2">
                             <span className="sr-only">Account</span>
-                            <WalletIcon
-                              aria-hidden="true"
-                              className="h-6 w-6"
-                            />
+                            <WalletIcon aria-hidden="true" className="h-6 w-6" />
                           </Link>
                         </div>
                       </div>
 
-                      <span
-                        aria-hidden="true"
-                        className="mx-4 h-6 w-px bg-gray-200 lg:mx-6"
-                      />
+                      <span aria-hidden="true" className="mx-4 h-6 w-px bg-gray-200 lg:mx-6" />
 
                       <div className="flow-root">
                         <Popover className="ml-4 flow-root text-sm lg:relative lg:ml-8">
@@ -478,9 +409,7 @@ export default function TopNav() {
                             <span className="ml-2 text-sm font-medium text-white">
                               {cart.items.length}
                             </span>
-                            <span className="sr-only">
-                              items in cart, view bag
-                            </span>
+                            <span className="sr-only">items in cart, view bag</span>
                           </PopoverButton>
                           <PopoverPanel
                             transition
@@ -490,16 +419,10 @@ export default function TopNav() {
                             <h2 className="sr-only">Shopping Cart</h2>
 
                             <form className="mx-auto max-w-2xl px-4">
-                              <ul
-                                role="list"
-                                className="divide-y divide-gray-200"
-                              >
+                              <ul role="list" className="divide-y divide-gray-200">
                                 {cart.items.length ? (
                                   cart.items.map((product) => (
-                                    <li
-                                      key={product.item.id}
-                                      className="flex items-center py-6"
-                                    >
+                                    <li key={product.item.id} className="flex items-center py-6">
                                       <img
                                         alt={product.item.imageAlt}
                                         src={product.item.images[0]}
@@ -507,33 +430,25 @@ export default function TopNav() {
                                       />
                                       <div className="ml-4 flex-auto">
                                         <h3 className="font-medium text-gray-900">
-                                          <a
-                                            href={`/ecommerce/products/${product.item.slug}`}
-                                          >
+                                          <a href={`/ecommerce/products/${product.item.slug}`}>
                                             {product.item.name}
                                           </a>
                                         </h3>
-                                        <p className="text-gray-500">
-                                          {product.item.options}
-                                        </p>
+                                        <p className="text-gray-500">{product.item.options}</p>
                                       </div>
                                       <div>{product.quantity}</div>
                                     </li>
                                   ))
                                 ) : (
                                   <li className="py-6">
-                                    <p className="text-gray-500 text-center">
-                                      No products yet...
-                                    </p>
+                                    <p className="text-center text-gray-500">No products yet...</p>
                                   </li>
                                 )}
                               </ul>
 
                               <CloseButton
                                 as={Button}
-                                onClick={() =>
-                                  router.push('/ecommerce/checkout')
-                                }
+                                onClick={() => router.push('/ecommerce/checkout')}
                                 disabled={!cart.items.length}
                               >
                                 Checkout
@@ -561,5 +476,5 @@ export default function TopNav() {
         </nav>
       </header>
     </div>
-  )
+  );
 }

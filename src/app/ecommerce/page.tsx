@@ -1,6 +1,5 @@
-import { currency } from '@/utils'
-import config from '@config'
-import Image from 'next/image'
+import { currency } from '@/utils';
+import config from '@config';
 
 export default function Page() {
   return (
@@ -14,8 +13,8 @@ export default function Page() {
               key={product.id}
               className="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white"
             >
-              <div className="aspect-h-4 aspect-video sm:aspect-none group-hover:opacity-75">
-                <Image
+              <div className="aspect-h-4 sm:aspect-none aspect-video group-hover:opacity-75">
+                <img
                   alt={product.imageAlt}
                   src={product.images[0]}
                   sizes="100vw"
@@ -31,16 +30,10 @@ export default function Page() {
                     {product.name}
                   </a>
                 </h3>
-                <p className="text-sm text-gray-500">
-                  {product.shortDescription}
-                </p>
+                <p className="text-sm text-gray-500">{product.shortDescription}</p>
                 <div className="flex flex-1 flex-col justify-end">
-                  <p className="text-sm italic text-gray-500">
-                    {product.options}
-                  </p>
-                  <p className="text-base font-medium text-gray-900">
-                    {currency(product.price)}
-                  </p>
+                  <p className="text-sm italic text-gray-500">{product.options}</p>
+                  <p className="text-base font-medium text-gray-900">{currency(product.price)}</p>
                 </div>
               </div>
             </div>
@@ -48,5 +41,5 @@ export default function Page() {
         </div>
       </div>
     </div>
-  )
+  );
 }

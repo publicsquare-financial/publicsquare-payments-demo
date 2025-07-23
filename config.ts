@@ -1,7 +1,6 @@
-export default {
+const defaultConfig = {
   seoTitle: 'PublicSquare Shop',
-  tagline:
-    'Making the world a better place through constructing elegant payment solutions.',
+  tagline: 'Making the world a better place through constructing elegant payment solutions.',
   trademark: 'PublicSquare Financial, LLC. All rights reserved.',
   logo: '/logo-white.svg',
   theme: {
@@ -209,11 +208,7 @@ Ultra absorbent core plus silky soft breathable top sheet and outer sheet, and s
       options: 'White',
       imageAlt:
         'Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.',
-      images: [
-        '/images/EveryLife 1.webp',
-        '/images/EveryLife 2.webp',
-        '/images/EveryLife 3.webp',
-      ],
+      images: ['/images/EveryLife 1.webp', '/images/EveryLife 2.webp', '/images/EveryLife 3.webp'],
     },
     {
       id: 4,
@@ -254,11 +249,7 @@ Our Woodsage and Sea Salt Natural Deodorant is developed and produced in Florida
 Experience the refreshing scent and gentle care of our Woodsage and Sea Salt Natural Deodorant – where the beauty of Scandinavia meets superior skincare.`,
       options: 'Charcoal',
       imageAlt: 'Front of plain black t-shirt.',
-      images: [
-        '/images/Alpinia 1.webp',
-        '/images/Alpinia 2.webp',
-        '/images/Alpinia 1.webp',
-      ],
+      images: ['/images/Alpinia 1.webp', '/images/Alpinia 2.webp', '/images/Alpinia 1.webp'],
     },
     {
       id: 5,
@@ -273,11 +264,7 @@ What could get any better than having your choice of seasonings available in the
       options: 'Olive',
       imageAlt:
         'Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.',
-      images: [
-        '/images/Acme Salt 1.webp',
-        '/images/Acme Salt 2.webp',
-        '/images/Acme Salt 3.webp',
-      ],
+      images: ['/images/Acme Salt 1.webp', '/images/Acme Salt 2.webp', '/images/Acme Salt 3.webp'],
     },
     {
       id: 6,
@@ -302,4 +289,6 @@ This is a flowy and loose fit. Runs true to size.
       ],
     },
   ],
-}
+};
+
+export default defaultConfig;

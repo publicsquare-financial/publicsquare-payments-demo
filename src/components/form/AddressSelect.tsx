@@ -1,14 +1,10 @@
-'use client'
+'use client';
 
-import { FormikProps } from 'formik'
-import { useState } from 'react'
+import { FormikProps } from 'formik';
+import { useState } from 'react';
 
-export default function AddressSelect({
-  formik,
-}: {
-  formik: FormikProps<any>
-}) {
-  const [addresses, setAddresses] = useState([
+export default function AddressSelect({ formik }: { formik: FormikProps<any> }) {
+  const [addresses] = useState([
     {
       id: '1',
       address_line_1: '123 Main St',
@@ -18,26 +14,23 @@ export default function AddressSelect({
       postal_code: '10001',
       country: 'US',
     },
-  ])
+  ]);
 
   return (
     <div className="flex flex-col">
-      <label
-        htmlFor="address-select"
-        className="block text-sm font-medium text-gray-700"
-      >
+      <label htmlFor="address-select" className="block text-sm font-medium text-gray-700">
         Billing address
       </label>
       <select
         id="address-select"
-        className="mt-1 block w-full rounded-md border overflow-hidden border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+        className="mt-1 block w-full overflow-hidden rounded-md border border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
         required
         name="addressId"
         onChange={(e) => {
           formik.setFieldValue(
             'address',
-            addresses.find((c) => c.id === e.target.value)
-          )
+            addresses.find((c) => c.id === e.target.value),
+          );
         }}
       >
         <option value="">Select an address</option>
@@ -52,5 +45,5 @@ export default function AddressSelect({
         ))}
       </select>
     </div>
-  )
+  );
 }

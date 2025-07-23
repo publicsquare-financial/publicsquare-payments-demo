@@ -5,7 +5,7 @@ import { CartProvider } from '@/providers/CartProvider';
 export default function Layout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <CartProvider>
@@ -13,5 +13,5 @@ export default function Layout({
       {children}
       <Footer />
     </CartProvider>
-  )
+  );
 }

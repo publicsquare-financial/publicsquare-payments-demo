@@ -1,5 +1,4 @@
 'use client';
-
 import { useState } from 'react';
 import { StarIcon } from '@heroicons/react/20/solid';
 import { Radio, RadioGroup } from '@headlessui/react';
@@ -8,7 +7,7 @@ import { useParams } from 'next/navigation';
 import { useCart } from '@/providers/CartProvider';
 import config from '@config';
 import Button from '@/components/Button';
-import { currency } from '@/utils'
+import { currency } from '@/utils';
 
 const _product = {
   breadcrumbs: [
@@ -30,18 +29,18 @@ const _product = {
     { name: '2XL', inStock: true },
     { name: '3XL', inStock: true },
   ],
-}
-const reviews = { href: '#', average: 4, totalCount: 117 }
+};
+const reviews = { href: '#', average: 4, totalCount: 117 };
 
 export default function Page() {
-  const params = useParams()
+  const params = useParams();
   const product = {
     ..._product,
     ...config.products.find((cur) => cur.slug === params.slug)!,
-  }
-  const [selectedColor, setSelectedColor] = useState(product.colors[0])
-  const [selectedSize, setSelectedSize] = useState(product.sizes[2])
-  const cart = useCart()
+  };
+  const [selectedColor, setSelectedColor] = useState(product.colors[0]);
+  const [selectedSize, setSelectedSize] = useState(product.sizes[2]);
+  const cart = useCart();
 
   return (
     <div className="bg-white">
@@ -54,10 +53,7 @@ export default function Page() {
             {product.breadcrumbs.map((breadcrumb) => (
               <li key={breadcrumb.id}>
                 <div className="flex items-center">
-                  <a
-                    href={breadcrumb.href}
-                    className="mr-2 text-sm font-medium text-gray-900"
-                  >
+                  <a href={breadcrumb.href} className="mr-2 text-sm font-medium text-gray-900">
                     {breadcrumb.name}
                   </a>
                   <svg
@@ -121,9 +117,7 @@ export default function Page() {
           {/* Options */}
           <div className="mt-4 lg:row-span-3 lg:mt-0">
             <h2 className="sr-only">Product information</h2>
-            <p className="text-3xl tracking-tight text-gray-900">
-              {currency(product.price)}
-            </p>
+            <p className="text-3xl tracking-tight text-gray-900">{currency(product.price)}</p>
 
             {/* Reviews */}
             <div className="mt-6">
@@ -135,10 +129,8 @@ export default function Page() {
                       key={rating}
                       aria-hidden="true"
                       className={cx(
-                        reviews.average > rating
-                          ? 'text-gray-900'
-                          : 'text-gray-200',
-                        'h-5 w-5 flex-shrink-0'
+                        reviews.average > rating ? 'text-gray-900' : 'text-gray-200',
+                        'h-5 w-5 flex-shrink-0',
                       )}
                     />
                   ))}
@@ -153,20 +145,15 @@ export default function Page() {
             <form
               className="mt-10"
               onSubmit={(e) => {
-                e.preventDefault()
+                e.preventDefault();
                 if (cart.items.find((cur) => cur.item.slug === params.slug)) {
                   cart.setItems(
                     cart.items.map((cur) =>
-                      cur.item.slug
-                        ? { ...cur, quantity: cur.quantity + 1 }
-                        : cur
-                    )
-                  )
+                      cur.item.slug ? { ...cur, quantity: cur.quantity + 1 } : cur,
+                    ),
+                  );
                 } else {
-                  cart.setItems([
-                    ...cart.items,
-                    { item: product as any, quantity: 1 },
-                  ])
+                  cart.setItems([...cart.items, { item: product as any, quantity: 1 }]);
                 }
               }}
             >
@@ -187,14 +174,14 @@ export default function Page() {
                         aria-label={color.name}
                         className={cx(
                           color.selectedClass,
-                          'relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none data-[checked]:ring-2 data-[focus]:data-[checked]:ring data-[focus]:data-[checked]:ring-offset-1'
+                          'relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none data-[checked]:ring-2 data-[focus]:data-[checked]:ring data-[focus]:data-[checked]:ring-offset-1',
                         )}
                       >
                         <span
                           aria-hidden="true"
                           className={cx(
                             color.class,
-                            'h-8 w-8 rounded-full border border-black border-opacity-10'
+                            'h-8 w-8 rounded-full border border-black border-opacity-10',
                           )}
                         />
                       </Radio>
@@ -207,7 +194,7 @@ export default function Page() {
               <div className="mt-10">
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-medium text-gray-900">Size</h3>
-                  <a href="#" className="text-sm font-medium0">
+                  <a href="#" className="font-medium0 text-sm">
                     Size guide
                   </a>
                 </div>
@@ -227,7 +214,7 @@ export default function Page() {
                           size.inStock
                             ? 'cursor-pointer bg-white text-gray-900 shadow-sm'
                             : 'cursor-not-allowed bg-gray-50 text-gray-200',
-                          'group relative flex items-center justify-center rounded-md border px-4 py-3 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none data-[focus]:ring-2 data-[focus]:ring-primary sm:flex-1 sm:py-6'
+                          'group relative flex items-center justify-center rounded-md border px-4 py-3 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none data-[focus]:ring-2 data-[focus]:ring-primary sm:flex-1 sm:py-6',
                         )}
                       >
                         <span>{size.name}</span>
@@ -275,14 +262,12 @@ export default function Page() {
               <h3 className="sr-only">Description</h3>
 
               <div className="space-y-6">
-                <p className="text-base text-gray-700 whitespace-pre-wrap">
-                  {product.description}
-                </p>
+                <p className="whitespace-pre-wrap text-base text-gray-700">{product.description}</p>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

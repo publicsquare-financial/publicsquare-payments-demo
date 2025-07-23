@@ -1,21 +1,21 @@
 'use client';
-
 import { useMemo, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import * as Yup from 'yup';
+import { ErrorMessage, Form, Formik } from 'formik';
 import { Radio, RadioGroup } from '@headlessui/react';
 import { CheckCircleIcon, TrashIcon } from '@heroicons/react/20/solid';
-import { PublicSquareProvider } from '@publicsquare/elements-react'
-import * as Yup from 'yup'
-import { Form, Formik } from 'formik'
-import FormInput from '@/components/form/FormInput'
-import FormSelect from '@/components/form/FormSelect'
-import PublicSquareTypes from '@publicsquare/elements-react/types'
-import { useRouter } from 'next/navigation'
-import Button from '@/components/Button'
-import { useCart } from '@/providers/CartProvider'
-import { currency, PaymentMethodEnum } from '@/utils'
-import ConfirmOrderCallout from '@/components/ecommerce/ConfirmOrderCallout'
-import PaymentMethodTabs from '@/components/PaymentMethodTabs'
-import { useCheckoutSubmit } from '@/hooks/useCheckoutSubmit'
+import { PublicSquareProvider } from '@publicsquare/elements-react';
+import FormInput from '@/components/form/FormInput';
+import FormSelect from '@/components/form/FormSelect';
+import PublicSquareTypes from '@publicsquare/elements-react/types';
+import Button from '@/components/Button';
+import { useCart } from '@/providers/CartProvider';
+import { currency, PaymentMethodEnum } from '@/utils';
+import ConfirmOrderCallout from '@/components/ecommerce/ConfirmOrderCallout';
+import PaymentMethodTabs from '@/components/PaymentMethodTabs';
+import { useCheckoutSubmit } from '@/hooks/useCheckoutSubmit';
+import ApplePayButtonElement from '@publicsquare/elements-react/elements/ApplePayButtonElement';
 
 const deliveryMethods = [
   {
@@ -25,30 +25,25 @@ const deliveryMethods = [
     price: '$5.00',
   },
   { id: 2, title: 'Express', turnaround: '2–5 business days', price: '$16.00' },
-]
+];
 
 function Component() {
-  const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(
-    deliveryMethods[0]
-  )
-  const cardElement = useRef<PublicSquareTypes.CardElement>(null)
-  const bankAccountElement = useRef<PublicSquareTypes.BankAccountElement>(null)
-  const { onSubmitCardElement, onSubmitBankAccountElement, submitting } =
-    useCheckoutSubmit()
-  const cart = useCart()
+  const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(deliveryMethods[0]);
+  const cardElement = useRef<PublicSquareTypes.CardElement>(null);
+  const bankAccountElement = useRef<PublicSquareTypes.BankAccountElement>(null);
+  const { onSubmitCardElement, onSubmitBankAccountElement, onSubmitApplePay, submitting } =
+    useCheckoutSubmit();
+  const cart = useCart();
   const total = useMemo(() => {
-    const subtotal = cart.items.reduce(
-      (accum, cur) => accum + cur.item.price * cur.quantity,
-      0
-    )
+    const subtotal = cart.items.reduce((accum, cur) => accum + cur.item.price * cur.quantity, 0);
     return {
       subtotal,
       shipping: 5,
       taxes: 0.07 * subtotal,
       total: subtotal + 0.07 * subtotal,
-    }
-  }, [cart.items])
-  const router = useRouter()
+    };
+  }, [cart.items]);
+  const router = useRouter();
 
   const schema = Yup.object().shape({
     customer: Yup.object({
@@ -71,23 +66,29 @@ function Component() {
         .required('State is required'),
       postal_code: Yup.string().required('Postal code is required'),
       country: Yup.string()
-        .length(
-          2,
-          'Country is the 2 character ISO country code (e.g. United States => "US")'
-        )
+        .length(2, 'Country is the 2 character ISO country code (e.g. United States => "US")')
         .required('Country is required'),
     }).required('Address is required'),
     delivery_method: Yup.number().required('Delivery method is required'),
     name_on_card: Yup.string().required('Name on card is required'),
     card: Yup.object().when('payment_method', {
-      is: 'credit-card',
+      is: PaymentMethodEnum.CREDIT_CARD,
       then: (schema) => schema.required('Card is required'),
+      otherwise: (schema) => schema.optional(),
+    }),
+    apple_pay: Yup.object().when('payment_method', {
+      is: PaymentMethodEnum.APPLE_PAY,
+      then: (schema) => schema.required('Apple Pay token is required'),
       otherwise: (schema) => schema.optional(),
     }),
     payment_method: Yup.string()
       .required('Payment method is required')
-      .oneOf([PaymentMethodEnum.CREDIT_CARD, PaymentMethodEnum.BANK_ACCOUNT]),
-  })
+      .oneOf([
+        PaymentMethodEnum.CREDIT_CARD,
+        PaymentMethodEnum.BANK_ACCOUNT,
+        PaymentMethodEnum.APPLE_PAY,
+      ]),
+  });
 
   const initialValues: Yup.InferType<typeof schema> = {
     customer: {
@@ -109,7 +110,8 @@ function Component() {
     name_on_card: 'John Joe',
     payment_method: PaymentMethodEnum.CREDIT_CARD,
     card: {},
-  }
+    apple_pay: {},
+  };
 
   return (
     <Formik
@@ -118,38 +120,37 @@ function Component() {
       onSubmit={async (values, { setFieldError }) => {
         if (values.payment_method === PaymentMethodEnum.CREDIT_CARD) {
           if (!cardElement.current) {
-            setFieldError('card', 'Card is required')
+            setFieldError('card', 'Card is required');
           } else {
             const payment = await onSubmitCardElement(
               total.total * 100,
               values as any,
-              cardElement
-            )
+              cardElement,
+            );
             if (payment.id) {
-              router.push(`/ecommerce/orders/${payment.id}/summary`)
+              router.push(`/ecommerce/orders/${payment.id}/summary`);
             }
           }
         } else if (values.payment_method === PaymentMethodEnum.BANK_ACCOUNT) {
           if (!bankAccountElement.current) {
-            setFieldError('bank_account', 'Bank account is required')
+            setFieldError('bank_account', 'Bank account is required');
           } else {
             const payment = await onSubmitBankAccountElement(
               total.total * 100,
               values as any,
-              bankAccountElement
-            )
+              bankAccountElement,
+            );
             if (payment.id) {
-              router.push(`/ecommerce/orders/${payment.id}/summary`)
+              router.push(`/ecommerce/orders/${payment.id}/summary`);
             }
           }
+        } else if (values.payment_method === PaymentMethodEnum.APPLE_PAY) {
+          await onSubmitApplePay(total.total * 100, values as any);
         }
       }}
     >
       {(formik) => (
-        <Form
-          className="flex flex-col space-y-8 divide-gray-200"
-          data-testid="checkout-form"
-        >
+        <Form className="flex flex-col space-y-8 divide-gray-200" data-testid="checkout-form">
           <div className="bg-gray-50">
             <div className="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
               <h2 className="sr-only">Checkout</h2>
@@ -157,9 +158,7 @@ function Component() {
               <div className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
                 <div>
                   <div>
-                    <h2 className="text-lg font-medium text-gray-900">
-                      Contact information
-                    </h2>
+                    <h2 className="text-lg font-medium text-gray-900">Contact information</h2>
 
                     <div className="mt-4">
                       <label
@@ -179,9 +178,7 @@ function Component() {
                   </div>
 
                   <div className="mt-10 border-t border-gray-200 pt-10">
-                    <h2 className="text-lg font-medium text-gray-900">
-                      Shipping information
-                    </h2>
+                    <h2 className="text-lg font-medium text-gray-900">Shipping information</h2>
 
                     <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                       <div>
@@ -192,10 +189,7 @@ function Component() {
                           First name
                         </label>
                         <div className="mt-1">
-                          <FormInput
-                            name="customer.first_name"
-                            onChange={formik.handleChange}
-                          />
+                          <FormInput name="customer.first_name" onChange={formik.handleChange} />
                         </div>
                       </div>
 
@@ -207,10 +201,7 @@ function Component() {
                           Last name
                         </label>
                         <div className="mt-1">
-                          <FormInput
-                            name="customer.last_name"
-                            onChange={formik.handleChange}
-                          />
+                          <FormInput name="customer.last_name" onChange={formik.handleChange} />
                         </div>
                       </div>
 
@@ -222,10 +213,7 @@ function Component() {
                           Company
                         </label>
                         <div className="mt-1">
-                          <FormInput
-                            name="customer.business_name"
-                            onChange={formik.handleChange}
-                          />
+                          <FormInput name="customer.business_name" onChange={formik.handleChange} />
                         </div>
                       </div>
 
@@ -237,10 +225,7 @@ function Component() {
                           Address
                         </label>
                         <div className="mt-1">
-                          <FormInput
-                            name="address.address_line_1"
-                            onChange={formik.handleChange}
-                          />
+                          <FormInput name="address.address_line_1" onChange={formik.handleChange} />
                         </div>
                       </div>
 
@@ -252,25 +237,16 @@ function Component() {
                           Apartment, suite, etc.
                         </label>
                         <div className="mt-1">
-                          <FormInput
-                            name="address.address_line_2"
-                            onChange={formik.handleChange}
-                          />
+                          <FormInput name="address.address_line_2" onChange={formik.handleChange} />
                         </div>
                       </div>
 
                       <div>
-                        <label
-                          htmlFor="city"
-                          className="block text-sm font-medium text-gray-700"
-                        >
+                        <label htmlFor="city" className="block text-sm font-medium text-gray-700">
                           City
                         </label>
                         <div className="mt-1">
-                          <FormInput
-                            name="address.city"
-                            onChange={formik.handleChange}
-                          />
+                          <FormInput name="address.city" onChange={formik.handleChange} />
                         </div>
                       </div>
 
@@ -294,17 +270,11 @@ function Component() {
                       </div>
 
                       <div>
-                        <label
-                          htmlFor="region"
-                          className="block text-sm font-medium text-gray-700"
-                        >
+                        <label htmlFor="region" className="block text-sm font-medium text-gray-700">
                           State / Province
                         </label>
                         <div className="mt-1">
-                          <FormInput
-                            name="address.state"
-                            onChange={formik.handleChange}
-                          />
+                          <FormInput name="address.state" onChange={formik.handleChange} />
                         </div>
                       </div>
 
@@ -316,10 +286,7 @@ function Component() {
                           Postal code
                         </label>
                         <div className="mt-1">
-                          <FormInput
-                            name="address.postal_code"
-                            onChange={formik.handleChange}
-                          />
+                          <FormInput name="address.postal_code" onChange={formik.handleChange} />
                         </div>
                       </div>
 
@@ -343,9 +310,7 @@ function Component() {
 
                   <div className="mt-10 border-t border-gray-200 pt-10">
                     <fieldset>
-                      <legend className="text-lg font-medium text-gray-900">
-                        Delivery method
-                      </legend>
+                      <legend className="text-lg font-medium text-gray-900">Delivery method</legend>
                       <RadioGroup
                         value={selectedDeliveryMethod}
                         onChange={setSelectedDeliveryMethod}
@@ -388,9 +353,7 @@ function Component() {
 
                   {/* Payment */}
                   <div className="mt-10 border-t border-gray-200 pt-10">
-                    <h2 className="text-lg font-medium text-gray-900">
-                      Payment
-                    </h2>
+                    <h2 className="text-lg font-medium text-gray-900">Payment</h2>
                     <PaymentMethodTabs
                       formik={formik}
                       cardElement={cardElement}
@@ -400,18 +363,13 @@ function Component() {
                 </div>
                 {/* Order summary */}
                 <div className="mt-10 lg:mt-0">
-                  <h2 className="text-lg font-medium text-gray-900">
-                    Order summary
-                  </h2>
+                  <h2 className="text-lg font-medium text-gray-900">Order summary</h2>
 
                   <div className="mt-4 rounded-lg border border-gray-200 bg-white shadow-sm">
                     <h3 className="sr-only">Items in your cart</h3>
                     <ul role="list" className="divide-y divide-gray-200">
                       {cart.items.map((product) => (
-                        <li
-                          key={product.item.id}
-                          className="flex px-4 py-6 sm:px-6"
-                        >
+                        <li key={product.item.id} className="flex px-4 py-6 sm:px-6">
                           <div className="flex-shrink-0">
                             <img
                               alt={product.item.imageAlt}
@@ -434,9 +392,7 @@ function Component() {
                                 <p className="mt-1 text-sm text-gray-500">
                                   {product.item.shortDescription}
                                 </p>
-                                <p className="mt-1 text-sm text-gray-500">
-                                  {product.item.options}
-                                </p>
+                                <p className="mt-1 text-sm text-gray-500">{product.item.options}</p>
                               </div>
 
                               <div className="ml-4 flow-root flex-shrink-0">
@@ -445,17 +401,12 @@ function Component() {
                                   className="-m-2.5 flex items-center justify-center bg-white p-2.5 text-gray-400 hover:text-gray-500"
                                   onClick={() =>
                                     cart.setItems(
-                                      cart.items.filter(
-                                        (cur) => cur.item.id !== product.item.id
-                                      )
+                                      cart.items.filter((cur) => cur.item.id !== product.item.id),
                                     )
                                   }
                                 >
                                   <span className="sr-only">Remove</span>
-                                  <TrashIcon
-                                    aria-hidden="true"
-                                    className="h-5 w-5"
-                                  />
+                                  <TrashIcon aria-hidden="true" className="h-5 w-5" />
                                 </button>
                               </div>
                             </div>
@@ -518,15 +469,23 @@ function Component() {
                       </div>
                     </dl>
 
-                    <div className="border-t border-gray-200 px-4 py-6 sm:px-6 relative">
-                      <Button
-                        type="submit"
-                        loading={submitting}
-                        disabled={submitting}
-                      >
+                    <div className="relative border-t border-gray-200 px-4 py-4 sm:px-6">
+                      <Button type="submit" loading={submitting} disabled={submitting}>
                         Confirm order
                       </Button>
                       <ConfirmOrderCallout />
+                    </div>
+
+                    <div className="relative px-4 py-4 sm:px-6">
+                      <ApplePayButtonElement
+                        id="apple-pay-element"
+                        disabled={submitting}
+                        onClick={() => {
+                          formik.setFieldValue('payment_method', PaymentMethodEnum.APPLE_PAY);
+                          formik.submitForm();
+                        }}
+                      />
+                      <ErrorMessage name="apple_pay" />
                     </div>
                   </div>
                 </div>
@@ -536,15 +495,13 @@ function Component() {
         </Form>
       )}
     </Formik>
-  )
+  );
 }
 
 export default function Page() {
   return (
-    <PublicSquareProvider
-      apiKey={process.env.NEXT_PUBLIC_PUBLICSQUARE_API_KEY!}
-    >
+    <PublicSquareProvider apiKey={process.env.NEXT_PUBLIC_PUBLICSQUARE_API_KEY!}>
       <Component />
     </PublicSquareProvider>
-  )
+  );
 }
