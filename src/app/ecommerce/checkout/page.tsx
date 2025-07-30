@@ -31,8 +31,15 @@ function Component() {
   const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(deliveryMethods[0]);
   const cardElement = useRef<PublicSquareTypes.CardElement>(null);
   const bankAccountElement = useRef<PublicSquareTypes.BankAccountElement>(null);
-  const { onSubmitCardElement, onSubmitBankAccountElement, onSubmitApplePay, submitting } =
-    useCheckoutSubmit();
+  const bankAccountVerificationElement =
+    useRef<PublicSquareTypes.BankAccountVerificationElement>(null);
+  const {
+    onSubmitCardElement,
+    onSubmitBankAccountElement,
+    onSubmitBankAccountVerificationElement,
+    onSubmitApplePay,
+    submitting,
+  } = useCheckoutSubmit();
   const cart = useCart();
   const total = useMemo(() => {
     const subtotal = cart.items.reduce((accum, cur) => accum + cur.item.price * cur.quantity, 0);
@@ -86,6 +93,7 @@ function Component() {
       .oneOf([
         PaymentMethodEnum.CREDIT_CARD,
         PaymentMethodEnum.BANK_ACCOUNT,
+        PaymentMethodEnum.BANK_ACCOUNT_VERIFICATION,
         PaymentMethodEnum.APPLE_PAY,
       ]),
   });
@@ -139,6 +147,19 @@ function Component() {
               total.total * 100,
               values as any,
               bankAccountElement,
+            );
+            if (payment.id) {
+              router.push(`/ecommerce/orders/${payment.id}/summary`);
+            }
+          }
+        } else if (values.payment_method === PaymentMethodEnum.BANK_ACCOUNT_VERIFICATION) {
+          if (!bankAccountVerificationElement.current) {
+            setFieldError('bank_account_verification', 'Bank account verification is required');
+          } else {
+            const payment = await onSubmitBankAccountVerificationElement(
+              total.total * 100,
+              values as any,
+              bankAccountVerificationElement,
             );
             if (payment.id) {
               router.push(`/ecommerce/orders/${payment.id}/summary`);
@@ -358,6 +379,7 @@ function Component() {
                       formik={formik}
                       cardElement={cardElement}
                       bankAccountElement={bankAccountElement}
+                      bankAccountVerificationElement={bankAccountVerificationElement}
                     />
                   </div>
                 </div>
