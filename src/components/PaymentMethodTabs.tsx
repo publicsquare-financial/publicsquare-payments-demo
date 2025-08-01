@@ -2,16 +2,19 @@ import { availablePaymentMethods, PaymentMethodEnum } from '@/utils';
 import { FormikProps } from 'formik';
 import CardElementForm from './form/CardElementForm';
 import BankAccountElementForm from './form/BankAccountElementForm';
+import BankAccountVerificationElementForm from './form/BankAccountVerificationElementForm';
 import PublicSquareTypes from '@publicsquare/elements-react/types';
 
 export default function PaymentMethodTabs({
   formik,
   cardElement,
   bankAccountElement,
+  bankAccountVerificationElement,
 }: {
   formik: FormikProps<any>;
   cardElement: React.RefObject<PublicSquareTypes.CardElement | null>;
   bankAccountElement: React.RefObject<PublicSquareTypes.BankAccountElement | null>;
+  bankAccountVerificationElement: React.RefObject<PublicSquareTypes.BankAccountVerificationElement | null>;
 }) {
   return (
     <div>
@@ -55,6 +58,9 @@ export default function PaymentMethodTabs({
       )}
       {formik.values.payment_method === PaymentMethodEnum.BANK_ACCOUNT && (
         <BankAccountElementForm formik={formik} ref={bankAccountElement} />
+      )}
+      {formik.values.payment_method === PaymentMethodEnum.BANK_ACCOUNT_VERIFICATION && (
+        <BankAccountVerificationElementForm formik={formik} ref={bankAccountVerificationElement} />
       )}
     </div>
   );

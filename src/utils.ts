@@ -8,10 +8,12 @@ export function currency(amount: number) {
 export enum PaymentMethodEnum {
   CREDIT_CARD = 'credit-card',
   BANK_ACCOUNT = 'bank-account',
+  BANK_ACCOUNT_VERIFICATION = 'bank-account-verification',
   APPLE_PAY = 'apple-pay',
 }
 
 export const availablePaymentMethods = [
   { id: PaymentMethodEnum.CREDIT_CARD, title: 'Credit card' },
   { id: PaymentMethodEnum.BANK_ACCOUNT, title: 'Bank Account (ACH)' },
+  { id: PaymentMethodEnum.BANK_ACCOUNT_VERIFICATION, title: 'Bank Account Verification' },
 ];

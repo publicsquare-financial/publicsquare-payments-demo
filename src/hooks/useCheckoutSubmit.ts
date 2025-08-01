@@ -139,6 +139,45 @@ export function useCheckoutSubmit() {
     }
   }
 
+  async function onSubmitBankAccountVerificationElement(
+    amount: number,
+    values: any,
+    bankAccountVerificationElement: RefObject<PublicSquareTypes.BankAccountVerificationElement | null>,
+    type: 'payment' | 'payout' = 'payment',
+  ) {
+    try {
+      if (bankAccountVerificationElement.current && !submitting) {
+        setSubmitting(true);
+        const bankAccount = await createBankAccountVerification(
+          values,
+          bankAccountVerificationElement,
+        );
+        if (bankAccount) {
+          const payment = await capturePayment(amount, values, { bankAccount }, type);
+          setSubmitting(false);
+          return payment;
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    setSubmitting(false);
+  }
+
+  async function createBankAccountVerification(values: any, bankAccountVerificationElement: any) {
+    if (bankAccountVerificationElement.current?.bank_account_verification_id && publicsquare) {
+      try {
+        const response = await publicsquare.bankAccounts.create({
+          bank_account_verification_id:
+            bankAccountVerificationElement.current?.bank_account_verification_id,
+        });
+        return response;
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+
   async function onSubmitApplePay(
     amount: number,
     values: {
@@ -235,6 +274,7 @@ export function useCheckoutSubmit() {
     submitting,
     onSubmitCardElement,
     onSubmitBankAccountElement,
+    onSubmitBankAccountVerificationElement,
     onSubmitApplePay,
   };
 }

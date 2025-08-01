@@ -27,7 +27,14 @@ export default function Page() {
 function PayoutCard() {
   const cardElement = useRef<PublicSquareTypes.CardElement>(null);
   const bankAccountElement = useRef<PublicSquareTypes.BankAccountElement>(null);
-  const { onSubmitCardElement, onSubmitBankAccountElement, submitting } = useCheckoutSubmit();
+  const bankAccountVerificationElement =
+    useRef<PublicSquareTypes.BankAccountVerificationElement>(null);
+  const {
+    onSubmitCardElement,
+    onSubmitBankAccountElement,
+    onSubmitBankAccountVerificationElement,
+    submitting,
+  } = useCheckoutSubmit();
 
   const schema = Yup.object().shape({
     amount: Yup.string().required('Amount is required'),
@@ -138,6 +145,24 @@ function PayoutCard() {
                 }
               });
             }
+          } else if (values.payment_method === PaymentMethodEnum.BANK_ACCOUNT_VERIFICATION) {
+            if (!bankAccountVerificationElement.current) {
+              setFieldError('bank_account_verification', 'Bank account verification is required');
+            } else {
+              onSubmitBankAccountVerificationElement(
+                amount,
+                {
+                  ...values,
+                  amount,
+                },
+                bankAccountVerificationElement,
+                'payout',
+              ).then((payment) => {
+                if (payment.id) {
+                  alert(`Payout successfully sent ${payment.id}`);
+                }
+              });
+            }
           }
         }}
       >
@@ -156,6 +181,7 @@ function PayoutCard() {
                 formik={formik}
                 cardElement={cardElement}
                 bankAccountElement={bankAccountElement}
+                bankAccountVerificationElement={bankAccountVerificationElement}
               />
               <ErrorMessage name="payment_method" />
               <hr />
