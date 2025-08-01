@@ -270,7 +270,7 @@ What could get any better than having your choice of seasonings available in the
       id: 6,
       name: 'Aztec Shacket',
       slug: 'aztec-shacket',
-      price: 55,
+      price: 1,
       shortDescription:
         'Diamond Aztec Shacket. Soft fabric, casual style, every day wear with POCKETS.',
       description: `Diamond Aztec Shacket. Soft fabric, casual style, every day wear with POCKETS. Fun and bright colors for the warmer season coming. Throw this layer over the Pocket Tee and style with our jeans or cutoffs!

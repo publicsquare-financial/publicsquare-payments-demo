@@ -38,9 +38,9 @@ function Component() {
     const subtotal = cart.items.reduce((accum, cur) => accum + cur.item.price * cur.quantity, 0);
     return {
       subtotal,
-      shipping: 5,
+      shipping: 0,
       taxes: 0.07 * subtotal,
-      total: subtotal + 0.07 * subtotal,
+      total: subtotal,
     };
   }, [cart.items]);
   const router = useRouter();
