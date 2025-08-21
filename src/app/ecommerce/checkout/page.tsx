@@ -15,7 +15,7 @@ import { currency, PaymentMethodEnum } from '@/utils';
 import ConfirmOrderCallout from '@/components/ecommerce/ConfirmOrderCallout';
 import PaymentMethodTabs from '@/components/PaymentMethodTabs';
 import { useCheckoutSubmit } from '@/hooks/useCheckoutSubmit';
-import ApplePayButtonElement from '@publicsquare/elements-react/elements/ApplePayButtonElement';
+import GooglePayButton from '@/components/form/GooglePayButton';
 
 const deliveryMethods = [
   {
@@ -31,8 +31,13 @@ function Component() {
   const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(deliveryMethods[0]);
   const cardElement = useRef<PublicSquareTypes.CardElement>(null);
   const bankAccountElement = useRef<PublicSquareTypes.BankAccountElement>(null);
-  const { onSubmitCardElement, onSubmitBankAccountElement, onSubmitApplePay, submitting } =
-    useCheckoutSubmit();
+  const {
+    onSubmitCardElement,
+    onSubmitBankAccountElement,
+    onSubmitApplePay,
+    onSubmitGooglePay,
+    submitting,
+  } = useCheckoutSubmit();
   const cart = useCart();
   const total = useMemo(() => {
     const subtotal = cart.items.reduce((accum, cur) => accum + cur.item.price * cur.quantity, 0);
@@ -81,12 +86,18 @@ function Component() {
       then: (schema) => schema.required('Apple Pay token is required'),
       otherwise: (schema) => schema.optional(),
     }),
+    google_pay: Yup.object().when('payment_method', {
+      is: PaymentMethodEnum.GOOGLE_PAY,
+      then: (schema) => schema.required('Google Pay token is required'),
+      otherwise: (schema) => schema.optional(),
+    }),
     payment_method: Yup.string()
       .required('Payment method is required')
       .oneOf([
         PaymentMethodEnum.CREDIT_CARD,
         PaymentMethodEnum.BANK_ACCOUNT,
         PaymentMethodEnum.APPLE_PAY,
+        PaymentMethodEnum.GOOGLE_PAY,
       ]),
   });
 
@@ -111,6 +122,7 @@ function Component() {
     payment_method: PaymentMethodEnum.CREDIT_CARD,
     card: {},
     apple_pay: {},
+    google_pay: {},
   };
 
   return (
@@ -146,6 +158,8 @@ function Component() {
           }
         } else if (values.payment_method === PaymentMethodEnum.APPLE_PAY) {
           await onSubmitApplePay(total.total * 100, values as any);
+        } else if (values.payment_method === PaymentMethodEnum.GOOGLE_PAY) {
+          await onSubmitGooglePay();
         }
       }}
     >
@@ -476,7 +490,7 @@ function Component() {
                       <ConfirmOrderCallout />
                     </div>
 
-                    <div className="relative px-4 py-4 sm:px-6">
+                    {/* <div className="relative px-4 py-4 sm:px-6">
                       <ApplePayButtonElement
                         id="apple-pay-element"
                         disabled={submitting}
@@ -486,6 +500,11 @@ function Component() {
                         }}
                       />
                       <ErrorMessage name="apple_pay" />
+                    </div> */}
+
+                    <div className="relative px-4 py-4 sm:px-6">
+                      <GooglePayButton />
+                      <ErrorMessage name="google_pay" />
                     </div>
                   </div>
                 </div>

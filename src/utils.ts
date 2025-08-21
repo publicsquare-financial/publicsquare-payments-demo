@@ -9,6 +9,7 @@ export enum PaymentMethodEnum {
   CREDIT_CARD = 'credit-card',
   BANK_ACCOUNT = 'bank-account',
   APPLE_PAY = 'apple-pay',
+  GOOGLE_PAY = 'google-pay',
 }
 
 export const availablePaymentMethods = [

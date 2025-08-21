@@ -230,11 +230,14 @@ export function useCheckoutSubmit() {
     }
   }
 
+  async function onSubmitGooglePay() {}
+
   return {
     createCard,
     submitting,
     onSubmitCardElement,
     onSubmitBankAccountElement,
     onSubmitApplePay,
+    onSubmitGooglePay,
   };
 }
