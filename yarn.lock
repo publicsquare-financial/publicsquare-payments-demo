@@ -469,20 +469,20 @@
   resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.2.9.tgz#d229a7b7f9dac167a156992ef23c7f023653f53b"
   integrity sha512-QNqXyfVS2wm9hweSYD2O7F0G06uurj9kZ96TRQE5Y9hU7+tgdZwIkbAKc5Ocy1HxEY2kuDQa6cQ1WRs/O5LFKA==
 
-"@publicsquare/elements-js@1.9.0":
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/@publicsquare/elements-js/-/elements-js-1.9.0.tgz#bc9142e22139f633a76f184724544b80681e1b35"
-  integrity sha512-DwrsfviHlSJBFlqIA4S3oxFmDMjagVKiS283Vb1FZr7EqJFnyucefSJweCJNCmJrKmBAMZXCWfL5vYo0a1+EJg==
+"@publicsquare/elements-js@1.9.2":
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/@publicsquare/elements-js/-/elements-js-1.9.2.tgz#d7612e5b2113b6421c489beeb177241930ca343a"
+  integrity sha512-bj+UF0YebC6+Aga8y/ex7kPCYhZGS4zbm7YnIV+caNPHJRuahtkQBIzjzOveb+fanOb2QDM3/i1VWkS2vAwMfg==
   dependencies:
     "@basis-theory/basis-theory-js" "^4.22.1"
     prettier "^3.6.2"
 
-"@publicsquare/elements-react@1.9.0":
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/@publicsquare/elements-react/-/elements-react-1.9.0.tgz#cbb62929135d7cdba512556661ee59aca33fdbb1"
-  integrity sha512-PvlGOCbX1LNQvcRbDnA+TMxfLdlGX69uJoygxiZxoFjQ7nzBWt96FgnlJbdR5RkdCj/2KOYEsBU+jhaoDQcV2A==
+"@publicsquare/elements-react@1.9.2":
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/@publicsquare/elements-react/-/elements-react-1.9.2.tgz#51c3799cbfb88fabb4977c4f781ea4ae3bd348af"
+  integrity sha512-j1KAUVH+Ebq3PeqxaO0GsX0nzsvCebPMNChPzDwXLkxJ0rpPfM3obZ5KPLJkOH7Wv5IQisbyHqrri7F6ICNM+Q==
   dependencies:
-    "@publicsquare/elements-js" "1.9.0"
+    "@publicsquare/elements-js" "1.9.2"
     prettier "^3.6.2"
 
 "@react-aria/focus@^3.20.2":

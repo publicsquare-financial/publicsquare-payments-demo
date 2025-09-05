@@ -16,6 +16,7 @@ import ConfirmOrderCallout from '@/components/ecommerce/ConfirmOrderCallout';
 import PaymentMethodTabs from '@/components/PaymentMethodTabs';
 import { useCheckoutSubmit } from '@/hooks/useCheckoutSubmit';
 import ApplePayButtonElement from '@publicsquare/elements-react/elements/ApplePayButtonElement';
+import GooglePayButtonElement from '@publicsquare/elements-react/elements/GooglePayButtonElement';
 
 const deliveryMethods = [
   {
@@ -38,6 +39,8 @@ function Component() {
     onSubmitBankAccountElement,
     onSubmitBankAccountVerificationElement,
     onSubmitApplePay,
+    onSubmitGooglePay,
+    onGooglePayPaymentAuthorized,
     submitting,
   } = useCheckoutSubmit();
   const cart = useCart();
@@ -88,6 +91,11 @@ function Component() {
       then: (schema) => schema.required('Apple Pay token is required'),
       otherwise: (schema) => schema.optional(),
     }),
+    google_pay: Yup.object().when('payment_method', {
+      is: PaymentMethodEnum.GOOGLE_PAY,
+      then: (schema) => schema.required('Google Pay token is required'),
+      otherwise: (schema) => schema.optional(),
+    }),
     payment_method: Yup.string()
       .required('Payment method is required')
       .oneOf([
@@ -95,6 +103,7 @@ function Component() {
         PaymentMethodEnum.BANK_ACCOUNT,
         PaymentMethodEnum.BANK_ACCOUNT_VERIFICATION,
         PaymentMethodEnum.APPLE_PAY,
+        PaymentMethodEnum.GOOGLE_PAY,
       ]),
   });
 
@@ -119,6 +128,7 @@ function Component() {
     payment_method: PaymentMethodEnum.CREDIT_CARD,
     card: {},
     apple_pay: {},
+    google_pay: {},
   };
 
   return (
@@ -167,6 +177,8 @@ function Component() {
           }
         } else if (values.payment_method === PaymentMethodEnum.APPLE_PAY) {
           await onSubmitApplePay(total.total * 100, values as any);
+        } else if (values.payment_method === PaymentMethodEnum.GOOGLE_PAY) {
+          await onSubmitGooglePay(total.total * 100);
         }
       }}
     >
@@ -508,6 +520,31 @@ function Component() {
                         }}
                       />
                       <ErrorMessage name="apple_pay" />
+                    </div>
+
+                    <div className="relative px-4 py-4 sm:px-6">
+                      {total.total > 0 && (
+                        <GooglePayButtonElement
+                          id="google-pay-element"
+                          environment="TEST"
+                          merchantName="PSQ Merchant Test"
+                          transactionInfo={{
+                            totalPriceStatus: 'FINAL',
+                            totalPrice: total.total.toFixed(2),
+                            currencyCode: 'USD',
+                            countryCode: 'US',
+                          }}
+                          disabled={submitting}
+                          onClick={() => {
+                            formik.setFieldValue('payment_method', PaymentMethodEnum.GOOGLE_PAY);
+                            formik.submitForm();
+                          }}
+                          onPaymentDataLoaded={(data) => {
+                            onGooglePayPaymentAuthorized(data, formik.values as any);
+                          }}
+                        />
+                      )}
+                      <ErrorMessage name="google_pay" />
                     </div>
                   </div>
                 </div>
