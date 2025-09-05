@@ -469,19 +469,21 @@
   resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.2.9.tgz#d229a7b7f9dac167a156992ef23c7f023653f53b"
   integrity sha512-QNqXyfVS2wm9hweSYD2O7F0G06uurj9kZ96TRQE5Y9hU7+tgdZwIkbAKc5Ocy1HxEY2kuDQa6cQ1WRs/O5LFKA==
 
-"@publicsquare/elements-js@1.8.0":
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/@publicsquare/elements-js/-/elements-js-1.8.0.tgz#654ca5cffb14b336a8c9b8e1ff5ea80b33c15113"
-  integrity sha512-qWJXkboAtV9QQwsfGUMFf1qDjcYW3Cev459vtk7gOqFs4Jm5/IVfMiYnk7HhY7seMEzZ39yrdvrCzY9FFMScFA==
+"@publicsquare/elements-js@1.9.2":
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/@publicsquare/elements-js/-/elements-js-1.9.2.tgz#d7612e5b2113b6421c489beeb177241930ca343a"
+  integrity sha512-bj+UF0YebC6+Aga8y/ex7kPCYhZGS4zbm7YnIV+caNPHJRuahtkQBIzjzOveb+fanOb2QDM3/i1VWkS2vAwMfg==
   dependencies:
     "@basis-theory/basis-theory-js" "^4.22.1"
+    prettier "^3.6.2"
 
-"@publicsquare/elements-react@1.8.0":
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/@publicsquare/elements-react/-/elements-react-1.8.0.tgz#5f54de6a4baad68949abe0c6b511339fe7a0e4be"
-  integrity sha512-ma1m4dfIarzoIBJFtZEdq48Fby6mEyVVfKHG/imwkq0XwmnlqajoQ3Ik6pfmRyPmc7ct9Yzcr9/sf/l1rFvDNw==
+"@publicsquare/elements-react@1.9.2":
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/@publicsquare/elements-react/-/elements-react-1.9.2.tgz#51c3799cbfb88fabb4977c4f781ea4ae3bd348af"
+  integrity sha512-j1KAUVH+Ebq3PeqxaO0GsX0nzsvCebPMNChPzDwXLkxJ0rpPfM3obZ5KPLJkOH7Wv5IQisbyHqrri7F6ICNM+Q==
   dependencies:
-    "@publicsquare/elements-js" "1.8.0"
+    "@publicsquare/elements-js" "1.9.2"
+    prettier "^3.6.2"
 
 "@react-aria/focus@^3.20.2":
   version "3.20.5"
@@ -2965,7 +2967,7 @@ prettier-plugin-tailwindcss@^0.6.8:
   resolved "https://registry.yarnpkg.com/prettier-plugin-tailwindcss/-/prettier-plugin-tailwindcss-0.6.14.tgz#06701a580f7104c034ae3b699dbd17a80d67f0cd"
   integrity sha512-pi2e/+ZygeIqntN+vC573BcW5Cve8zUB0SSAGxqpB4f96boZF4M3phPVoOFCeypwkpRYdi7+jQ5YJJUwrkGUAg==
 
-prettier@^3.5.1:
+prettier@^3.5.1, prettier@^3.6.2:
   version "3.6.2"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.6.2.tgz#ccda02a1003ebbb2bfda6f83a074978f608b9393"
   integrity sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==

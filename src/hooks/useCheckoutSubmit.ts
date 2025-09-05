@@ -1,4 +1,4 @@
-import { RefObject, useState } from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { usePublicSquare } from '@publicsquare/elements-react';
 import PublicSquareTypes from '@publicsquare/elements-react/types';
@@ -11,8 +11,14 @@ declare global {
 
 export function useCheckoutSubmit() {
   const { publicsquare } = usePublicSquare();
+  const publicsquareRef = useRef(publicsquare);
   const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
+  const cartAmount = useRef(0);
+
+  useEffect(() => {
+    publicsquareRef.current = publicsquare;
+  }, [publicsquare]);
 
   async function onSubmitCardElement(
     amount: number,
@@ -67,10 +73,12 @@ export function useCheckoutSubmit() {
       card,
       bankAccount,
       applePay,
+      googlePay,
     }: {
       card?: PublicSquareTypes.CardCreateResponse;
       bankAccount?: PublicSquareTypes.BankAccountCreateResponse;
       applePay?: PublicSquareTypes.ApplePayCreateResponse;
+      googlePay?: PublicSquareTypes.GooglePayCreateResponse;
     },
     type: 'payment' | 'payout' = 'payment',
   ) {
@@ -86,6 +94,7 @@ export function useCheckoutSubmit() {
             ...(card && { card: card.id }),
             ...(bankAccount && { bank_account: bankAccount.id }),
             ...(applePay && { apple_pay: applePay.id }),
+            ...(googlePay && { google_pay: googlePay.id }),
           },
           customer: values.customer,
           billing_details: values.address,
@@ -226,8 +235,6 @@ export function useCheckoutSubmit() {
   async function createApplePay(applePaymentData: PublicSquareTypes.ApplePaymentData) {
     if (publicsquare) {
       try {
-        console.log('Apple Pay token', applePaymentData);
-
         const response = await publicsquare.applePay.create({
           apple_payment_data: applePaymentData,
         });
@@ -269,6 +276,70 @@ export function useCheckoutSubmit() {
     }
   }
 
+  async function onSubmitGooglePay(amount: number) {
+    cartAmount.current = amount;
+  }
+
+  async function onGooglePayPaymentAuthorized(
+    google_pay: any,
+    values: {
+      amount: number;
+      customer: any;
+      address: any;
+    },
+  ) {
+    try {
+      if (!submitting) {
+        setSubmitting(true);
+
+        // Create a Google Pay payment method from the encrypted payment token
+        const googlePayToken = JSON.parse(google_pay.paymentMethodData.tokenizationData.token);
+        const googlePay = await createGooglePay(googlePayToken);
+
+        if (googlePay) {
+          // Send the payment method to the backend for payment processing
+          const payment = await capturePayment(
+            cartAmount.current,
+            values,
+            { googlePay },
+            'payment',
+          );
+
+          setSubmitting(false);
+
+          //return payment;
+          if (payment?.id) {
+            router.push(`/ecommerce/orders/${payment.id}/summary`);
+          }
+        } else {
+          console.error('Google Pay payment method creation failed');
+        }
+
+        setSubmitting(false);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async function createGooglePay(
+    googlePaymentMethodToken: PublicSquareTypes.GooglePaymentMethodToken,
+  ) {
+    const psq = publicsquareRef.current;
+    if (psq) {
+      try {
+        const response = await psq.googlePay.create({
+          google_payment_method_token: googlePaymentMethodToken,
+        });
+        if (response) {
+          return response;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+
   return {
     createCard,
     submitting,
@@ -276,5 +347,7 @@ export function useCheckoutSubmit() {
     onSubmitBankAccountElement,
     onSubmitBankAccountVerificationElement,
     onSubmitApplePay,
+    onSubmitGooglePay,
+    onGooglePayPaymentAuthorized,
   };
 }
