@@ -329,7 +329,7 @@ export function useCheckoutSubmit() {
     if (psq) {
       try {
         const response = await psq.googlePay.create({
-          google_payment_method_token: googlePaymentMethodToken,
+          google_payment_data: googlePaymentMethodToken,
         });
         if (response) {
           return response;
