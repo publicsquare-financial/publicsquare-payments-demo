@@ -12,18 +12,23 @@
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.27.6.tgz#ec4070a04d76bae8ddbb10770ba55714a417b7c6"
   integrity sha512-vbavdySgbTTrmFE+EsiqUTzlOr5bzlnJtUv9PynGCAKvfQqjIXbvFdumPM/GxMDfyuGMJaJAU6TO4zc1Jf1i8Q==
 
-"@basis-theory/basis-theory-js@^4.22.1":
-  version "4.25.0"
-  resolved "https://registry.yarnpkg.com/@basis-theory/basis-theory-js/-/basis-theory-js-4.25.0.tgz#e3b8307d1ef75d7d7fdb7bb8e09766e6b013deab"
-  integrity sha512-3zj96fWezQ75CByXF8hj7+nsH+qnAAFhUqSxj01ydSlYSVfOVUoX0hLXYR0x0akl7+/qhWsM09sowGohsfzuOA==
+"@basis-theory/basis-theory-js@^4.30.0":
+  version "4.30.1"
+  resolved "https://registry.yarnpkg.com/@basis-theory/basis-theory-js/-/basis-theory-js-4.30.1.tgz#79b7a313d4fb073ecd83f4809fc6a2d32206c4a7"
+  integrity sha512-CPg8mk6eQiWQUf+pYiyHOFauqEiQlVNO1tbd1dImGth3NJ6zJZaWwzJUsd0ahcmcWx/d66ZL8lv8uy5STzmiWg==
   dependencies:
-    axios "^1.7.4"
+    axios "^1.8.2"
     camelcase-keys "^6.2.2"
     csstype "^3.0.11"
     os "^0.1.2"
     os-browserify "^0.3.0"
     snake-case "^3.0.4"
     snakecase-keys "^3.2.1"
+
+"@basis-theory/web-threeds@^2.1.2":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@basis-theory/web-threeds/-/web-threeds-2.1.2.tgz#49e1339075eee4ddcae299afcf2c2d6a01e9e5da"
+  integrity sha512-Gh2EAVu6OukomspU/+VWaXBwyaegCHuwzblYLH9o+THIxTbACuACTZvP68SnuFADxKJsII6X0ir5hQIVLXcMeQ==
 
 "@emnapi/core@^1.4.3":
   version "1.4.5"
@@ -469,21 +474,29 @@
   resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.2.9.tgz#d229a7b7f9dac167a156992ef23c7f023653f53b"
   integrity sha512-QNqXyfVS2wm9hweSYD2O7F0G06uurj9kZ96TRQE5Y9hU7+tgdZwIkbAKc5Ocy1HxEY2kuDQa6cQ1WRs/O5LFKA==
 
-"@publicsquare/elements-js@1.9.4":
-  version "1.9.4"
-  resolved "https://registry.yarnpkg.com/@publicsquare/elements-js/-/elements-js-1.9.4.tgz#4fbdb1b47be909ec8dbcb8f69011fe9583a3517e"
-  integrity sha512-qD6Z2eN5/usq7YBr72y2scHLWH16LcFGXrbAQxkMPwDTdQzowRIKQnrAyW8Q2QnJLUQkOmA/OfxrxYhDbrXpQQ==
+"@publicsquare/elements-js@1.12.0":
+  version "1.12.0"
+  resolved "https://registry.yarnpkg.com/@publicsquare/elements-js/-/elements-js-1.12.0.tgz#28c7ceb0a1c1324d899e8d4b794eab8e94818e7d"
+  integrity sha512-t4aeHzXwKDy2iD+xTMx2AZnD2gj9enn6dPXzINDosCwwTycgY3tujPGBme9yvxTIDSpUxR/lNffXW18MbwcrwQ==
   dependencies:
-    "@basis-theory/basis-theory-js" "^4.22.1"
-    prettier "^3.6.2"
+    "@basis-theory/basis-theory-js" "^4.30.0"
+    "@basis-theory/web-threeds" "^2.1.2"
+    follow-redirects "^1.16.0"
+    glob "^13.0.6"
+    minimatch "^10.2.5"
+    prettier "^3.8.2"
+    serialize-javascript "^7.0.5"
 
-"@publicsquare/elements-react@1.9.4":
-  version "1.9.4"
-  resolved "https://registry.yarnpkg.com/@publicsquare/elements-react/-/elements-react-1.9.4.tgz#79f67093dd1088a1b6d1a0ed32a53a15bc965427"
-  integrity sha512-4rnI91UHSPevgs0MlOfTDK+HytfPRGDELn1kmDtdv+N+sH1hkedd0m8gPHOF1vqgARE5jflnDsICupnd06FAAQ==
+"@publicsquare/elements-react@1.12.0":
+  version "1.12.0"
+  resolved "https://registry.yarnpkg.com/@publicsquare/elements-react/-/elements-react-1.12.0.tgz#44936107eb5a6d18057858d96575d3c7cf3c62e5"
+  integrity sha512-NEoNWIcM1sEtUQaNWXnGCZTwElSoOT61v/yZXLH8glgjd31Omr6OE0dQLsTneFV06RPA6k7W6pze7/ySIspmrg==
   dependencies:
-    "@publicsquare/elements-js" "1.9.4"
-    prettier "^3.6.2"
+    "@publicsquare/elements-js" "1.12.0"
+    follow-redirects "^1.16.0"
+    glob "^13.0.1"
+    minimatch "^10.2.3"
+    prettier "^3.8.2"
 
 "@react-aria/focus@^3.20.2":
   version "3.20.5"
@@ -1046,7 +1059,7 @@ axe-core@^4.10.0:
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.10.3.tgz#04145965ac7894faddbac30861e5d8f11bfd14fc"
   integrity sha512-Xm7bpRXnDSX2YE2YFfBk2FnF0ep6tmG7xPh8iHee8MIcrgq762Nkce856dYtJYLkuIoYZvGfTs/PbZhideTcEg==
 
-axios@^1.16.0, axios@^1.7.4:
+axios@^1.16.0, axios@^1.8.2:
   version "1.18.0"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.18.0.tgz#8a7f8854af280fcaae063272df2ed9f3837d2398"
   integrity sha512-E32NzpYKp++W7XRe52rHiXV2ehxmh3wbdgO7MHeFM+vqxLBYHzt0ElkiImtOBxtOmyp0yoC8C6uESVV84Y2/hw==
@@ -2025,7 +2038,7 @@ glob-parent@^6.0.2:
   dependencies:
     is-glob "^4.0.3"
 
-glob@^10.3.10, glob@^10.5.0:
+glob@^10.3.10, glob@^10.5.0, glob@^13.0.1, glob@^13.0.6:
   version "10.5.0"
   resolved "https://registry.yarnpkg.com/glob/-/glob-10.5.0.tgz#8ec0355919cd3338c28428a23d4f24ecc5fe738c"
   integrity sha512-DfXN8DfhJ7NH3Oe7cFmu3NCu1wKbkReJ8TorzSAFbSKrlNaQSKfIzqYqVY8zlbs2NLBbWpRiU52GX2PbaBVNkg==
@@ -2622,7 +2635,7 @@ mini-svg-data-uri@^1.2.3:
   resolved "https://registry.yarnpkg.com/mini-svg-data-uri/-/mini-svg-data-uri-1.4.4.tgz#8ab0aabcdf8c29ad5693ca595af19dd2ead09939"
   integrity sha512-r9deDe9p5FJUPZAk3A59wGH7Ii9YrjjWw0jmw/liSbHl2CHiyXj6FcDXDu2K3TjVAXqiJdaw3xxwlZZr9E6nHg==
 
-minimatch@^3.1.2, minimatch@^9.0.4, minimatch@^9.0.7:
+minimatch@^10.2.3, minimatch@^10.2.5, minimatch@^3.1.2, minimatch@^9.0.4, minimatch@^9.0.7:
   version "9.0.9"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-9.0.9.tgz#9b0cb9fcb78087f6fd7eababe2511c4d3d60574e"
   integrity sha512-OBwBN9AL4dqmETlpS2zasx+vTeWclWzkblfZk7KTA5j3jeOONz/tRCnZomUyvNg83wL5Zv9Ss6HMJXAgL8R2Yg==
@@ -2965,10 +2978,15 @@ prettier-plugin-tailwindcss@^0.6.8:
   resolved "https://registry.yarnpkg.com/prettier-plugin-tailwindcss/-/prettier-plugin-tailwindcss-0.6.14.tgz#06701a580f7104c034ae3b699dbd17a80d67f0cd"
   integrity sha512-pi2e/+ZygeIqntN+vC573BcW5Cve8zUB0SSAGxqpB4f96boZF4M3phPVoOFCeypwkpRYdi7+jQ5YJJUwrkGUAg==
 
-prettier@^3.5.1, prettier@^3.6.2:
+prettier@^3.5.1:
   version "3.6.2"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.6.2.tgz#ccda02a1003ebbb2bfda6f83a074978f608b9393"
   integrity sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==
+
+prettier@^3.8.2:
+  version "3.8.4"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.8.4.tgz#f334f013ac04a96676f24dabc23c1c4ae1bae411"
+  integrity sha512-N2MylSdi48+5N/6S5j+maeHbUSIzzZ5uOcX5Hm4QpV8Dkb1HFjfAKTKX6yNPJQD9AhcT3ifHNB66tWTTJDi11Q==
 
 prismjs@^1.29.0:
   version "1.30.0"
@@ -3171,6 +3189,11 @@ semver@^7.6.0, semver@^7.7.1, semver@^7.7.2:
   version "7.7.2"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.7.2.tgz#67d99fdcd35cec21e6f8b87a7fd515a33f982b58"
   integrity sha512-RF0Fw+rO5AMf9MAyaRXI4AV0Ulj5lMHqVxxdSgiVbixSCXoEmmX/jk0CuJw4+3SqroYO9VoUh+HcuJivvtJemA==
+
+serialize-javascript@^7.0.5:
+  version "7.0.5"
+  resolved "https://registry.yarnpkg.com/serialize-javascript/-/serialize-javascript-7.0.5.tgz#c798cc0552ffbb08981914a42a8756e339d0d5b1"
+  integrity sha512-F4LcB0UqUl1zErq+1nYEEzSHJnIwb3AF2XWB94b+afhrekOUijwooAYqFyRbjYkm2PAKBabx6oYv/xDxNi8IBw==
 
 set-function-length@^1.2.2:
   version "1.2.2"
