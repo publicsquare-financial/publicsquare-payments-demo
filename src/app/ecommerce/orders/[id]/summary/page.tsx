@@ -1,5 +1,6 @@
 import { currency } from '@/utils';
 import config from '@config';
+import Image from 'next/image';
 
 const products = config.products.slice(0, 1);
 
@@ -28,9 +29,11 @@ export default function Page() {
           <h3 className="sr-only">Items</h3>
           {products.map((product) => (
             <div key={product.id} className="flex space-x-6 border-b border-gray-200 py-10">
-              <img
+              <Image
                 alt={product.imageAlt}
                 src={product.images[0]}
+                width={20}
+                height={20}
                 className="h-20 w-20 flex-none rounded-lg bg-gray-100 object-cover object-center sm:h-40 sm:w-40"
               />
               <div className="flex flex-auto flex-col">
