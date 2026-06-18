@@ -2,6 +2,11 @@ import { RefObject, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { usePublicSquare } from '@publicsquare/elements-react';
 import PublicSquareTypes from '@publicsquare/elements-react/types';
+import {
+  CompletePaymentIntentRequest,
+  ConfirmPaymentIntentRequest,
+  PaymentIntentModel,
+} from '@/types';
 
 declare global {
   interface Window {
@@ -303,6 +308,42 @@ export function useCheckoutSubmit() {
     }
   }
 
+  async function completeThreeDsPaymentIntent(
+    paymentIntentId: string,
+    body: CompletePaymentIntentRequest,
+  ): Promise<PaymentIntentModel> {
+    const response = await fetch(
+      `/api/payment-intents/${paymentIntentId}/three_d_secure/complete`,
+      {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: { 'Content-Type': 'application/json' },
+      },
+    );
+    return response.json();
+  }
+
+  async function confirmPaymentIntent(
+    paymentIntentId: string,
+    body: ConfirmPaymentIntentRequest,
+  ): Promise<PaymentIntentModel> {
+    const response = await fetch(`/api/payment-intents/${paymentIntentId}/confirm`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    return response.json();
+  }
+
+  async function createPaymentIntent(cardId: string): Promise<PaymentIntentModel> {
+    const response = await fetch('/api/payment-intents', {
+      method: 'POST',
+      body: JSON.stringify({ cardId }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    return response.json();
+  }
+
   async function onSubmitGooglePay(amount: number) {
     cartAmount.current = amount;
   }
@@ -369,6 +410,9 @@ export function useCheckoutSubmit() {
 
   return {
     createCard,
+    createPaymentIntent,
+    confirmPaymentIntent,
+    completeThreeDsPaymentIntent,
     submitting,
     onSubmitCardElement,
     onSubmitThreeDsElement,
