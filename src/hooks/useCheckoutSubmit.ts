@@ -104,6 +104,33 @@ export function useCheckoutSubmit() {
     } catch (_error) {}
   }
 
+  async function onSubmitThreeDsElement(
+    amount: number,
+    values: {
+      name_on_card: string;
+      amount: number;
+      customer: any;
+      address: any;
+    },
+    threeDsElement: RefObject<PublicSquareTypes.CardElement | null>,
+    type: 'payment' | 'payout' = 'payment',
+  ) {
+    try {
+      if (threeDsElement.current && !submitting) {
+        setSubmitting(true);
+        const card = await createCard(values, threeDsElement.current);
+        if (card) {
+          const payment = await capturePayment(amount, values, { card }, type);
+          setSubmitting(false);
+          return payment;
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    setSubmitting(false);
+  }
+
   async function onSubmitBankAccountElement(
     amount: number,
     values: any,
@@ -344,6 +371,7 @@ export function useCheckoutSubmit() {
     createCard,
     submitting,
     onSubmitCardElement,
+    onSubmitThreeDsElement,
     onSubmitBankAccountElement,
     onSubmitBankAccountVerificationElement,
     onSubmitApplePay,

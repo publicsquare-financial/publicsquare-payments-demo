@@ -1,5 +1,6 @@
 'use client';
 import { useMemo, useRef, useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import * as Yup from 'yup';
 import { ErrorMessage, Form, Formik } from 'formik';
@@ -31,11 +32,13 @@ const deliveryMethods = [
 function Component() {
   const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(deliveryMethods[0]);
   const cardElement = useRef<PublicSquareTypes.CardElement>(null);
+  const threeDsElement = useRef<PublicSquareTypes.CardElement>(null);
   const bankAccountElement = useRef<PublicSquareTypes.BankAccountElement>(null);
   const bankAccountVerificationElement =
     useRef<PublicSquareTypes.BankAccountVerificationElement>(null);
   const {
     onSubmitCardElement,
+    onSubmitThreeDsElement,
     onSubmitBankAccountElement,
     onSubmitBankAccountVerificationElement,
     onSubmitApplePay,
@@ -82,7 +85,8 @@ function Component() {
     delivery_method: Yup.number().required('Delivery method is required'),
     name_on_card: Yup.string().required('Name on card is required'),
     card: Yup.object().when('payment_method', {
-      is: PaymentMethodEnum.CREDIT_CARD,
+      is: (val: string) =>
+        val === PaymentMethodEnum.CREDIT_CARD || val === PaymentMethodEnum.THREE_DS,
       then: (schema) => schema.required('Card is required'),
       otherwise: (schema) => schema.optional(),
     }),
@@ -104,6 +108,7 @@ function Component() {
         PaymentMethodEnum.BANK_ACCOUNT_VERIFICATION,
         PaymentMethodEnum.APPLE_PAY,
         PaymentMethodEnum.GOOGLE_PAY,
+        PaymentMethodEnum.THREE_DS,
       ]),
   });
 
@@ -144,6 +149,19 @@ function Component() {
               total.total * 100,
               values as any,
               cardElement,
+            );
+            if (payment.id) {
+              router.push(`/ecommerce/orders/${payment.id}/summary`);
+            }
+          }
+        } else if (values.payment_method === PaymentMethodEnum.THREE_DS) {
+          if (!threeDsElement.current) {
+            setFieldError('card', 'Card is required');
+          } else {
+            const payment = await onSubmitThreeDsElement(
+              total.total * 100,
+              values as any,
+              threeDsElement,
             );
             if (payment.id) {
               router.push(`/ecommerce/orders/${payment.id}/summary`);
@@ -390,6 +408,7 @@ function Component() {
                     <PaymentMethodTabs
                       formik={formik}
                       cardElement={cardElement}
+                      threeDsElement={threeDsElement}
                       bankAccountElement={bankAccountElement}
                       bankAccountVerificationElement={bankAccountVerificationElement}
                     />
@@ -405,9 +424,11 @@ function Component() {
                       {cart.items.map((product) => (
                         <li key={product.item.id} className="flex px-4 py-6 sm:px-6">
                           <div className="flex-shrink-0">
-                            <img
+                            <Image
                               alt={product.item.imageAlt}
                               src={product.item.images[0]}
+                              width={20}
+                              height={20}
                               className="w-20 rounded-md"
                             />
                           </div>

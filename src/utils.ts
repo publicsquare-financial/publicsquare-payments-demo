@@ -11,10 +11,12 @@ export enum PaymentMethodEnum {
   BANK_ACCOUNT_VERIFICATION = 'bank-account-verification',
   APPLE_PAY = 'apple-pay',
   GOOGLE_PAY = 'google-pay',
+  THREE_DS = 'three-ds',
 }
 
 export const availablePaymentMethods = [
   { id: PaymentMethodEnum.CREDIT_CARD, title: 'Credit Card' },
   { id: PaymentMethodEnum.BANK_ACCOUNT, title: 'Bank Account (ACH)' },
   { id: PaymentMethodEnum.BANK_ACCOUNT_VERIFICATION, title: 'Bank Account Verification' },
+  { id: PaymentMethodEnum.THREE_DS, title: '3DS' },
 ];
