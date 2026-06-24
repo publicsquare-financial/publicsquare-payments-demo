@@ -11,7 +11,7 @@ export default function CustomerSelect({ formik }: { formik: FormikProps<any> })
       method: 'GET',
     })
       .then((res) => res.json())
-      .then(({ data }) => setCustomers(data));
+      .then(({ data }) => setCustomers(data ?? []));
   }, []);
 
   return (

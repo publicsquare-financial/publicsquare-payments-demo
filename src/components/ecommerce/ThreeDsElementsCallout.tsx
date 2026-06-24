@@ -48,7 +48,7 @@ function Component() {
 
 export default function App() {
   return (
-    <PublicSquareProvider apiKey={apiKey}>
+    <PublicSquareProvider apiKey={apiKey} options={{ ...{apiUrl: apiUrl} }}>
       <Component />
     </PublicSquareProvider>
   );

@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const result = await fetch(`${process.env.PUBLICSQUARE_API_URI}/payouts`, {
+    const result = await fetch(`${process.env.NEXT_PUBLIC_PUBLICSQUARE_API_URI!}/payouts`, {
       method: 'POST',
       body: JSON.stringify({
         amount,

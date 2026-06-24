@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
-  const { cardId } = await req.json();
+  const { amount, cardId } = await req.json();
   try {
-    const result = await fetch(`${process.env.PUBLICSQUARE_API_URI}/payment-intents`, {
+    const result = await fetch(`${process.env.NEXT_PUBLIC_PUBLICSQUARE_API_URI!}/payment-intents`, {
       method: 'POST',
       body: JSON.stringify({
-        amount: 5000,
+        amount: amount,
         currency: 'USD',
         capture_method: 'Automatic',
         payment_method: { card: cardId },

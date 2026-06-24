@@ -4,7 +4,7 @@ export async function POST(req: NextRequest) {
   // Parse json body
   const { amount, payment_method, customer, billing_details, shipping_address } = await req.json();
   try {
-    const result = await fetch(`${process.env.PUBLICSQUARE_API_URI}/payments`, {
+    const result = await fetch(`${process.env.NEXT_PUBLIC_PUBLICSQUARE_API_URI!}/payments`, {
       method: 'POST',
       body: JSON.stringify({
         amount,

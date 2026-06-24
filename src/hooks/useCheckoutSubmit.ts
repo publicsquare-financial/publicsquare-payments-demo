@@ -35,11 +35,12 @@ export function useCheckoutSubmit() {
     },
     cardElement: RefObject<PublicSquareTypes.CardElement | null>,
     type: 'payment' | 'payout' = 'payment',
+    environment: 'TEST' | 'PRODUCTION',
   ) {
     try {
       if (cardElement.current && !submitting) {
         setSubmitting(true);
-        const card = await createCard(values, cardElement.current);
+        const card = await createCard(values, cardElement.current, environment);
         if (card) {
           const payment = await capturePayment(amount, values, { card }, type);
           setSubmitting(false);
@@ -55,13 +56,17 @@ export function useCheckoutSubmit() {
   async function createCard(
     values: { name_on_card: string },
     card: PublicSquareTypes.CardCreateInput['card'],
+    environment: 'TEST' | 'PRODUCTION',
   ) {
     if (values.name_on_card && card && publicsquare) {
       try {
-        const response = await publicsquare.cards.create({
-          cardholder_name: values.name_on_card,
-          card,
-        });
+        const response = await publicsquare.cards.create(
+          {
+            cardholder_name: values.name_on_card,
+            card,
+          },
+          environment,
+        );
         if (response) {
           return response;
         }
@@ -107,33 +112,6 @@ export function useCheckoutSubmit() {
       }).then((res) => res.json());
       return payment;
     } catch (_error) {}
-  }
-
-  async function onSubmitThreeDsElement(
-    amount: number,
-    values: {
-      name_on_card: string;
-      amount: number;
-      customer: any;
-      address: any;
-    },
-    threeDsElement: RefObject<PublicSquareTypes.CardElement | null>,
-    type: 'payment' | 'payout' = 'payment',
-  ) {
-    try {
-      if (threeDsElement.current && !submitting) {
-        setSubmitting(true);
-        const card = await createCard(values, threeDsElement.current);
-        if (card) {
-          const payment = await capturePayment(amount, values, { card }, type);
-          setSubmitting(false);
-          return payment;
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    setSubmitting(false);
   }
 
   async function onSubmitBankAccountElement(
@@ -308,42 +286,6 @@ export function useCheckoutSubmit() {
     }
   }
 
-  async function completeThreeDsPaymentIntent(
-    paymentIntentId: string,
-    body: CompletePaymentIntentRequest,
-  ): Promise<PaymentIntentModel> {
-    const response = await fetch(
-      `/api/payment-intents/${paymentIntentId}/three_d_secure/complete`,
-      {
-        method: 'POST',
-        body: JSON.stringify(body),
-        headers: { 'Content-Type': 'application/json' },
-      },
-    );
-    return response.json();
-  }
-
-  async function confirmPaymentIntent(
-    paymentIntentId: string,
-    body: ConfirmPaymentIntentRequest,
-  ): Promise<PaymentIntentModel> {
-    const response = await fetch(`/api/payment-intents/${paymentIntentId}/confirm`, {
-      method: 'POST',
-      body: JSON.stringify(body),
-      headers: { 'Content-Type': 'application/json' },
-    });
-    return response.json();
-  }
-
-  async function createPaymentIntent(cardId: string): Promise<PaymentIntentModel> {
-    const response = await fetch('/api/payment-intents', {
-      method: 'POST',
-      body: JSON.stringify({ cardId }),
-      headers: { 'Content-Type': 'application/json' },
-    });
-    return response.json();
-  }
-
   async function onSubmitGooglePay(amount: number) {
     cartAmount.current = amount;
   }
@@ -408,9 +350,104 @@ export function useCheckoutSubmit() {
     }
   }
 
+  async function onSubmitThreeDsElement(
+    amount: number,
+    values: {
+      name_on_card: string;
+      amount: number;
+      customer: any;
+      address: any;
+    },
+    threeDsElement: RefObject<PublicSquareTypes.CardElement | null>,
+  ) {
+    try {
+      if (threeDsElement.current && !submitting) {
+        setSubmitting(true);
+        const card = await createCard(values, threeDsElement.current, 'TEST');
+        if (!card) return;
+
+        const intent = await createPaymentIntent(amount, card.id);
+        if (!intent?.id) return;
+        console.log('createPaymentIntent: ', intent);
+
+        const session = await createThreeDsSession((card as any).token, intent.id, 'no-preference');
+        if (!session?.id) return;
+        console.log('createThreeDsSession: ', session);
+
+        const paymentIntentModel = await confirmPaymentIntent(intent.id, {
+          three_d_secure: { session_id: session.id, transport: 'iframe' },
+        });
+        console.log('confirmPaymentIntent: ', paymentIntentModel);
+
+        setSubmitting(false);
+        return { ...paymentIntentModel, btSessionId: session.bt_session_id };
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    setSubmitting(false);
+  }
+
+  async function completeThreeDsPaymentIntent(
+    paymentIntentId: string,
+    body: CompletePaymentIntentRequest,
+  ): Promise<PaymentIntentModel> {
+    const response = await fetch(
+      `/api/payment-intents/${paymentIntentId}/three_d_secure/complete`,
+      {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: { 'Content-Type': 'application/json' },
+      },
+    );
+    return response.json();
+  }
+
+  async function confirmPaymentIntent(
+    paymentIntentId: string,
+    body: ConfirmPaymentIntentRequest,
+  ): Promise<PaymentIntentModel> {
+    const response = await fetch(`/api/payment-intents/${paymentIntentId}/confirm`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    return response.json();
+  }
+
+  async function createThreeDsSession(
+    tokenId: string,
+    paymentIntentId: string,
+    challengePreference: string,
+  ) {
+    if (!publicsquare) return null;
+    try {
+      const response = await (publicsquare as any).threeDs.createSession({
+        token_id: tokenId,
+        payment_intent_id: paymentIntentId,
+        challenge_preference: challengePreference,
+        environment: 'TEST',
+      });
+      return response as { id: string; bt_session_id: string; acs_transaction_id: string };
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
+
+  async function createPaymentIntent(amount: number, cardId: string): Promise<PaymentIntentModel> {
+    const response = await fetch('/api/payment-intents', {
+      method: 'POST',
+      body: JSON.stringify({ amount, cardId }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    return response.json();
+  }
+
   return {
     createCard,
     createPaymentIntent,
+    createThreeDsSession,
     confirmPaymentIntent,
     completeThreeDsPaymentIntent,
     submitting,

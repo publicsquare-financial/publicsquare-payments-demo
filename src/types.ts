@@ -30,6 +30,7 @@ export type ThreeDsNextActionModel = {
   acs_transaction_id?: string;
   transport: string;
   redirect_url?: string;
+  three_ds_version?: string;
 };
 
 export type PaymentIntentNextActionModel = {

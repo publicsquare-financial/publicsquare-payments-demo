@@ -128,6 +128,7 @@ function PayoutCard() {
                 },
                 cardElement,
                 'payout',
+                'TEST',
               ).then((payment) => {
                 if (payment.id) {
                   alert(`Payout successfully sent ${payment.id}`);
@@ -146,10 +147,9 @@ function PayoutCard() {
                   amount,
                 },
                 threeDsElement,
-                'payout',
-              ).then((payment) => {
-                if (payment.id) {
-                  alert(`Payout successfully sent ${payment.id}`);
+              ).then((intent) => {
+                if (intent) {
+                  alert(`Payout successfully sent ${intent.payment_id}`);
                 }
               });
             }

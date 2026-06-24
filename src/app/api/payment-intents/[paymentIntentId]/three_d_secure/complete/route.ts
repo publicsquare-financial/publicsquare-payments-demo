@@ -8,7 +8,7 @@ export async function POST(
   const body = await req.json();
   try {
     const result = await fetch(
-      `${process.env.PUBLICSQUARE_API_URI}/payment-intents/${paymentIntentId}/three_d_secure/complete`,
+      `${process.env.NEXT_PUBLIC_PUBLICSQUARE_API_URI!}/payment-intents/${paymentIntentId}/three_d_secure/complete`,
       {
         method: 'POST',
         body: JSON.stringify(body),
