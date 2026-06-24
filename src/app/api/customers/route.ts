@@ -13,7 +13,7 @@ export async function GET() {
     console.log(result.status);
     return NextResponse.json(await result.json());
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return NextResponse.json(
       {
         error: {

@@ -31,13 +31,13 @@ export async function POST(req: NextRequest) {
     const res = await result.json();
 
     if (!result.ok) {
-      console.log(result.status);
-      console.log(res);
+      console.error(result.status);
+      console.error(res);
     }
 
     return NextResponse.json(res);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return NextResponse.json(
       {
         error: {

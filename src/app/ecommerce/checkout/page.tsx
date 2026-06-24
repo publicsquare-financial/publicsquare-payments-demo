@@ -73,8 +73,9 @@ function Component() {
       three_d_secure: { session_id: threeDsChallenge.nextAction.session_id },
     });
     setThreeDsChallenge(null);
-    if (completed.id) {
-      router.push(`/ecommerce/orders/${completed.id}/summary`);
+    console.debug('completed.payment_id: ', completed.payment_id);
+    if (completed.payment_id) {
+      router.push(`/ecommerce/orders/${completed.payment_id}/summary`);
     }
   }
 
@@ -162,6 +163,10 @@ function Component() {
   };
 
   if (threeDsChallenge) {
+    const { acs_challenge_url, acs_transaction_id, three_ds_version } = threeDsChallenge.nextAction;
+    if (!acs_challenge_url || !acs_transaction_id || !three_ds_version) {
+      return null;
+    }
     return (
       <div className="bg-gray-50">
         <div className="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6">
@@ -171,9 +176,9 @@ function Component() {
           <ThreeDSChallengeElement
             environment="TEST"
             sessionId={threeDsChallenge.btSessionId}
-            acsChallengeUrl={threeDsChallenge.nextAction.acs_challenge_url!}
-            acsTransactionId={threeDsChallenge.nextAction.acs_transaction_id!}
-            threeDsVersion={threeDsChallenge.nextAction.three_ds_version!}
+            acsChallengeUrl={acs_challenge_url}
+            acsTransactionId={acs_transaction_id}
+            threeDsVersion={three_ds_version}
             onComplete={onThreeDsChallengeComplete}
             onFailure={onThreeDsChallengeFailure}
           />
@@ -213,15 +218,13 @@ function Component() {
             );
             if (!paymentIntentModel) return;
 
-            if (
-              paymentIntentModel.status === 'requires_action' &&
-              paymentIntentModel.next_action?.three_d_secure
-            ) {
+            const threeDsNextAction = paymentIntentModel.next_action?.three_d_secure;
+            if (paymentIntentModel.status === 'requires_action' && threeDsNextAction) {
               const { btSessionId, ...intentModel } = paymentIntentModel;
               setThreeDsChallenge({
                 intentId: intentModel.id,
                 btSessionId,
-                nextAction: intentModel.next_action!.three_d_secure!,
+                nextAction: threeDsNextAction,
               });
             } else if (paymentIntentModel.payment_id) {
               router.push(`/ecommerce/orders/${paymentIntentModel.payment_id}/summary`);
@@ -643,9 +646,7 @@ export default function Page() {
     <PublicSquareProvider
       apiKey={process.env.NEXT_PUBLIC_PUBLICSQUARE_API_KEY!}
       options={{
-        ...{
-          apiUrl: process.env.NEXT_PUBLIC_PUBLICSQUARE_API_URI!,
-        },
+        apiUrl: process.env.NEXT_PUBLIC_PUBLICSQUARE_API_URI!,
       }}
     >
       <Component />

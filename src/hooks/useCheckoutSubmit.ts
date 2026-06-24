@@ -48,7 +48,7 @@ export function useCheckoutSubmit() {
         }
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
     setSubmitting(false);
   }
@@ -71,7 +71,7 @@ export function useCheckoutSubmit() {
           return response;
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }
   }
@@ -131,7 +131,7 @@ export function useCheckoutSubmit() {
         }
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
     setSubmitting(false);
   }
@@ -153,7 +153,7 @@ export function useCheckoutSubmit() {
           return response;
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }
   }
@@ -178,7 +178,7 @@ export function useCheckoutSubmit() {
         }
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
     setSubmitting(false);
   }
@@ -192,7 +192,7 @@ export function useCheckoutSubmit() {
         });
         return response;
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }
   }
@@ -252,7 +252,7 @@ export function useCheckoutSubmit() {
           return response;
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }
   }
@@ -278,7 +278,7 @@ export function useCheckoutSubmit() {
         domain: window.location.host,
       });
 
-      console.log(session);
+      console.debug(session);
       return session;
     } catch (error) {
       console.error('Error validating merchant:', error);
@@ -345,7 +345,7 @@ export function useCheckoutSubmit() {
           return response;
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }
   }
@@ -365,25 +365,25 @@ export function useCheckoutSubmit() {
         setSubmitting(true);
         const card = await createCard(values, threeDsElement.current, 'TEST');
         if (!card) return;
+        console.debug('createCard: ', card);
 
         const intent = await createPaymentIntent(amount, card.id);
         if (!intent?.id) return;
-        console.log('createPaymentIntent: ', intent);
 
-        const session = await createThreeDsSession((card as any).token, intent.id, 'no-preference');
+        const session = await createThreeDsSession(card.token, intent.id, 'no-preference');
         if (!session?.id) return;
-        console.log('createThreeDsSession: ', session);
+        console.debug('createThreeDsSession: ', session);
 
         const paymentIntentModel = await confirmPaymentIntent(intent.id, {
           three_d_secure: { session_id: session.id, transport: 'iframe' },
         });
-        console.log('confirmPaymentIntent: ', paymentIntentModel);
+        console.debug('confirmPaymentIntent: ', paymentIntentModel);
 
         setSubmitting(false);
         return { ...paymentIntentModel, btSessionId: session.bt_session_id };
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
     setSubmitting(false);
   }
@@ -420,18 +420,21 @@ export function useCheckoutSubmit() {
     paymentIntentId: string,
     challengePreference: string,
   ) {
-    if (!publicsquare) return null;
-    try {
-      const response = await (publicsquare as any).threeDs.createSession({
-        token_id: tokenId,
-        payment_intent_id: paymentIntentId,
-        challenge_preference: challengePreference,
-        environment: 'TEST',
-      });
-      return response as { id: string; bt_session_id: string; acs_transaction_id: string };
-    } catch (error) {
-      console.log(error);
-      return null;
+    if (publicsquare) {
+      try {
+        const response = await publicsquare.threeDs.createSession({
+          token_id: tokenId,
+          payment_intent_id: paymentIntentId,
+          challenge_preference: challengePreference,
+          environment: 'TEST',
+        });
+        if (response) {
+          return response as { id: string; bt_session_id: string; acs_transaction_id: string };
+        }
+      } catch (error) {
+        console.error(error);
+        return null;
+      }
     }
   }
 

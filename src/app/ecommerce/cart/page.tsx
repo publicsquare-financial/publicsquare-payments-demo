@@ -41,8 +41,8 @@ export default function Cart() {
                       <Image
                         alt={product.item.imageAlt}
                         src={product.item.images[0]}
-                        width={24}
-                        height={24}
+                        width={192}
+                        height={192}
                         className="h-24 w-24 rounded-md object-cover object-center sm:h-48 sm:w-48"
                       />
                     </div>

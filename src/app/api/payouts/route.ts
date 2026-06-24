@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(await result.json());
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return NextResponse.json(
       {
         error: {
