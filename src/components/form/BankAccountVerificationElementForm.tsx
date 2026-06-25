@@ -20,7 +20,7 @@ export default function BankAccountVerificationElementForm({
             id="bank-account-element"
             className="space-x-4"
             onVerificationComplete={(result) => {
-              console.log('Bank account verification completed:', result);
+              console.debug('Bank account verification completed:', result);
               formik.setFieldValue(
                 'bank_account_verification_id',
                 result.bank_account_verification_id,

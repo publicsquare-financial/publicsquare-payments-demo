@@ -4,6 +4,7 @@ import { useCart } from '@/providers/CartProvider';
 import { currency } from '@/utils';
 import { QuestionMarkCircleIcon, XMarkIcon } from '@heroicons/react/20/solid';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { useMemo } from 'react';
 
 export default function Cart() {
@@ -37,9 +38,11 @@ export default function Cart() {
                 cart.items.map((product, productIdx) => (
                   <li key={product.item.id} className="flex py-6 sm:py-10">
                     <div className="flex-shrink-0">
-                      <img
+                      <Image
                         alt={product.item.imageAlt}
                         src={product.item.images[0]}
+                        width={192}
+                        height={192}
                         className="h-24 w-24 rounded-md object-cover object-center sm:h-48 sm:w-48"
                       />
                     </div>

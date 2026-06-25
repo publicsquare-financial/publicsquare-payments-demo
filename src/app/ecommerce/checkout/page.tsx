@@ -1,11 +1,13 @@
 'use client';
 import { useMemo, useRef, useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import * as Yup from 'yup';
 import { ErrorMessage, Form, Formik } from 'formik';
 import { Radio, RadioGroup } from '@headlessui/react';
 import { CheckCircleIcon, TrashIcon } from '@heroicons/react/20/solid';
 import { PublicSquareProvider } from '@publicsquare/elements-react';
+import { ThreeDsNextActionModel } from '@/types';
 import FormInput from '@/components/form/FormInput';
 import FormSelect from '@/components/form/FormSelect';
 import PublicSquareTypes from '@publicsquare/elements-react/types';
@@ -17,6 +19,7 @@ import PaymentMethodTabs from '@/components/PaymentMethodTabs';
 import { useCheckoutSubmit } from '@/hooks/useCheckoutSubmit';
 import ApplePayButtonElement from '@publicsquare/elements-react/elements/ApplePayButtonElement';
 import GooglePayButtonElement from '@publicsquare/elements-react/elements/GooglePayButtonElement';
+import { ThreeDSChallengeElement } from '@publicsquare/elements-react/elements/ThreeDSChallengeElement';
 
 const deliveryMethods = [
   {
@@ -31,11 +34,14 @@ const deliveryMethods = [
 function Component() {
   const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(deliveryMethods[0]);
   const cardElement = useRef<PublicSquareTypes.CardElement>(null);
+  const threeDsElement = useRef<PublicSquareTypes.CardElement>(null);
   const bankAccountElement = useRef<PublicSquareTypes.BankAccountElement>(null);
   const bankAccountVerificationElement =
     useRef<PublicSquareTypes.BankAccountVerificationElement>(null);
   const {
+    completeThreeDsPaymentIntent,
     onSubmitCardElement,
+    onSubmitThreeDsElement,
     onSubmitBankAccountElement,
     onSubmitBankAccountVerificationElement,
     onSubmitApplePay,
@@ -54,6 +60,29 @@ function Component() {
     };
   }, [cart.items]);
   const router = useRouter();
+
+  const [threeDsChallenge, setThreeDsChallenge] = useState<{
+    intentId: string;
+    btSessionId: string;
+    nextAction: ThreeDsNextActionModel;
+  } | null>(null);
+
+  async function onThreeDsChallengeComplete() {
+    if (!threeDsChallenge) return;
+    const completed = await completeThreeDsPaymentIntent(threeDsChallenge.intentId, {
+      three_d_secure: { session_id: threeDsChallenge.nextAction.session_id },
+    });
+    setThreeDsChallenge(null);
+    console.debug('completed.payment_id: ', completed.payment_id);
+    if (completed.payment_id) {
+      router.push(`/ecommerce/orders/${completed.payment_id}/summary`);
+    }
+  }
+
+  function onThreeDsChallengeFailure(err: Error) {
+    console.error('3DS challenge failed', err);
+    setThreeDsChallenge(null);
+  }
 
   const schema = Yup.object().shape({
     customer: Yup.object({
@@ -82,7 +111,8 @@ function Component() {
     delivery_method: Yup.number().required('Delivery method is required'),
     name_on_card: Yup.string().required('Name on card is required'),
     card: Yup.object().when('payment_method', {
-      is: PaymentMethodEnum.CREDIT_CARD,
+      is: (val: string) =>
+        val === PaymentMethodEnum.CREDIT_CARD || val === PaymentMethodEnum.THREE_DS,
       then: (schema) => schema.required('Card is required'),
       otherwise: (schema) => schema.optional(),
     }),
@@ -104,6 +134,7 @@ function Component() {
         PaymentMethodEnum.BANK_ACCOUNT_VERIFICATION,
         PaymentMethodEnum.APPLE_PAY,
         PaymentMethodEnum.GOOGLE_PAY,
+        PaymentMethodEnum.THREE_DS,
       ]),
   });
 
@@ -131,6 +162,31 @@ function Component() {
     google_pay: {},
   };
 
+  if (threeDsChallenge) {
+    const { acs_challenge_url, acs_transaction_id, three_ds_version } = threeDsChallenge.nextAction;
+    if (!acs_challenge_url || !acs_transaction_id || !three_ds_version) {
+      return null;
+    }
+    return (
+      <div className="bg-gray-50">
+        <div className="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6">
+          <div className="mb-4 rounded-lg border border-yellow-200 bg-yellow-50 p-3 text-sm">
+            <b>3DS Challenge</b> — complete the authentication below
+          </div>
+          <ThreeDSChallengeElement
+            environment="TEST"
+            sessionId={threeDsChallenge.btSessionId}
+            acsChallengeUrl={acs_challenge_url}
+            acsTransactionId={acs_transaction_id}
+            threeDsVersion={three_ds_version}
+            onComplete={onThreeDsChallengeComplete}
+            onFailure={onThreeDsChallengeFailure}
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <Formik
       initialValues={initialValues}
@@ -144,9 +200,34 @@ function Component() {
               total.total * 100,
               values as any,
               cardElement,
+              'payment',
+              'TEST',
             );
             if (payment.id) {
               router.push(`/ecommerce/orders/${payment.id}/summary`);
+            }
+          }
+        } else if (values.payment_method === PaymentMethodEnum.THREE_DS) {
+          if (!threeDsElement.current) {
+            setFieldError('card', 'Card is required');
+          } else {
+            const paymentIntentModel = await onSubmitThreeDsElement(
+              total.total * 100,
+              values as any,
+              threeDsElement,
+            );
+            if (!paymentIntentModel) return;
+
+            const threeDsNextAction = paymentIntentModel.next_action?.three_d_secure;
+            if (paymentIntentModel.status === 'requires_action' && threeDsNextAction) {
+              const { btSessionId, ...intentModel } = paymentIntentModel;
+              setThreeDsChallenge({
+                intentId: intentModel.id,
+                btSessionId,
+                nextAction: threeDsNextAction,
+              });
+            } else if (paymentIntentModel.payment_id) {
+              router.push(`/ecommerce/orders/${paymentIntentModel.payment_id}/summary`);
             }
           }
         } else if (values.payment_method === PaymentMethodEnum.BANK_ACCOUNT) {
@@ -390,6 +471,7 @@ function Component() {
                     <PaymentMethodTabs
                       formik={formik}
                       cardElement={cardElement}
+                      threeDsElement={threeDsElement}
                       bankAccountElement={bankAccountElement}
                       bankAccountVerificationElement={bankAccountVerificationElement}
                     />
@@ -405,9 +487,11 @@ function Component() {
                       {cart.items.map((product) => (
                         <li key={product.item.id} className="flex px-4 py-6 sm:px-6">
                           <div className="flex-shrink-0">
-                            <img
+                            <Image
                               alt={product.item.imageAlt}
                               src={product.item.images[0]}
+                              width={20}
+                              height={20}
                               className="w-20 rounded-md"
                             />
                           </div>
@@ -559,7 +643,12 @@ function Component() {
 
 export default function Page() {
   return (
-    <PublicSquareProvider apiKey={process.env.NEXT_PUBLIC_PUBLICSQUARE_API_KEY!}>
+    <PublicSquareProvider
+      apiKey={process.env.NEXT_PUBLIC_PUBLICSQUARE_API_KEY!}
+      options={{
+        apiUrl: process.env.NEXT_PUBLIC_PUBLICSQUARE_API_URI!,
+      }}
+    >
       <Component />
     </PublicSquareProvider>
   );

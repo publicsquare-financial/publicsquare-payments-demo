@@ -4,6 +4,7 @@ import { StarIcon } from '@heroicons/react/20/solid';
 import { Radio, RadioGroup } from '@headlessui/react';
 import cx from 'classnames';
 import { useParams } from 'next/navigation';
+import Image from 'next/image';
 import { useCart } from '@/providers/CartProvider';
 import config from '@config';
 import Button from '@/components/Button';
@@ -84,23 +85,29 @@ export default function Page() {
         {/* Image gallery */}
         <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
           <div className="aspect-h-3 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
-            <img
+            <Image
               alt={product.imageAlt}
               src={product.images[0]}
+              width={1000}
+              height={1000}
               className="h-full w-full object-cover object-center"
             />
           </div>
           <div className="aspect-h-3 aspect-w-3 sm:overflow-hidden sm:rounded-lg">
-            <img
+            <Image
               alt={product.imageAlt}
               src={product.images[1]}
+              width={1000}
+              height={1000}
               className="h-full w-full object-cover object-center"
             />
           </div>
           <div className="aspect-h-3 aspect-w-3 sm:overflow-hidden sm:rounded-lg">
-            <img
+            <Image
               alt={product.imageAlt}
               src={product.images[2]}
+              width={1000}
+              height={1000}
               className="h-full w-full object-cover object-center"
             />
           </div>

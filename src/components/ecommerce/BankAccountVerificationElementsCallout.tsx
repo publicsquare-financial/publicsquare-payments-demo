@@ -40,7 +40,10 @@ function Component() {
 
 export default function App() {
   return (
-    <PublicSquareProvider apiKey={apiKey}>
+    <PublicSquareProvider 
+      apiKey=apiKey='YOUR_PUBLISHABLE_API_KEY'
+      options={{ apiUrl: 'YOUR_API_URL' }}
+    >
       <Component />
     </PublicSquareProvider>
   );

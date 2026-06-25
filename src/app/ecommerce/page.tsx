@@ -1,5 +1,6 @@
 import { currency } from '@/utils';
 import config from '@config';
+import Image from 'next/image';
 
 export default function Page() {
   return (
@@ -14,7 +15,7 @@ export default function Page() {
               className="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white"
             >
               <div className="aspect-h-4 sm:aspect-none aspect-video group-hover:opacity-75">
-                <img
+                <Image
                   alt={product.imageAlt}
                   src={product.images[0]}
                   sizes="100vw"

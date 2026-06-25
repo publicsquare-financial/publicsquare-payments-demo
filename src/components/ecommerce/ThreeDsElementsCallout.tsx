@@ -2,7 +2,7 @@ import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import CodeCallout from '../CodeCallout';
 
-export default function CardElementsCallout() {
+export default function ThreeDsElementsCallout() {
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -13,7 +13,7 @@ export default function CardElementsCallout() {
         <QuestionMarkCircleIcon className="h-5 w-5" />
       </button>
       <CodeCallout
-        title="Render PublicSquare credit/debit card form snippet"
+        title="Render PublicSquare 3DS card form snippet"
         description="The following code will give you the card form you see on the checkout page:"
         code={`import React, { useRef, useState } from 'react';
 import {

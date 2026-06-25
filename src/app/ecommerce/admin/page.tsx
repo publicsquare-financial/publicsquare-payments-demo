@@ -26,11 +26,13 @@ export default function Page() {
 
 function PayoutCard() {
   const cardElement = useRef<PublicSquareTypes.CardElement>(null);
+  const threeDsElement = useRef<PublicSquareTypes.CardElement>(null);
   const bankAccountElement = useRef<PublicSquareTypes.BankAccountElement>(null);
   const bankAccountVerificationElement =
     useRef<PublicSquareTypes.BankAccountVerificationElement>(null);
   const {
     onSubmitCardElement,
+    onSubmitThreeDsElement,
     onSubmitBankAccountElement,
     onSubmitBankAccountVerificationElement,
     submitting,
@@ -63,7 +65,8 @@ function PayoutCard() {
     }).required('Address is required'),
     delivery_method: Yup.number().required('Delivery method is required'),
     name_on_card: Yup.string().when('payment_method', {
-      is: PaymentMethodEnum.CREDIT_CARD,
+      is: (val: string) =>
+        val === PaymentMethodEnum.CREDIT_CARD || val === PaymentMethodEnum.THREE_DS,
       then: (schema) => schema.required('Name on card is required'),
       otherwise: (schema) => schema.optional(),
     }),
@@ -74,7 +77,11 @@ function PayoutCard() {
     }),
     payment_method: Yup.string()
       .required('Payment method is required')
-      .oneOf([PaymentMethodEnum.CREDIT_CARD, PaymentMethodEnum.BANK_ACCOUNT]),
+      .oneOf([
+        PaymentMethodEnum.CREDIT_CARD,
+        PaymentMethodEnum.BANK_ACCOUNT,
+        PaymentMethodEnum.THREE_DS,
+      ]),
   });
 
   const initialValues: Yup.InferType<typeof schema> = {
@@ -121,9 +128,28 @@ function PayoutCard() {
                 },
                 cardElement,
                 'payout',
+                'TEST',
               ).then((payment) => {
                 if (payment.id) {
                   alert(`Payout successfully sent ${payment.id}`);
+                }
+              });
+            }
+          } else if (values.payment_method === PaymentMethodEnum.THREE_DS) {
+            if (!threeDsElement.current || !values.name_on_card) {
+              setFieldError('card', 'Card is required');
+            } else {
+              onSubmitThreeDsElement(
+                amount,
+                {
+                  ...values,
+                  name_on_card: values.name_on_card,
+                  amount,
+                },
+                threeDsElement,
+              ).then((intent) => {
+                if (intent) {
+                  alert(`Payout successfully sent ${intent.payment_id}`);
                 }
               });
             }
@@ -180,6 +206,7 @@ function PayoutCard() {
               <PaymentMethodTabs
                 formik={formik}
                 cardElement={cardElement}
+                threeDsElement={threeDsElement}
                 bankAccountElement={bankAccountElement}
                 bankAccountVerificationElement={bankAccountVerificationElement}
               />

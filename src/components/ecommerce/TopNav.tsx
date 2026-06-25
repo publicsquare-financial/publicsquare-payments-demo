@@ -22,6 +22,7 @@ import {
   WalletIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/providers/CartProvider';
@@ -216,7 +217,7 @@ export default function TopNav() {
                   <div className="hidden lg:flex lg:items-center">
                     <Link href="/ecommerce" className="border-none">
                       <span className="sr-only">Your Company</span>
-                      <img
+                      <Image
                         alt=""
                         src={config.logo}
                         sizes="100vw"
@@ -372,9 +373,11 @@ export default function TopNav() {
                   {/* Logo (lg-) */}
                   <a href="#" className="lg:hidden">
                     <span className="sr-only">Your Company</span>
-                    <img
+                    <Image
                       alt=""
                       src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                      width={32}
+                      height={32}
                       className="h-8 w-auto"
                     />
                   </a>
@@ -423,9 +426,11 @@ export default function TopNav() {
                                 {cart.items.length ? (
                                   cart.items.map((product) => (
                                     <li key={product.item.id} className="flex items-center py-6">
-                                      <img
+                                      <Image
                                         alt={product.item.imageAlt}
                                         src={product.item.images[0]}
+                                        width={64}
+                                        height={64}
                                         className="h-16 w-16 flex-none rounded-md border border-gray-200"
                                       />
                                       <div className="ml-4 flex-auto">
