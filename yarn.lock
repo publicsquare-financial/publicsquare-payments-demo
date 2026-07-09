@@ -474,10 +474,10 @@
   resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.2.9.tgz#d229a7b7f9dac167a156992ef23c7f023653f53b"
   integrity sha512-QNqXyfVS2wm9hweSYD2O7F0G06uurj9kZ96TRQE5Y9hU7+tgdZwIkbAKc5Ocy1HxEY2kuDQa6cQ1WRs/O5LFKA==
 
-"@publicsquare/elements-js@1.13.1":
-  version "1.13.1"
-  resolved "https://registry.yarnpkg.com/@publicsquare/elements-js/-/elements-js-1.13.1.tgz#047c7955e17c0c5cd85ea919d5467db27117a941"
-  integrity sha512-1H0Zx0U6WUhPILeRO4KDG2TW5iu5NBpH1IH0Q2DV2nqU4r616nx8+ody7/fHYC3xY0ih/1ctWeBi0GZTntjLSw==
+"@publicsquare/elements-js@1.14.1":
+  version "1.14.1"
+  resolved "https://registry.yarnpkg.com/@publicsquare/elements-js/-/elements-js-1.14.1.tgz#e72d792b24eb838c5408ea01a29351d4efb80a7d"
+  integrity sha512-WyqBGk/MqLWyy0LdxdBviizzWd6IQY+88qbSSo79bOupb48aSLqJD4ekp1dJLuzsXCZ6efmdDcIysecrTTeIYg==
   dependencies:
     "@basis-theory/basis-theory-js" "^4.30.0"
     "@basis-theory/web-threeds" "^2.1.2"
@@ -487,12 +487,12 @@
     prettier "^3.8.2"
     serialize-javascript "^7.0.5"
 
-"@publicsquare/elements-react@1.13.1":
-  version "1.13.1"
-  resolved "https://registry.yarnpkg.com/@publicsquare/elements-react/-/elements-react-1.13.1.tgz#8a859491640a943f1df3735279506f6f354938b2"
-  integrity sha512-l9cylWOhnZNE5iD49n43cvolwnstc41N76QoKzbOtv58HzAdDPVyzLbdVEj11ZiscdgiuLzsHO7S5wOBoICsxg==
+"@publicsquare/elements-react@1.14.1":
+  version "1.14.1"
+  resolved "https://registry.yarnpkg.com/@publicsquare/elements-react/-/elements-react-1.14.1.tgz#d4842db95f7aed51ec99a9b9e2f32c94572a98df"
+  integrity sha512-I7/AhcUYpklxr6/Y/xfGpIcKMfBtWunxHCDPST3u4VwONsL8G2ov/h7wArnaEGvc0VhWKePMuw9MiCWMeeUC0g==
   dependencies:
-    "@publicsquare/elements-js" "1.13.1"
+    "@publicsquare/elements-js" "1.14.1"
     follow-redirects "^1.16.0"
     glob "^13.0.1"
     minimatch "^10.2.3"

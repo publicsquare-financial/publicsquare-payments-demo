@@ -303,7 +303,7 @@ export function useCheckoutSubmit() {
         setSubmitting(true);
 
         // Create a Google Pay payment method from the encrypted payment token
-        const googlePayToken = JSON.parse(google_pay.paymentMethodData.tokenizationData.token);
+        const googlePayToken = google_pay.paymentMethodData;
         const googlePay = await createGooglePay(googlePayToken);
 
         if (googlePay) {
@@ -333,13 +333,13 @@ export function useCheckoutSubmit() {
   }
 
   async function createGooglePay(
-    googlePaymentMethodToken: PublicSquareTypes.GooglePaymentMethodToken,
+    googlePaymentMethodData: PublicSquareTypes.GooglePaymentMethodData,
   ) {
     const psq = publicsquareRef.current;
     if (psq) {
       try {
         const response = await psq.googlePay.create({
-          google_payment_data: googlePaymentMethodToken,
+          google_payment_method_data: googlePaymentMethodData,
         });
         if (response) {
           return response;
