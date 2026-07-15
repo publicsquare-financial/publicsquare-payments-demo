@@ -474,10 +474,10 @@
   resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.2.9.tgz#d229a7b7f9dac167a156992ef23c7f023653f53b"
   integrity sha512-QNqXyfVS2wm9hweSYD2O7F0G06uurj9kZ96TRQE5Y9hU7+tgdZwIkbAKc5Ocy1HxEY2kuDQa6cQ1WRs/O5LFKA==
 
-"@publicsquare/elements-js@1.14.1":
-  version "1.14.1"
-  resolved "https://registry.yarnpkg.com/@publicsquare/elements-js/-/elements-js-1.14.1.tgz#e72d792b24eb838c5408ea01a29351d4efb80a7d"
-  integrity sha512-WyqBGk/MqLWyy0LdxdBviizzWd6IQY+88qbSSo79bOupb48aSLqJD4ekp1dJLuzsXCZ6efmdDcIysecrTTeIYg==
+"@publicsquare/elements-js@1.15.1":
+  version "1.15.1"
+  resolved "https://registry.yarnpkg.com/@publicsquare/elements-js/-/elements-js-1.15.1.tgz#0082f4334eb0e75837367d9e1b1920284142d4df"
+  integrity sha512-+kF5TryAnT9GtuC+7+kRS9VVuewvxQELdXwb3TNIp18K7pN15DTuQaNozglZ/N5BACu/2e/m9QmrLh0qMp3JKQ==
   dependencies:
     "@basis-theory/basis-theory-js" "^4.30.0"
     "@basis-theory/web-threeds" "^2.1.2"
@@ -487,12 +487,12 @@
     prettier "^3.8.2"
     serialize-javascript "^7.0.5"
 
-"@publicsquare/elements-react@1.14.1":
-  version "1.14.1"
-  resolved "https://registry.yarnpkg.com/@publicsquare/elements-react/-/elements-react-1.14.1.tgz#d4842db95f7aed51ec99a9b9e2f32c94572a98df"
-  integrity sha512-I7/AhcUYpklxr6/Y/xfGpIcKMfBtWunxHCDPST3u4VwONsL8G2ov/h7wArnaEGvc0VhWKePMuw9MiCWMeeUC0g==
+"@publicsquare/elements-react@1.15.1":
+  version "1.15.1"
+  resolved "https://registry.yarnpkg.com/@publicsquare/elements-react/-/elements-react-1.15.1.tgz#0421157b3886290cf9f3441c7fd1cc10ee80c4a3"
+  integrity sha512-p7o5m0l2oJ36FzODHOSgEwEccWzcbQShTD5wkJMjC41J+NWpIAGVAVnb1ZKPIMoB4L/wUKPY1v2zVZq/jlutig==
   dependencies:
-    "@publicsquare/elements-js" "1.14.1"
+    "@publicsquare/elements-js" "1.15.1"
     follow-redirects "^1.16.0"
     glob "^13.0.1"
     minimatch "^10.2.3"
@@ -2642,7 +2642,7 @@ minimatch@^10.2.3, minimatch@^10.2.5:
   dependencies:
     brace-expansion "^5.0.5"
 
-minimatch@^3.1.2, minimatch@^3.1.4:
+minimatch@^3.1.2, minimatch@^3.1.5:
   version "3.1.5"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.1.5.tgz#580c88f8d5445f2bd6aa8f3cadefa0de79fbd69e"
   integrity sha512-VgjWUsnnT6n+NUk6eZq77zeFdpW2LWDzP6zFGrCbHXiYNul5Dzqk2HHQ5uFH2DNW5Xbp8+jVzaeNt94ssEEl4w==
