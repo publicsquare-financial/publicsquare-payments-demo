@@ -299,9 +299,21 @@ export function useCheckoutSubmit() {
         const googlePay = await createGooglePay(googlePayToken);
 
         if (googlePay) {
-          const intent = await createPaymentIntent(cartAmount.current, {
-            google_pay: googlePay.id,
-          });
+          const walletBillingAddress = google_pay.paymentMethodData?.info?.billingAddress;
+          const billingDetails = walletBillingAddress && {
+            address_line_1: walletBillingAddress.address1,
+            address_line_2: walletBillingAddress.address2 || undefined,
+            city: walletBillingAddress.locality,
+            state: walletBillingAddress.administrativeArea,
+            postal_code: walletBillingAddress.postalCode,
+            country: walletBillingAddress.countryCode,
+          };
+
+          const intent = await createPaymentIntent(
+            cartAmount.current,
+            { google_pay: googlePay.id },
+            billingDetails,
+          );
 
           if (intent?.id) {
             const paymentIntent = await confirmPaymentIntent(intent.id, {});
@@ -429,10 +441,18 @@ export function useCheckoutSubmit() {
   async function createPaymentIntent(
     amount: number,
     paymentMethod: { card?: string; google_pay?: string },
+    billingDetails?: {
+      address_line_1?: string;
+      address_line_2?: string;
+      city?: string;
+      state?: string;
+      postal_code?: string;
+      country?: string;
+    },
   ): Promise<PaymentIntentModel> {
     const response = await fetch('/api/payment-intents', {
       method: 'POST',
-      body: JSON.stringify({ amount, paymentMethod }),
+      body: JSON.stringify({ amount, paymentMethod, billingDetails }),
       headers: { 'Content-Type': 'application/json' },
     });
     return response.json();
