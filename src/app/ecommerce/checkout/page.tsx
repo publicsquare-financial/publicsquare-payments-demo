@@ -624,7 +624,7 @@ function Component() {
                             formik.submitForm();
                           }}
                           onPaymentDataLoaded={(data) => {
-                            onGooglePayPaymentAuthorized(data, formik.values as any);
+                            onGooglePayPaymentAuthorized(data);
                           }}
                         />
                       )}
