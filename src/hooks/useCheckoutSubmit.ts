@@ -14,6 +14,14 @@ declare global {
   }
 }
 
+type ApplePayContactField = 'postalAddress' | 'phone' | 'email' | 'name';
+
+// Apple Pay always requires billing address + phone number before a payment can complete.
+const APPLE_PAY_REQUIRED_CONTACT_FIELDS: ApplePayContactField[] = ['postalAddress', 'phone'];
+// Shipping address is not requested by default. Set this to true to require
+// shipping contact collection on the Apple Pay sheet.
+const APPLE_PAY_REQUIRE_SHIPPING_CONTACT = false;
+
 export function useCheckoutSubmit() {
   const { publicsquare } = usePublicSquare();
   const publicsquareRef = useRef(publicsquare);
@@ -91,6 +99,10 @@ export function useCheckoutSubmit() {
       googlePay?: PublicSquareTypes.GooglePayCreateResponse;
     },
     type: 'payment' | 'payout' = 'payment',
+    overrides?: {
+      billingDetails?: PublicSquareTypes.CardBillingDetails;
+      shippingAddress?: PublicSquareTypes.CardBillingDetails;
+    },
   ) {
     try {
       const payment = await fetch(`/api/${type}s`, {
@@ -107,7 +119,8 @@ export function useCheckoutSubmit() {
             ...(googlePay && { google_pay: googlePay.id }),
           },
           customer: values.customer,
-          billing_details: values.address,
+          billing_details: overrides?.billingDetails ?? values.address,
+          ...(overrides?.shippingAddress && { shipping_address: overrides.shippingAddress }),
         }),
       }).then((res) => res.json());
       return payment;
@@ -218,9 +231,20 @@ export function useCheckoutSubmit() {
 
     session.onpaymentauthorized = async (event: any) => {
       try {
-        const applePay = await createApplePay(event.payment.token);
+        const applePayPayment = event.payment as PublicSquareTypes.ApplePayPayment;
+        const billingDetails = mapApplePayContactToBillingDetails(applePayPayment.billingContact);
+        const shippingAddress =
+          APPLE_PAY_REQUIRE_SHIPPING_CONTACT && applePayPayment.shippingContact
+            ? mapApplePayContactToBillingDetails(applePayPayment.shippingContact)
+            : undefined;
+
+        const applePay = await createApplePay(applePayPayment);
+
         if (applePay) {
-          const payment = await capturePayment(amount, values, { applePay }, 'payment');
+          const payment = await capturePayment(amount, values, { applePay }, 'payment', {
+            billingDetails,
+            shippingAddress,
+          });
           setSubmitting(false);
 
           // present green check to the user before the timeout (30 seconds)
@@ -242,7 +266,20 @@ export function useCheckoutSubmit() {
     session.begin();
   }
 
-  async function createApplePay(applePaymentData: PublicSquareTypes.ApplePaymentData) {
+  function mapApplePayContactToBillingDetails(
+    contact?: PublicSquareTypes.ApplePayPaymentContact,
+  ): PublicSquareTypes.CardBillingDetails {
+    return {
+      address_line_1: contact?.addressLines?.[0] ?? '',
+      address_line_2: contact?.addressLines?.[1],
+      city: contact?.locality ?? '',
+      state: contact?.administrativeArea ?? '',
+      postal_code: contact?.postalCode ?? '',
+      country: contact?.countryCode ?? contact?.country ?? '',
+    };
+  }
+
+  async function createApplePay(applePaymentData: PublicSquareTypes.ApplePayPayment) {
     if (publicsquare) {
       try {
         const response = await publicsquare.applePay.create({
@@ -263,6 +300,10 @@ export function useCheckoutSubmit() {
       currencyCode: 'USD',
       merchantCapabilities: ['supports3DS'],
       supportedNetworks: ['visa', 'masterCard', 'amex', 'discover'],
+      requiredBillingContactFields: APPLE_PAY_REQUIRED_CONTACT_FIELDS,
+      requiredShippingContactFields: APPLE_PAY_REQUIRE_SHIPPING_CONTACT
+        ? APPLE_PAY_REQUIRED_CONTACT_FIELDS
+        : [],
       total: {
         label: 'PublicSquare Payments Demo',
         type: 'final',
