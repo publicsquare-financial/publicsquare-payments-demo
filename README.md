@@ -4,7 +4,7 @@ This app uses Javascript, React & Next.js, but you are free to use whatever lang
 
 ## Quick start
 
-First, install dependencies:
+### Dependencies
 
 ```bash
 npm i
@@ -16,9 +16,17 @@ pnpm i
 bun i
 ```
 
-Second, rename the `.env.example` file to `.env` and update the api key variables named `NEXT_PUBLIC_PUBLICSQUARE_API_KEY` and `PUBLICSQUARE_API_SECRET` from your account in the [PublicSquare portal](https://portal.publicsquare.com/developers/api-keys).
+### Environment Configuration
 
-Third, run the development server:
+Rename the `.env.example` file to `.env` and update the api key variables named `NEXT_PUBLIC_PUBLICSQUARE_API_URI`, `NEXT_PUBLIC_PUBLICSQUARE_API_KEY` and `PUBLICSQUARE_API_SECRET` from your account in the [PublicSquare portal](https://portal.publicsquare.com/developers/api-keys).
+
+#### Apple Pay domain association per processor
+
+The file `public/.well-known/apple-developer-merchantid-domain-association` is processor-specific. When testing Apple Pay with the **Moov** or **Nuvei** processor, replace the contents of that file with the corresponding version found in `public/.well-known/moov/` or `public/.well-known/nuvei/`.
+
+If you add support for a new processor that needs Apple Pay, include its own domain association file under `public/.well-known/<processor-name>/` and swap it into `public/.well-known/apple-developer-merchantid-domain-association` when testing that processor.
+
+### Run the development server:
 
 ```bash
 npm run dev
@@ -30,4 +38,4 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000/ecommerce](http://localhost:3000/ecommerce) with your browser to see the Ecommerce demo.
+Then open [http://localhost:3000/ecommerce](http://localhost:3000/ecommerce) with your browser to see the Ecommerce demo.
